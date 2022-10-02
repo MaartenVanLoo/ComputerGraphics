@@ -99,13 +99,14 @@ void Transform::rotateZ(Matrix4 &T, float angle) {
     T[3] = Vec4(    0,  0,0,1);
 }
 
+//https://math.stackexchange.com/questions/1882276/combining-all-three-rotation-matrices
 void Transform::rotate(Matrix4 &T, float Rx, float Ry, float Rz){
-    float cosRx = cos(Rx);
-    float cosRy = cos(Ry);
-    float cosRz = cos(Rz);
-    float sinRx = sin(Rx);
-    float sinRy = sin(Ry);
-    float sinRz = sin(Rz);
+    float cosRx = std::cos(Rx);
+    float cosRy = std::cos(Ry);
+    float cosRz = std::cos(Rz);
+    float sinRx = std::sin(Rx);
+    float sinRy = std::sin(Ry);
+    float sinRz = std::sin(Rz);
 
     T[0] = Vec4( cosRy * cosRz                        , cosRy * sinRz                         , -sinRy          ,0);
     T[1] = Vec4( sinRx * sinRy * cosRz - cosRx * sinRz, sinRx * sinRy * sinRz + cosRx * cosRz ,sinRx * cosRy ,0);

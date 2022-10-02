@@ -7,7 +7,7 @@ set(testSources
         ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TSphere.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TBox.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Camera/TCamera.cpp
-        )
+        ${CMAKE_CURRENT_SOURCE_DIR}/Transform/TTransform.cpp)
 
 add_executable(I_ComputerGraphics_tests tests.cpp ${ProjectSourceFiles} ${testSources})
 target_include_directories(I_ComputerGraphics_tests PUBLIC ${CMAKE_SOURCE_DIR}/include)

@@ -17,4 +17,6 @@
 #include "Scene/Scene.h"
 
 #include "Screen/Screen.h"
+
+#include "Transform/Transform.h"
 #endif //I_COMPUTERGRAPHICS_RENDERENGINECORE_H

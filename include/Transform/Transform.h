@@ -8,6 +8,7 @@
 #include <Vector.h>
 #include <Matrix.h>
 class Transform{
+public:
     //angle in radians unless specified different
 
     static Vec4 applyTransform(Matrix4 &T, Vec4& vec);
