@@ -23,6 +23,7 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const Scene &scene);
 
     void Render();
+
 private:
 
     Light light;

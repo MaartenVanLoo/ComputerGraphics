@@ -31,7 +31,7 @@ public:
     long long getLastUpdate();
 
     void update();
-
+    void save(std::string filename);
 private:
     cv::Mat imageBuffer;
     std::atomic<long long> lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();

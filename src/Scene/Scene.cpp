@@ -49,6 +49,8 @@ void Scene::Render() {
         }
     }
     this->image->update();
+    this->image->save("render.png");
+    this->image->save("render.bmp");
     this->screen->waitClose();
 
     //cleanup screen
@@ -63,6 +65,10 @@ Scene::Scene() {
     this->camera.setSensor(Sensor(360,240));
     this->camera.setResolution(Resolution(Screensize::_4K));
     this->camera.setFocalLength(100);
+}
+
+void Image::save(std::string filename) {
+    cv::imwrite(filename, this->imageBuffer);
 }
 
 
