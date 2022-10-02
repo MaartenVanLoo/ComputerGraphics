@@ -8,11 +8,7 @@ Vec4 Transform::applyTransform(Matrix4 &T, Vec4 &vec) {
     //T = 4x4 matrix!
     Vec4 result;
     for (int row = 0; row < 4; row++){
-        float tmp = 0;
-        for (int col =0; col < 4; col ++){
-            tmp+= T[row][col]*vec[row];
-        }
-        result[row] = tmp;
+        result[row] = Vec4::sum(T[row]*vec);
     }
     return result;
 }

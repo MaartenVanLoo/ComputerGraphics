@@ -107,6 +107,11 @@ struct Vec4{
     float abs() const;
     static float abs(const Vec4& vec);
 
+    //angle between 2 vectors
+    float angle(const Vec4& v1, const Vec4& v2);
+
+    //sum of all values
+    static float sum(const Vec4& vec);
     //operators
     bool operator==(const Vec4 &rhs) const;
     bool operator!=(const Vec4 &rhs) const;

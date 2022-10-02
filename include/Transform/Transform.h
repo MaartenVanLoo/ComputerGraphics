@@ -11,6 +11,7 @@ class Transform{
     //angle in radians unless specified different
 
     static Vec4 applyTransform(Matrix4 &T, Vec4& vec);
+
     //http://scipp.ucsc.edu/~haber/ph216/rotation_12.pdf
     static void rotatef(Matrix4 &T, float angle, float x, float y, float z);
     static void rotatef(Matrix4 &T, float angle, Vec3 axis);

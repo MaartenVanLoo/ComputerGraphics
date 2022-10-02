@@ -408,6 +408,14 @@ Vec4::Vec4(const Vec4 &p1) {
     this->data[3] = p1.data[3];
 }
 
+float Vec4::angle(const Vec4 &v1, const Vec4 &v2) {
+    return v1.dot(v2)/(abs(v1)*abs(v2));
+}
+
+float Vec4::sum(const Vec4 &vec) {
+    return vec.data[0] + vec.data[1] + vec.data[2] + vec.data[3];
+}
+
 
 #pragma endregion
 
