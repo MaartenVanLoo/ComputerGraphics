@@ -20,23 +20,23 @@ std::ostream &operator<<(std::ostream &os, const Ray &ray) {
 }
 
 void Ray::setPos(float x, float y, float z) {
-    this->position.x = x;
-    this->position.y = y;
-    this->position.z = z;
-    this->position.w = 1.0;
+    this->position[0] = x;
+    this->position[1] = y;
+    this->position[2] = z;
+    this->position[3] = 1.0;
 }
-void Ray::setPos(const Vec4 &pos) {
-    this->position.x = pos.x;
-    this->position.y = pos.y;
-    this->position.z = pos.z;
-    this->position.w = 1.0;
+void Ray::setPos(Vec4 &pos) {
+    this->position[0] = pos[0];
+    this->position[1] = pos[1];
+    this->position[2] = pos[2];
+    this->position[3] = 1.0;
 }
 
 void Ray::setDir(float x, float y, float z) {
-    this->direction.x = x;
-    this->direction.y = y;
-    this->direction.z = z;
-    this->direction.w = 0.0;
+    this->direction[0] = x;
+    this->direction[1] = y;
+    this->direction[2] = z;
+    this->direction[3] = 0.0;
     normalizeDir();
 }
 
@@ -45,10 +45,11 @@ Ray::Ray(const Vec4 &position, const Vec4 &direction) : position(position), dire
 }
 
 void Ray::normalizeDir() {
-    float invSqrt = 1.0/std::sqrt(this->direction.x * this->direction.x
-            + this->direction.y * this->direction.y
-            + this->direction.z * this->direction.z
-            + this->direction.w * this->direction.w);
+    float invSqrt = 1.0/std::sqrt(
+            this->direction[0] * this->direction[0] +
+            this->direction[1] * this->direction[1] +
+            this->direction[2] * this->direction[2] +
+            this->direction[3] * this->direction[3]);
     this->direction*=invSqrt;
 }
 

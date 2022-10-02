@@ -26,6 +26,37 @@ std::ostream &operator<<(std::ostream &os, const Sensor &sensor) {
     return os;
 }
 
+Sensor::Sensor(Screensize screensize) {
+    switch(screensize){
+        case _240p:
+            this->width  = 352;
+            this->height = 240;
+            break;
+        case _360p:
+            this->width  = 480;
+            this->height = 360;
+            break;
+        case _480p:
+            this->width  = 858;
+            this->height = 480;
+            break;
+        case _720p : case _HD:
+            this->width  = 1280;
+            this->height = 720;
+            break;
+        case _1080p: case _FHD:
+            this->width  = 1920;
+            this->height = 1080;
+            break;
+        case _2160p: case _UHD: case _4K:
+            this->width  = 3860;
+            this->height = 2160;
+            break;
+        default:
+            throw std::invalid_argument("Unrecognized screensize");
+    }
+}
+
 Resolution::Resolution(int width, int height): width(width), height(height){}
 
 Resolution::Resolution(std::string ratio, int width) {
@@ -46,3 +77,46 @@ std::ostream &operator<<(std::ostream &os, const Resolution &resolution) {
     os << "w: " << resolution.width << " h: " << resolution.height;
     return os;
 }
+
+Resolution::Resolution(Screensize screensize) {
+    switch(screensize){
+        case _240p:
+            this->width  = 352;
+            this->height = 240;
+            break;
+        case _360p:
+            this->width  = 480;
+            this->height = 360;
+            break;
+        case _480p:
+            this->width  = 858;
+            this->height = 480;
+            break;
+        case _720p : case _HD:
+            this->width  = 1280;
+            this->height = 720;
+            break;
+        case _1080p: case _FHD:
+            this->width  = 1920;
+            this->height = 1080;
+            break;
+        case _2160p: case _UHD: case _4K:
+            this->width  = 3860;
+            this->height = 2160;
+            break;
+        default:
+            throw std::invalid_argument("Unrecognized screensize");
+    }
+}
+
+
+#pragma region RGB
+RGB::RGB() {}
+
+RGB::RGB(int red, int green, int blue) {
+    this->red = red;
+    this->green = green;
+    this->blue = blue;
+}
+
+#pragma endregion

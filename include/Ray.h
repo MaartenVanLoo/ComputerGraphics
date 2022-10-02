@@ -17,7 +17,7 @@ public:
     Vec4 at(float t) const;
 
     void setPos(float x, float y, float z);
-    void setPos(const Vec4& pos);
+    void setPos(Vec4& pos);
     void setDir(float x, float y, float z);
 
 

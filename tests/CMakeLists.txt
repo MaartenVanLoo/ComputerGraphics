@@ -2,6 +2,14 @@ cmake_minimum_required(VERSION 3.17)
 project(I_ComputerGraphics_tests)
 find_package(Catch2 3 REQUIRED)
 
-add_executable(I_ComputerGraphics_tests tests.cpp ${ProjectSourceFiles} Objects/TSphere.cpp)
+
+set(testSources
+        ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TSphere.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TBox.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Camera/TCamera.cpp
+        )
+
+add_executable(I_ComputerGraphics_tests tests.cpp ${ProjectSourceFiles} ${testSources})
 target_include_directories(I_ComputerGraphics_tests PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(I_ComputerGraphics_tests PRIVATE Catch2::Catch2WithMain)
+target_link_libraries( I_ComputerGraphics_tests PRIVATE  ${OpenCV_LIBS} )

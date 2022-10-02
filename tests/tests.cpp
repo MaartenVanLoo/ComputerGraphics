@@ -14,7 +14,6 @@ int main(int argc, char ** argv)
     camera.setFocalLength(35);
     Scene scene = Scene();
 
-    Box box = Box();
     Sphere sphere = Sphere();
     Ray ray = Ray();
     //std::cout << "Camera:" << camera << "\n";

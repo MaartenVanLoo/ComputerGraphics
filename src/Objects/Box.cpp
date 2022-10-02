@@ -16,8 +16,8 @@ bool Box::hitPoint(Ray &ray, float &t1, float &t2) {
     Vec4 k = m.abs()*boxSize;
     Vec4 tStart = - n - k;
     Vec4 tEnd = - n + k;
-    t1 = std::max(std::max(tStart.x, tStart.y), tStart.z);
-    t2 = std::max(std::max(tEnd.x, tEnd.y), tEnd.z);
+    t1 = std::max(std::max(tStart[0], tStart[1]), tStart[2]);
+    t2 = std::max(std::max(tEnd[0], tEnd[1]), tEnd[2]);
     if (t1 > t2 ||t2 < 0) return false; //No intersection
     return true;
 }
