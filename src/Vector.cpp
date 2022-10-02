@@ -88,7 +88,8 @@ Vec2 operator/(Vec2 lhs, const float &rhs) {
     return lhs;
 }
 Vec2 operator/(const float &lhs, Vec2 rhs ) {
-    rhs/=lhs;
+    rhs.data[0] = lhs/rhs.data[0];
+    rhs.data[1] = lhs/rhs.data[1];
     return rhs;
 }
 Vec2 operator/(Vec2 lhs, const Vec2 &rhs) {
@@ -218,7 +219,9 @@ Vec3 operator/(Vec3 lhs, const float &rhs) {
     return lhs;
 }
 Vec3 operator/(const float &lhs, Vec3 rhs ) {
-    rhs/=lhs;
+    rhs.data[0] = lhs/rhs.data[0];
+    rhs.data[1] = lhs/rhs.data[1];
+    rhs.data[2] = lhs/rhs.data[2];
     return rhs;
 }
 Vec3 operator/(Vec3 lhs, const Vec3 &rhs) {
@@ -379,7 +382,10 @@ Vec4 operator/(Vec4 lhs, const float &rhs) {
     return lhs;
 }
 Vec4 operator/(const float &lhs, Vec4 rhs ) {
-    rhs/=lhs;
+    rhs.data[0] = lhs/rhs.data[0];
+    rhs.data[1] = lhs/rhs.data[1];
+    rhs.data[2] = lhs/rhs.data[2];
+    rhs.data[3] = lhs/rhs.data[3];
     return rhs;
 }
 Vec4 operator/(Vec4 lhs, const Vec4 &rhs) {
@@ -390,7 +396,7 @@ Vec4 operator/(Vec4 lhs, const Vec4 &rhs) {
 #pragma endregion
 
 std::ostream &operator<<(std::ostream &os, const Vec4 &vec4) {
-    os <<"[" << vec4.data[0] << ", " << vec4.data[0] << ", " << vec4.data[0] << ", " << vec4.data[0] << "]";
+    os <<"[" << vec4.data[0] << ", " << vec4.data[1] << ", " << vec4.data[2] << ", " << vec4.data[3] << "]";
     return os;
 }
 

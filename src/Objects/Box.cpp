@@ -8,21 +8,37 @@
 
 //https://iquilezles.org/articles/intersectors/
 //https://www.shadertoy.com/view/ld23DV
+//https://iquilezles.org/articles/boxfunctions/
 bool Box::hitPoint(Ray &ray, float &t1, float &t2) {
-    Vec4 m = 1.0/ray.dir();
-    Vec4 n = m * ray.pos();
+// convert from world to box space
+    //vec4 rd = (txx*vec4(rdw,0.0)).xyz;
+    //vec4 ro = (txx*vec4(row,1.0)).xyz;
+    Vec4 rd = ray.dir();
+    Vec4 ro = ray.pos() - this->pos;
+    Vec4 rad = this->halfSize;
 
-    Vec4 boxSize = this->max - this->min;
-    Vec4 k = m.abs()*boxSize;
-    Vec4 tStart = - n - k;
-    Vec4 tEnd = - n + k;
-    t1 = std::max(std::max(tStart[0], tStart[1]), tStart[2]);
-    t2 = std::max(std::max(tEnd[0], tEnd[1]), tEnd[2]);
-    if (t1 > t2 ||t2 < 0) return false; //No intersection
+    // ray-box intersection in box space
+    Vec4 m = 1.0/rd;
+    Vec4 s = Vec4((rd[0]<0.0)?1.0:-1.0,
+                  (rd[1]<0.0)?1.0:-1.0,
+                  (rd[2]<0.0)?1.0:-1.0,
+                  0);
+    Vec4 tN = m * (-ro + s * rad);
+    Vec4 tF = m * (-ro - s * rad);
+
+    t1 = std::max(std::max(tN[0], tN[1] ), tN[2]);
+    t2 = std::min(std::min(tF[0], tF[1] ), tF[2]);
+
+    if( t1>t2 || t2<0.0) return false;
+
     return true;
 }
 
 std::ostream &operator<<(std::ostream &os, const Box &box) {
-    os << "Box: {" << "min: " << box.min << " max: " << box.max << "}";
+    os << "Box: {" << "pos: " << box.pos << " size: " << box.size << "}";
     return os;
+}
+
+Box::Box(const Vec4 &pos, const Vec4 &size): pos(pos), size(size), halfSize(size/2) {
+
 }

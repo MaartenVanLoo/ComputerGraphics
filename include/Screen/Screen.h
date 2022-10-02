@@ -10,26 +10,36 @@
 #include "../Vector.h"
 #include <thread>
 #include <chrono>
+#include <atomic>
+#include <opencv2/highgui/highgui_c.h>
 enum keycodes{
     esc = 27,
-    f = 102
+    f = 102,
+    s = 115
 };
 
 class Image{
 public:
+    Image();
     Image(Resolution resolution);
-    cv::Mat getImageBuffer();
+
+    const cv::Mat &getImageBuffer() const;
+
     void setPixel(int x, int y, RGB rgb);
     RGB getPixel(int x, int y);
 
     long long getLastUpdate();
+
+    void update();
+
 private:
     cv::Mat imageBuffer;
-    long long lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    std::atomic<long long> lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 };
 
 class Screen {
 public:
+    Screen()= default;;
     Screen(Image &image);
 
     void show();
@@ -39,11 +49,16 @@ public:
 
 private:
     Image* image = nullptr;
-    std::thread gui;
-    std::atomic<bool> gui_running = false;
-    long long lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    std::thread* gui = nullptr;
+    std::atomic<bool> gui_running= false;
+    long long lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+
     void loop();
+
+    cv::Mat detailImage;
+
     static void onMouse(int event,int x,int y,int flags,void *param);
+    static void onMouseCrop(int event,int x,int y,int flags,void *param);
 };
 
 

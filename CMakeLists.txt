@@ -27,7 +27,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 #resource files
-set (APP_ICON_RESOURCE_WINDOWS "resources.rc")
+set (APP_ICON_RESOURCE_WINDOWS "resources.rc" src/Light/Light.cpp include/Light/Light.h)
 
 
 add_executable(I_ComputerGraphics main.cpp ${ProjectSourceFiles} ${APP_ICON_RESOURCE_WINDOWS})

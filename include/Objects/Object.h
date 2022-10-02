@@ -13,6 +13,7 @@
 class Object {
 public:
     virtual bool hitPoint(Ray& ray, float &t1, float &t2) = 0;
+    virtual Vec4 normal(Ray& ray) = 0;
 };
 
 

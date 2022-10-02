@@ -4,15 +4,15 @@
 
 int main() {
     Camera camera = Camera();
-    camera.setPosition(Vec4(0,0,0,1));
+    camera.setPosition(Vec4(-5,0,0,1));
     camera.setDirection(Vec4(1,0,0, 0));
-    camera.setSensor(Sensor("16:9",160));
-    camera.setResolution(Resolution(Screensize::_4K));
+    camera.setSensor(Sensor(36,24));
+    camera.setResolution(Resolution(Screensize::_1080p));
     camera.setFocalLength(35);
+
     Scene scene = Scene();
-    Image image = Image(camera.getResolution());
-    Screen screen = Screen(image);
-    screen.show();
+    //scene.addObject(new Sphere(Vec4(0,0,2,1),2));
+    scene.addObject(new Box(Vec4(0,0,0,1),Vec4(1,1,1,0)));
 
     Box box = Box();
     Sphere sphere = Sphere();
@@ -23,13 +23,7 @@ int main() {
     std::cout << "Sphere:" << sphere << "\n";
     std::cout << "Ray:" << ray << "\n";
     std::cout << "Hello, World!" << std::endl;
-    for (int y = 0; y < camera.getResolution().height; y++){
-        //std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        for (int x = 0; x < camera.getResolution().width; x++){
-            Ray primary =  camera.getPrimaryRay(x,y);
-            image.setPixel(x, y, RGB(x, y, 0));
-        }
-    }
-    screen.waitClose();
+
+    scene.Render();
     return 0;
 }

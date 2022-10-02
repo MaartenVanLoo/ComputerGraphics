@@ -17,6 +17,9 @@ public:
     /// Doesn't check if the point is actually on the circle!
     /// \return
     Vec4 normal(Vec4 point);
+
+    Vec4 normal(Ray &ray) override;
+
     friend std::ostream &operator<<(std::ostream &os, const Sphere &sphere);
 
 private:
