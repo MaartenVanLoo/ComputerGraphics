@@ -10,11 +10,11 @@ Sensor::Sensor(float width, float height): width(width), height(height){}
 Sensor::Sensor(std::string ratio, float width) {
         if (ratio == "4:3"){
             this->width = width;
-            this->height = width * 3.0 / 4.0;
+            this->height = width * 3.0f / 4.0f;
         }
         else if (ratio=="16:9"){
             this->width = width;
-            this->height = width * 9.0 / 16.0;
+            this->height = width * 9.0f / 16.0f;
         }
         else{
             throw std::invalid_argument("Unrecognized sensor aspect ratio");
@@ -62,11 +62,11 @@ Resolution::Resolution(int width, int height): width(width), height(height){}
 Resolution::Resolution(std::string ratio, int width) {
     if (ratio == "4:3"){
         this->width = width;
-        this->height = int(width * 3.0 / 4.0);
+        this->height = int(width * 3.0f / 4.0f);
     }
     else if (ratio =="16:9"){
         this->width = width;
-        this->height = int(width * 9.0 / 16.0);
+        this->height = int(width * 9.0f / 16.0f);
     }
     else{
         throw std::invalid_argument("Unrecognized resolution");
@@ -107,6 +107,10 @@ Resolution::Resolution(Screensize screensize) {
         default:
             throw std::invalid_argument("Unrecognized screensize");
     }
+}
+
+long Resolution::getPixels() const{
+    return this->width * this->height;
 }
 
 

@@ -34,6 +34,7 @@ struct Resolution{
     Resolution(std::string ratio, int width);
     Resolution(Screensize screensize);
 
+    long getPixels() const;
     friend std::ostream &operator<<(std::ostream &os, const Resolution &resolution);
 
     int width = 1920, height = 1080;

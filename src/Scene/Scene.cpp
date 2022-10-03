@@ -2,6 +2,7 @@
 // Created by maart on 30/09/2022.
 //
 
+#include <Utils/Stopwatch.h>
 #include "../../include/Scene/Scene.h"
 
 Scene::~Scene() {
@@ -34,6 +35,9 @@ void Scene::Render() {
     this->screen = new Screen(*this->image);
     this->screen->show();
 
+    Stopwatch stopwatch = Stopwatch();
+    stopwatch.start();
+
     //main render loop
     for (int y = 0; y < this->camera.getResolution().height; y++){
         for (int x = 0; x < this->camera.getResolution().width; x++){
@@ -48,9 +52,17 @@ void Scene::Render() {
             //image.setPixel(x, y, RGB(x, y, 0));
         }
     }
+    stopwatch.stop();
+    std::cout << "Render finished in : " << stopwatch.elapsedms() << " ms" << std::endl;
+    std::cout << "Pixel count: " << this->camera.getResolution().getPixels() << std::endl;
+    std::cout << "Pixels / second : " << this->camera.getResolution().getPixels() * 1000/stopwatch.elapsedms() << std::endl;
+    stopwatch.reset();
+    stopwatch.start();
     this->image->update();
     this->image->save("render.png");
     this->image->save("render.bmp");
+    stopwatch.stop();
+    std::cout << "File saved in :" << stopwatch.elapsedms() << " ms" << std::endl;
     this->screen->waitClose();
 
     //cleanup screen
@@ -63,7 +75,7 @@ Scene::Scene() {
     this->camera.setPosition(Vec4(-5,0,0,1));
     this->camera.setDirection(Vec4(1,0,0, 0));
     this->camera.setSensor(Sensor(360,240));
-    this->camera.setResolution(Resolution(Screensize::_4K));
+    this->camera.setResolution(Resolution(Screensize::_1080p));
     this->camera.setFocalLength(100);
 }
 

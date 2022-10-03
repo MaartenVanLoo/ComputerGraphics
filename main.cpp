@@ -11,8 +11,9 @@ int main() {
     camera.setFocalLength(35);
 
     Scene scene = Scene();
-    //scene.addObject(new Sphere(Vec4(0,0,2,1),2));
+    scene.addObject(new Sphere(Vec4(0,-3,-2,1),1.5));
     scene.addObject(new Box(Vec4(0,0,0,1),Vec4(1,1,1,0)));
+    scene.addObject(new Box(Vec4(0,2,1,1),Vec4(1,1,1,0)));
 
     Box box = Box();
     Sphere sphere = Sphere();

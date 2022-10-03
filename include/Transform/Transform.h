@@ -18,13 +18,14 @@ public:
     static void rotatef(Matrix4 &T, float angle, Vec3 axis);
     static void rotatef(Matrix4 &T, float angle, Vec4 axis);
 
-    //https://people.cs.clemson.edu/~dhouse/courses/401/notes/affines-matrices.pdf
+    //https://people.cs.clemson.edu/~dhouse/courses/401/notes/affines-matrices.pdf => rotation Y and Z are swapped?
+    //checked with matlab makehgtform function
     static void translate(Matrix4 &T, float dx, float dy, float dz);
+    static void scale(Matrix4 &T, float s);
     static void scale(Matrix4 &T, float sx, float sy, float sz);
     static void shear(Matrix4 &T, float hxy, float hxz, float hyz, float hyx, float hzx, float hzy);
     static void rotateX(Matrix4 &T, float angle);
     static void rotateY(Matrix4 &T, float angle);
     static void rotateZ(Matrix4 &T, float angle);
-    static void rotate(Matrix4 &T, float Rx, float Ry, float Rz);
 };
 #endif //I_COMPUTERGRAPHICS_TRANSFORM_H

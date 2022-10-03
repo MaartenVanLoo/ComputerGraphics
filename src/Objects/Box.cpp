@@ -19,9 +19,9 @@ bool Box::hitPoint(Ray &ray, float &t1, float &t2) {
 
     // ray-box intersection in box space
     Vec4 m = 1.0/rd;
-    Vec4 s = Vec4((rd[0]<0.0)?1.0:-1.0,
-                  (rd[1]<0.0)?1.0:-1.0,
-                  (rd[2]<0.0)?1.0:-1.0,
+    Vec4 s = Vec4((rd[0]<0.0)?1.0f:-1.0f,
+                  (rd[1]<0.0)?1.0f:-1.0f,
+                  (rd[2]<0.0)?1.0f:-1.0f,
                   0);
     Vec4 tN = m * (-ro + s * rad);
     Vec4 tF = m * (-ro - s * rad);

@@ -20,16 +20,16 @@ cv::Mat resizeKeepAspectRatio(const cv::Mat &input, const cv::Size &dstSize, con
     if( h1 <= dstSize.height)
     {
         // only vertical borders
-        top = (dstSize.height - h1) / 2;
+        top = int((dstSize.height - h1) / 2);
         down = top;
-        cv::resize( input, output, cv::Size(dstSize.width, h1),0,0);
+        cv::resize( input, output, cv::Size(dstSize.width, int(h1)),0,0);
     }
     else
     {
         // only horizontal borders
-        left = (dstSize.width - w2) / 2;
+        left = int((dstSize.width - w2) / 2);
         right = left;
-        cv::resize( input, output, cv::Size(w2, dstSize.height),0,0);
+        cv::resize( input, output, cv::Size(int(w2), dstSize.height),0,0);
     }
     cv::copyMakeBorder(output, output, top, down, left, right, cv::BORDER_CONSTANT, bgcolor );
     return output;

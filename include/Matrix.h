@@ -10,6 +10,12 @@
 
 class Matrix4{
 public:
+    bool operator==(const Matrix4 &rhs) const;
+
+    bool operator!=(const Matrix4 &rhs) const;
+
+    Matrix4& operator *=(Matrix4& rhs); // elementwise multiplication
+
     Vec4& operator[](int index);
 
     friend std::ostream &operator<<(std::ostream &os, const Matrix4 &matrix4);

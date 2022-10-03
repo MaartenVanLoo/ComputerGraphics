@@ -37,6 +37,9 @@ Ray Camera::getPrimaryRay(int x, int y) {
     ray.setDir(lcs_X, lcs_y, lcs_z); //compute the direction of the ray
     //std::cout << "x:" << lcs_X  << " y: " << lcs_y << " z: " << lcs_z << "\n";
     // TODO: Transform ray according to camera direction.
+
+    //transform ray from "camera-space" to "global-space"
+
     return ray;
 }
 
