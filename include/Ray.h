@@ -6,7 +6,7 @@
 #define I_COMPUTERGRAPHICS_RAY_H
 
 #include <ostream>
-#include "Vector.h"
+#include "LinearAlgebra/Vector.h"
 class Ray {
 public:
     Ray(){};

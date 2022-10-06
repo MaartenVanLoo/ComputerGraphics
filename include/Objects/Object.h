@@ -6,7 +6,7 @@
 #define I_COMPUTERGRAPHICS_OBJECT_H
 
 #include "../Ray.h"
-#include "../Vector.h"
+#include "LinearAlgebra/Vector.h"
 #include <cmath>
 #include <algorithm>
 #include <ostream>

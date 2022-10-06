@@ -11,6 +11,7 @@
 #include <Camera/Camera.h>
 #include <Light/Light.h>
 #include <Screen/Screen.h>
+#include <Utils/Options.h>
 #include "../Objects/Object.h"
 
 class Scene {
@@ -22,9 +23,11 @@ public:
     void addObject(Object* obj);
     friend std::ostream &operator<<(std::ostream &os, const Scene &scene);
 
-    void Render();
+    void Render(const Options &options);
 
+    RGB computePixelColor(int x, int y);
 private:
+
 
     Light light;
     Camera camera;

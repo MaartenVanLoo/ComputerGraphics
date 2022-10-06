@@ -5,18 +5,18 @@
 #ifndef I_COMPUTERGRAPHICS_TRANSFORM_H
 #define I_COMPUTERGRAPHICS_TRANSFORM_H
 
-#include <Vector.h>
-#include <Matrix.h>
+#include <LinearAlgebra/Vector.h>
+#include <LinearAlgebra/Matrix.h>
 class Transform{
 public:
     //angle in radians unless specified different
 
-    static Vec4 applyTransform(Matrix4 &T, Vec4& vec);
+    static Vec4 applyTransform(const Matrix4 &T, const Vec4& vec);
 
     //http://scipp.ucsc.edu/~haber/ph216/rotation_12.pdf
     static void rotatef(Matrix4 &T, float angle, float x, float y, float z);
-    static void rotatef(Matrix4 &T, float angle, Vec3 axis);
-    static void rotatef(Matrix4 &T, float angle, Vec4 axis);
+    static void rotatef(Matrix4 &T, float angle, const Vec3 &axis);
+    static void rotatef(Matrix4 &T, float angle, const Vec4 &axis);
 
     //https://people.cs.clemson.edu/~dhouse/courses/401/notes/affines-matrices.pdf => rotation Y and Z are swapped?
     //checked with matlab makehgtform function

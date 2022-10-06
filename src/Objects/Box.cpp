@@ -19,15 +19,15 @@ bool Box::hitPoint(Ray &ray, float &t1, float &t2) {
 
     // ray-box intersection in box space
     Vec4 m = 1.0/rd;
-    Vec4 s = Vec4((rd[0]<0.0)?1.0f:-1.0f,
-                  (rd[1]<0.0)?1.0f:-1.0f,
-                  (rd[2]<0.0)?1.0f:-1.0f,
+    Vec4 s = Vec4((rd.get(0)<0.0)?1.0f:-1.0f,
+                  (rd.get(1)<0.0)?1.0f:-1.0f,
+                  (rd.get(2)<0.0)?1.0f:-1.0f,
                   0);
     Vec4 tN = m * (-ro + s * rad);
     Vec4 tF = m * (-ro - s * rad);
 
-    t1 = std::max(std::max(tN[0], tN[1] ), tN[2]);
-    t2 = std::min(std::min(tF[0], tF[1] ), tF[2]);
+    t1 = tN.max3(); //std::max(std::max(tN[0], tN[1] ), tN[2]);
+    t2 = tF.min3(); //std::min(std::min(tF[0], tF[1] ), tF[2]);
 
     if( t1>t2 || t2<0.0) return false;
 

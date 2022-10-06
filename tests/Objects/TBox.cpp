@@ -38,12 +38,14 @@ TEST_CASE("tBox_HitPoints"){
         CHECK(box.hitPoint(ray7, t1, t2));
         p1 = ray7.at(t1);
         p2 = ray7.at(t2);
-        CHECK(std::abs((target1-p1)[0]) < 5e-6);
-        CHECK(std::abs((target1-p1)[1]) < 5e-6);
-        CHECK(std::abs((target1-p1)[2]) < 5e-6);
-        CHECK(std::abs((target2-p2)[0]) < 5e-6);
-        CHECK(std::abs((target2-p2)[1]) < 5e-6);
-        CHECK(std::abs((target2-p2)[2]) < 5e-6);
+        CHECK(std::abs((target1-p1).get(0)) < 5e-6);
+        CHECK(std::abs((target1-p1).get(1)) < 5e-6);
+        CHECK(std::abs((target1-p1).get(2)) < 5e-6);
+        CHECK(std::abs((target1-p1).get(3)) < 5e-6);
+        CHECK(std::abs((target2-p2).get(0)) < 5e-6);
+        CHECK(std::abs((target2-p2).get(1)) < 5e-6);
+        CHECK(std::abs((target2-p2).get(2)) < 5e-6);
+        CHECK(std::abs((target2-p2).get(3)) < 5e-6);
 
 
     }

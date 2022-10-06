@@ -11,7 +11,7 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 set(ProjectSourceFiles
         ${CMAKE_SOURCE_DIR}/src/Ray.cpp
-        ${CMAKE_SOURCE_DIR}/src/Vector.cpp
+        ${CMAKE_SOURCE_DIR}/src/LinearAlgebra/Vector.cpp
         ${CMAKE_SOURCE_DIR}/src/Objects/Sphere.cpp
         ${CMAKE_SOURCE_DIR}/src/Objects/Box.cpp
         ${CMAKE_SOURCE_DIR}/src/Camera/Camera.cpp
@@ -19,7 +19,7 @@ set(ProjectSourceFiles
         ${CMAKE_SOURCE_DIR}/src/Camera/CameraUtils.cpp
         ${CMAKE_SOURCE_DIR}/src/Screen/Screen.cpp
         ${CMAKE_SOURCE_DIR}/src/Transform/Transform.cpp
-        ${CMAKE_SOURCE_DIR}/src/Matrix.cpp
+        ${CMAKE_SOURCE_DIR}/src/LinearAlgebra/Matrix.cpp
         ${CMAKE_SOURCE_DIR}/src/Light/Light.cpp
         )
 add_subdirectory(tests)
@@ -28,7 +28,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 #resource files
-set (APP_ICON_RESOURCE_WINDOWS "resources.rc" )
+set (APP_ICON_RESOURCE_WINDOWS "resources.rc" include/Utils/RenderTask.h)
 
 
 add_executable(I_ComputerGraphics main.cpp ${ProjectSourceFiles} ${APP_ICON_RESOURCE_WINDOWS})
@@ -36,7 +36,7 @@ target_include_directories(I_ComputerGraphics PUBLIC ${CMAKE_SOURCE_DIR}/include
 target_link_libraries( I_ComputerGraphics PRIVATE  ${OpenCV_LIBS} )
 #target_link_options(I_ComputerGraphics PRIVATE /nodefaultlib)
 
-#Optiomization flags
+#Optimization flags
 message("Build type: ${CMAKE_BUILD_TYPE}")
 if (CMAKE_BUILD_TYPE MATCHES "Release")
     target_compile_options(I_ComputerGraphics  PRIVATE
@@ -51,5 +51,8 @@ if (CMAKE_BUILD_TYPE MATCHES "Release")
     SET_TARGET_PROPERTIES(I_ComputerGraphics PROPERTIES LINK_FLAGS "/PROFILE")
     SET_TARGET_PROPERTIES(I_ComputerGraphics PROPERTIES LINK_FLAGS "/DEBUG")
 endif()
+
+#override the AVX.h file to use AVX
+#target_compile_definitions(I_ComputerGraphics PUBLIC SSE_AVX_EXTENSIONS=true)
 
 

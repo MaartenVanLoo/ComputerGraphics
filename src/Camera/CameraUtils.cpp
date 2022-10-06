@@ -109,8 +109,8 @@ Resolution::Resolution(Screensize screensize) {
     }
 }
 
-long Resolution::getPixels() const{
-    return this->width * this->height;
+long long Resolution::getPixels() const{
+    return (long long)(this->width) * (long long)(this->height);
 }
 
 

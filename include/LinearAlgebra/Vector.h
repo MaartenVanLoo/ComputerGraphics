@@ -7,14 +7,14 @@
 
 #include <cmath>
 #include <ostream>
-
-struct Vec2;
-struct Vec3;
-struct Vec4;
+#include <immintrin.h>
+#include <AVX.h>
+#include "LinearAlgebra.h"
 
 struct Vec2 {
     Vec2(float x = 0.0, float y = 0.0);
 
+    float get(int index) const;
     float dot(const Vec2& rhs) const;
     static float dot(const Vec2& lhs, const Vec2& rhs);
 
@@ -39,11 +39,12 @@ struct Vec2 {
     friend Vec2 operator /(Vec2 lhs, const float& rhs);  //elementwise division
     friend Vec2 operator /(Vec2 lhs, const Vec2& rhs);   //elementwise division
 
-    float& operator[](int index);
+
 
     friend std::ostream &operator<<(std::ostream &os, const Vec2 &vec2);
 private:
     float data[2] {0.0,0.0};
+    friend Matrix4;
     friend Vec3;
     friend Vec4;
 
@@ -51,6 +52,9 @@ private:
 
 struct Vec3{
     Vec3(float x = 0.0, float y = 0.0, float z = 0.0);
+
+    //get index
+    float get(int index) const;
 
     float dot(const Vec3& rhs) const;
     static float dot(const Vec3& lhs, const Vec3& rhs);
@@ -65,9 +69,9 @@ struct Vec3{
     Vec3 operator-() const;
     Vec3& operator +=(const Vec3& rhs); // elementwise addition
     Vec3& operator -=(const Vec3& rhs); // elementwise subtraction
-    Vec3& operator *=(const float rhs); // elementwise multiplication
+    Vec3& operator *=(float rhs); // elementwise multiplication
     Vec3& operator *=(const Vec3& rhs); // elementwise multiplication
-    Vec3& operator /=(const float rhs); // elementwise division
+    Vec3& operator /=(float rhs); // elementwise division
     Vec3& operator /=(const Vec3& rhs); // elementwise division
 
     friend Vec3 operator +(Vec3 lhs, const Vec3& rhs);   //elementwise addition
@@ -79,39 +83,82 @@ struct Vec3{
     friend Vec3 operator /(Vec3 lhs, const float& rhs);  //elementwise division
     friend Vec3 operator /(Vec3 lhs, const Vec3& rhs);   //elementwise division
 
-    float& operator[](int index);
+
 
     friend std::ostream &operator<<(std::ostream &os, const Vec3 &vec3);
 
 private:
     float data[3] {0.0,0.0,0.0};;
+    friend Matrix4;
     friend Vec2;
     friend Vec4;
     //float x,y,z;
 };
 
 struct Vec4{
-    Vec4(float  = 0.0, float y = 0.0, float z = 0.0, float w = 0.0);
+    Vec4(float x  = 0.0, float y = 0.0, float z = 0.0, float w = 0.0);
     Vec4(Vec3 &vec3, float w = 0.0);
 
     // Copy constructor
     Vec4(const Vec4& p1);
+
+    //get index
+    float get(int index) const;
+
+    template <int index> void set(float value) {
+#if SET_DATA
+        __m128 b = _mm_set_ss(value);
+        this->data = _mm_insert_ps(this->data,b,(index << 4)); //TODO: test!
+#else
+        this->data[index] = value;
+#endif
+    }
+
+    //Todo: check if this is faster?:
+    template <int i> float get() const noexcept {
+#if SET_DATA
+        return _mm_cvtss_f32(_mm_shuffle_ps(this->data, this->data, _MM_SHUFFLE(0, 0, 0, i)));
+#else
+        return this->data[i];
+#endif
+    }
 
     float dot(const Vec4& rhs) const;
     static float dot(const Vec4& lhs,const Vec4& rhs);
 
     //compute the cross product as if ti was a Vec3 (only first 3 elements will be used)
     Vec4 cross(const Vec4& rhs) const;
-    Vec4 cross(const Vec4& lhs, const Vec4& rhs);
+    static Vec4 cross(const Vec4& lhs, const Vec4& rhs);
+
+    //cosine of angle between 2 vectors
+    float angle(const Vec4& rhs) const;
+    static float angle(const Vec4& v1, const Vec4& v2);
 
     float abs() const;
     static float abs(const Vec4& vec);
 
-    //angle between 2 vectors
-    float angle(const Vec4& v1, const Vec4& v2);
-
     //sum of all values
+    float sum() const;
     static float sum(const Vec4& vec);
+    //sum of first 3 values (sometimes needed when only xyz is required
+    float sum3() const;
+    static float sum3(const Vec4& vec);
+
+    //max of all values
+    float max() const;
+    static float max( const Vec4& vec);
+    //max of first 3 values (sometimes needed when only xyz is required
+    float max3() const;
+    static float max3( const Vec4& vec);
+
+    //min of all values
+    float min() const;
+    static float min( const Vec4& vec);
+    //min of first 3 values (sometimes needed when only xyz is required
+    float min3() const;
+    static float min3( const Vec4& vec);
+
+
     //operators
     bool operator==(const Vec4 &rhs) const;
     bool operator!=(const Vec4 &rhs) const;
@@ -119,9 +166,9 @@ struct Vec4{
     Vec4 operator-() const;
     Vec4& operator +=(const Vec4& rhs); // elementwise addition
     Vec4& operator -=(const Vec4& rhs); // elementwise subtraction
-    Vec4& operator *=(const float rhs); // elementwise multiplication
+    Vec4& operator *=(float rhs); // elementwise multiplication
     Vec4& operator *=(const Vec4& rhs); // elementwise multiplication
-    Vec4& operator /=(const float rhs); // elementwise division
+    Vec4& operator /=(float rhs); // elementwise division
     Vec4& operator /=(const Vec4& rhs); // elementwise division
 
     friend Vec4 operator +(Vec4 lhs, const Vec4& rhs);   //elementwise addition
@@ -133,16 +180,24 @@ struct Vec4{
     friend Vec4 operator /(Vec4 lhs, const float& rhs);  //elementwise division
     friend Vec4 operator /(Vec4 lhs, const Vec4& rhs);   //elementwise division
 
-    float& operator[](int index);
+
 
     friend std::ostream &operator<<(std::ostream &os, const Vec4 &vec4);
 
 private:
+
+#if SET_DATA
+    __m128 data;
+#else
     float data[4] {0.0,0.0,0.0,0.0};
+#endif
+    friend Matrix4;
     friend Vec2;
     friend Vec3;
+
     //float x,y,z,w;
 };
+
 
 
 

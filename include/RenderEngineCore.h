@@ -7,8 +7,9 @@
 
 #undef RGB //Note test framework Catch2 already has an RGB macro defined which causes havoc with our own RGB class; this will disable the macro
 
+
 #include "Ray.h"
-#include "Vector.h"
+#include "LinearAlgebra/Vector.h"
 
 #include "Objects/ObjectCore.h"
 
@@ -19,4 +20,6 @@
 #include "Screen/Screen.h"
 
 #include "Transform/Transform.h"
+
+#include "Utils/Options.h"
 #endif //I_COMPUTERGRAPHICS_RENDERENGINECORE_H

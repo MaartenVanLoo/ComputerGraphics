@@ -7,7 +7,7 @@
 
 
 #include <ostream>
-#include "../Vector.h"
+#include "LinearAlgebra/Vector.h"
 #include "../Ray.h"
 #include "CameraUtils.h"
 

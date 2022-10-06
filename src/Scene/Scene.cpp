@@ -3,6 +3,7 @@
 //
 
 #include <Utils/Stopwatch.h>
+#include <Utils/Options.h>
 #include "../../include/Scene/Scene.h"
 
 Scene::~Scene() {
@@ -13,7 +14,7 @@ Scene::~Scene() {
         this->screen->waitClose();
         free(this->screen);
     }
-    if (this->image == nullptr){
+    if (this->image != nullptr){
         free(this->image);
     }
 }
@@ -27,29 +28,23 @@ void Scene::addObject(Object *obj) {
     this->objects.push_back(obj);
 }
 
-void Scene::Render() {
-    if (this->image == nullptr) free(this->image);
+void Scene::Render(const Options &options) {
+    if (this->image != nullptr) free(this->image);
     this->image = new Image(camera.getResolution());
 
     //create new gui
-    this->screen = new Screen(*this->image);
-    this->screen->show();
-
+    if (options.enableGui) {
+        this->screen = new Screen(*this->image);
+        this->screen->show();
+    }
     Stopwatch stopwatch = Stopwatch();
     stopwatch.start();
 
     //main render loop
     for (int y = 0; y < this->camera.getResolution().height; y++){
         for (int x = 0; x < this->camera.getResolution().width; x++){
-            Ray primary =  this->camera.getPrimaryRay(x,y);
-            //std::cout <<primary << std::endl;
-            for (auto obj: this->objects){
-                float t1,t2;
-                if (obj->hitPoint(primary, t1, t2)){
-                    this->image->setPixel(x, y, RGB(x, y, 0));
-                }
-            }
-            //image.setPixel(x, y, RGB(x, y, 0));
+            RGB rgb = this->computePixelColor(x,y);
+            this->image->setPixel(x, y,rgb);
         }
     }
     stopwatch.stop();
@@ -63,11 +58,14 @@ void Scene::Render() {
     this->image->save("render.bmp");
     stopwatch.stop();
     std::cout << "File saved in :" << stopwatch.elapsedms() << " ms" << std::endl;
-    this->screen->waitClose();
 
-    //cleanup screen
-    free(this->screen);
-    this->screen = nullptr;
+    //close gui
+    if (options.enableGui) {
+        this->screen->waitClose();
+        //cleanup screen
+        free(this->screen);
+        this->screen = nullptr;
+    }
 
 }
 
@@ -75,8 +73,21 @@ Scene::Scene() {
     this->camera.setPosition(Vec4(-5,0,0,1));
     this->camera.setDirection(Vec4(1,0,0, 0));
     this->camera.setSensor(Sensor(360,240));
-    this->camera.setResolution(Resolution(Screensize::_1080p));
+    this->camera.setResolution(Resolution(Screensize::_4K));
     this->camera.setFocalLength(100);
+}
+
+RGB Scene::computePixelColor(int x, int y) {
+    RGB rgb;
+    Ray primary =  this->camera.getPrimaryRay(x,y);
+    //std::cout <<primary << std::endl;
+    for (auto obj: this->objects){
+        float t1,t2;
+        if (obj->hitPoint(primary, t1, t2)){
+             rgb = RGB(x, y, 0);
+        }
+    }
+    return rgb;
 }
 
 void Image::save(std::string filename) {

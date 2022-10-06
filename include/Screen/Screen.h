@@ -7,7 +7,7 @@
 
 #include <opencv2/opencv.hpp>
 #include "../Camera/CameraUtils.h"
-#include "../Vector.h"
+#include "LinearAlgebra/Vector.h"
 #include <thread>
 #include <chrono>
 #include <atomic>
