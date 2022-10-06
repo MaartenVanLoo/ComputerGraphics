@@ -411,7 +411,7 @@ TEST_CASE("tVectorBenchmark"){
                 meter.measure([vec1,vec2] { return vec1 - vec2;});
             };
 
-        //TODO: finish benchmarks
+
         // *=
         BENCHMARK_ADVANCED("Vec4 *  Vec4")(Catch::Benchmark::Chronometer meter) {
                 Vec4 vec1 = Vec4(rand()%100,rand()%100,rand()%100,rand()%100);
@@ -429,7 +429,7 @@ TEST_CASE("tVectorBenchmark"){
                 meter.measure([vec1,vec2] { return vec2 * vec1;});
             };
 
-
+        //TODO: finish benchmarks
         // /=
         stopwatch = Stopwatch();
         stopwatch.start();

@@ -26,7 +26,6 @@ std::ostream &operator<<(std::ostream &os, const Matrix4 &matrix4) {
 
 //https://codereview.stackexchange.com/questions/208565/simd-product-of-a-4%C3%974-matrix-and-a-vector
 Vec4 Matrix4::operator*(const Vec4 &rhs) const{
-    //should work both for _m128 and float[4] => //TODO:check, still something wrong
     Vec4 result; //init with all zero's
 #if SSE_AVX_EXTENSIONS
     __m128 x = _mm_set1_ps(rhs.get<0>());
@@ -48,7 +47,7 @@ Vec4 Matrix4::operator*(const Vec4 &rhs) const{
 #endif
     //data = float[4]
 #else
-    //no avx & SSE
+    //no avx & no SSE
     for (int col = 0; col < 4; col ++){
         for(int row = 0; row < 4 ; row ++){
             result.data[row] += this->data[col].data[row] * rhs.data[col];
