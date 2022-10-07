@@ -23,7 +23,12 @@ public:
     static void translate(Matrix4 &T, float dx, float dy, float dz);
     static void scale(Matrix4 &T, float s);
     static void scale(Matrix4 &T, float sx, float sy, float sz);
+    //don't use "shear" as inverse is hard!
     static void shear(Matrix4 &T, float hxy, float hxz, float hyz, float hyx, float hzx, float hzy);
+    //https://www.gatevidyalay.com/3d-shearing-in-computer-graphics-definition-examples/
+    static void shearX(Matrix4 &T, float shy, float shz);
+    static void shearY(Matrix4 &T, float shx, float shz);
+    static void shearZ(Matrix4 &T, float shx, float shy);
     static void rotateX(Matrix4 &T, float angle);
     static void rotateY(Matrix4 &T, float angle);
     static void rotateZ(Matrix4 &T, float angle);

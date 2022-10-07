@@ -8,5 +8,6 @@
 #include "Object.h"
 #include "Box.h"
 #include "Sphere.h"
+#include "Plane.h"
 
 #endif //I_COMPUTERGRAPHICS_OBJECTCORE_H

@@ -2,7 +2,6 @@
 // Created by maart on 30/09/2022.
 //
 
-#include <cassert>
 #include <iostream>
 #include "LinearAlgebra/Vector.h"
 

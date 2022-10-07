@@ -7,8 +7,8 @@ int main() {
     Stopwatch stopwatch = Stopwatch();
     stopwatch.start();
     for (int i = 0; i< 1e6; i++) {
-        Vec4 v1 = Vec4(rand() % 8, rand() % 8, rand() % 8, 0);
-        Vec4 v2 = Vec4(rand() % 8, rand() % 8, rand() % 8, 0);
+        Vec4 v1 = Vec4((float)(rand() % 8), (float)(rand() % 8), (float)(rand() % 8), 0.0f);
+        Vec4 v2 = Vec4((float)(rand() % 8), (float)(rand() % 8), (float)(rand() % 8), 0.0f);
         Vec4 res = v1.cross(v2);
     }
     stopwatch.stop();

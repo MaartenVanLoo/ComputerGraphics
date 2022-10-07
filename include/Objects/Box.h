@@ -11,7 +11,7 @@
 //aligned box
 class Box : public Object{
 public:
-    Box(){};
+    Box(){this->pos = Vec4(0,0,0,1);};
     Box(const Vec4 &pos, const Vec4 &halfSize);
 
     bool hitPoint(Ray &ray, float &t1, float &t2) override;

@@ -4,22 +4,15 @@
 
 #include <LinearAlgebra/Matrix.h>
 #include <iostream>
+#include <cassert>
 
-Vec4& Matrix4::operator[](int index){
-    if (index > 3 || index < 0) {
-        throw std::out_of_range("Index out of bounds");
-    }
-    return this->data[index];
-}
 
 std::ostream &operator<<(std::ostream &os, const Matrix4 &matrix4) {
-
     os << "Matrix: " << "\n";
-    os << matrix4.data[0] << "\n";
-    os << matrix4.data[1] << "\n";
-    os << matrix4.data[2] << "\n";
-    os << matrix4.data[3] << "\n";
-
+    os << "[" << matrix4.data[0].get<0>() <<", "<< matrix4.data[1].get<0>()<<", "<< matrix4.data[2].get<0>()<<", "<< matrix4.data[3].get<0>()<< "]\n";
+    os << "[" << matrix4.data[0].get<1>() <<", "<< matrix4.data[1].get<1>()<<", "<< matrix4.data[2].get<1>()<<", "<< matrix4.data[3].get<1>()<< "]\n";
+    os << "[" << matrix4.data[0].get<2>() <<", "<< matrix4.data[1].get<2>()<<", "<< matrix4.data[2].get<2>()<<", "<< matrix4.data[3].get<2>()<< "]\n";
+    os << "[" << matrix4.data[0].get<3>() <<", "<< matrix4.data[1].get<3>()<<", "<< matrix4.data[2].get<3>()<<", "<< matrix4.data[3].get<3>()<< "]\n";
     return os;
 }
 
@@ -61,39 +54,23 @@ Vec4 Matrix4::operator*(const Vec4 &rhs) const{
 //http://fhtr.blogspot.com/2010/02/4x4-float-matrix-multiplication-using.html
 Matrix4 &Matrix4::operator*=(const Matrix4 &rhs) {
     Matrix4 tmp; //defaults to all zero's
-#if SSE_AVX_EXTENSIONS
-    //TODO: does this always work?
+
     tmp.data[0] = (*this)*rhs.data[0];
     tmp.data[1] = (*this)*rhs.data[1];
     tmp.data[2] = (*this)*rhs.data[2];
     tmp.data[3] = (*this)*rhs.data[3];
 
-    //TODO: not used, check if correct and profile
-    /*for (int i =0; i < 4; i++){
-        for (int j = 0; j < 4; j++){
-            tmp[i] = Vec4(
-                    tmp[j].get(i) + this->data[j].get(0) * rhs.data[0].get(i),
-                    tmp[j].get(i) + this->data[j].get(1) * rhs.data[1].get(i),
-                    tmp[j].get(i) + this->data[j].get(2) * rhs.data[2].get(i),
-                    tmp[j].get(i) + this->data[j].get(3) * rhs.data[3].get(i)
-                    );
-        }
-    }*/
-#else
-    for (int i =0; i < 4; i++){
-        for (int j = 0; j < 4; j++){
-            for (int k = 0; k < 4; k++){
-                tmp[j].data[i] += this->data[j].data[k] * rhs.data[k].data[i];
-            }
-        }
-    }
-#endif
     this->data[0] = tmp.data[0];
     this->data[1] = tmp.data[1];
     this->data[2] = tmp.data[2];
     this->data[3] = tmp.data[3];
     return *this;
 }
+Matrix4 operator*(Matrix4 lhs, const Matrix4 &rhs) {
+    lhs*=rhs;
+    return lhs;
+}
+
 
 bool Matrix4::operator==(const Matrix4 &rhs) const {
     for (int i = 0; i < 4; i++){
@@ -106,11 +83,14 @@ bool Matrix4::operator!=(const Matrix4 &rhs) const {
     return !(rhs == *this);
 }
 
-
-
-Vec4 operator*(Matrix4 lhs, Vec4 &rhs) {
-
-    return Vec4();
+Matrix4 Matrix4::identity() {
+    Matrix4 mat4;
+    mat4.data[0] = Vec4(1,0,0,0);
+    mat4.data[1] = Vec4(0,1,0,0);
+    mat4.data[2] = Vec4(0,0,1,0);
+    mat4.data[3] = Vec4(0,0,0,1);
+    return mat4;
 }
+
 
 

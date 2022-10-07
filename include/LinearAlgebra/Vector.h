@@ -10,6 +10,7 @@
 #include <immintrin.h>
 #include <AVX.h>
 #include "LinearAlgebra.h"
+#include <cassert>
 
 struct Vec2 {
     Vec2(float x = 0.0, float y = 0.0);
@@ -106,6 +107,7 @@ struct Vec4{
     float get(int index) const;
 
     template <int index> void set(float value) {
+        assert(index <= 3 & index >= 0);
 #if SET_DATA
         __m128 b = _mm_set_ss(value);
         this->data = _mm_insert_ps(this->data,b,(index << 4)); //TODO: test!
@@ -115,11 +117,12 @@ struct Vec4{
     }
 
     //Todo: check if this is faster?:
-    template <int i> float get() const noexcept {
+    template <int index> float get() const noexcept {
+        assert(index <= 3 & index >= 0);
 #if SET_DATA
-        return _mm_cvtss_f32(_mm_shuffle_ps(this->data, this->data, _MM_SHUFFLE(0, 0, 0, i)));
+        return _mm_cvtss_f32(_mm_shuffle_ps(this->data, this->data, _MM_SHUFFLE(0, 0, 0, index)));
 #else
-        return this->data[i];
+        return this->data[index];
 #endif
     }
 

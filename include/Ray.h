@@ -25,8 +25,8 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const Ray &ray);
 
 private:
-    Vec4 position;
-    Vec4 direction;
+    Vec4 position = Vec4(0,0,0,1);
+    Vec4 direction = Vec4(0,0,0,0);;
 
 };
 

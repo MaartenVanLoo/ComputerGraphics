@@ -22,7 +22,7 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const Sphere &sphere);
 
-private:
+protected:
     Vec4 position;
     float radius = 1.0;
 };

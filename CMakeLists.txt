@@ -12,8 +12,10 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 set(ProjectSourceFiles
         ${CMAKE_SOURCE_DIR}/src/Ray.cpp
         ${CMAKE_SOURCE_DIR}/src/LinearAlgebra/Vector.cpp
+        ${CMAKE_SOURCE_DIR}/src/Objects/Object.cpp
         ${CMAKE_SOURCE_DIR}/src/Objects/Sphere.cpp
         ${CMAKE_SOURCE_DIR}/src/Objects/Box.cpp
+        ${CMAKE_SOURCE_DIR}/src/Objects/Plane.cpp
         ${CMAKE_SOURCE_DIR}/src/Camera/Camera.cpp
         ${CMAKE_SOURCE_DIR}/src/Scene/Scene.cpp
         ${CMAKE_SOURCE_DIR}/src/Camera/CameraUtils.cpp
@@ -28,7 +30,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 
 #resource files
-set (APP_ICON_RESOURCE_WINDOWS "resources.rc" include/Utils/RenderTask.h)
+set (APP_ICON_RESOURCE_WINDOWS "resources.rc")
 
 
 add_executable(I_ComputerGraphics main.cpp ${ProjectSourceFiles} ${APP_ICON_RESOURCE_WINDOWS})
