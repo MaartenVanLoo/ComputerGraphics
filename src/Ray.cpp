@@ -56,6 +56,13 @@ Vec4 Ray::at(float t) const {
     return this->pos() + this->dir() * t;
 }
 
+Ray Ray::transform(const Matrix4 &T) const {
+    Ray r;
+    r.position = T * this->position;
+    r.direction = T * this->direction;
+    //r.normalizeDir();
+    return r;
+}
 
 
 

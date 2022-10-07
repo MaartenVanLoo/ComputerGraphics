@@ -723,9 +723,6 @@ std::ostream &operator<<(std::ostream &os, const Vec4 &vec4) {
 
 }
 
-
-
-
 #pragma endregion
 
 

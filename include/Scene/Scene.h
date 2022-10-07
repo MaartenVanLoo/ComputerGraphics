@@ -20,7 +20,7 @@ public:
 
     virtual ~Scene();
 
-    void addObject(Object* obj);
+    void addObject(Object* obj, RGB rgb);
     friend std::ostream &operator<<(std::ostream &os, const Scene &scene);
 
     void Render(const Options &options);

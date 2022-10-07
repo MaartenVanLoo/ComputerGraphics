@@ -4,7 +4,10 @@
 
 #include <catch2/catch_all.hpp>
 #include <iostream>
+#include <Utils/Stopwatch.h>
 #include "../../include/RenderEngineCore.h"
+
+#define benchmark true
 
 TEST_CASE("tMatrix"){
     Matrix4 mat1;
@@ -87,3 +90,25 @@ TEST_CASE("tMatrix"){
         }
     }
 }
+
+#if benchmark
+TEST_CASE("tMatrixBenchmark"){
+    Matrix4 mat1;
+    Matrix4 mat2;
+    Vec4 vec1;
+    Stopwatch stopwatch;
+
+    SECTION("Getter & Setters"){
+        //templated getter and setters
+        BENCHMARK_ADVANCED("Mat4*Vec4")(Catch::Benchmark::Chronometer meter) {
+                mat1.set<0>( 1, 2, 3, 4);
+                mat1.set<1>( 5, 6, 7, 8);
+                mat1.set<2>( 9,10,11,12);
+                mat1.set<3>(13,14,15,16);
+                vec1 = Vec4(4,8,12,1);
+                meter.measure([mat1,vec1] { return mat1*vec1; });
+            };
+
+    }
+}
+#endif

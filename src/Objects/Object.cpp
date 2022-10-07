@@ -11,15 +11,15 @@ std::ostream &operator<<(std::ostream &os, const Object &object) {
 void Object::rotate(float rx, float ry, float rz) {
     Matrix4 Tx,Ty,Tz;
     Transform::rotateX(Tx,rx);
-    Transform::rotateX(Ty,ry);
-    Transform::rotateX(Tz,rz);
+    Transform::rotateY(Ty,ry);
+    Transform::rotateZ(Tz,rz);
     this->transform = Tx * this->transform;
     this->transform = Ty * this->transform;
     this->transform = Tz * this->transform;
     //inverse transform
     Transform::rotateX(Tx,-rx);
-    Transform::rotateX(Ty,-ry);
-    Transform::rotateX(Tz,-rz);
+    Transform::rotateY(Ty,-ry);
+    Transform::rotateZ(Tz,-rz);
     this->invtransform = this->invtransform * Tx; //reverse order of transform!
     this->invtransform = this->invtransform * Ty;
     this->invtransform = this->invtransform * Tz;

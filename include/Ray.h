@@ -7,6 +7,7 @@
 
 #include <ostream>
 #include "LinearAlgebra/Vector.h"
+#include "LinearAlgebra/Matrix.h"
 class Ray {
 public:
     Ray(){};
@@ -22,6 +23,7 @@ public:
 
 
     void normalizeDir();
+    Ray transform(const Matrix4 &T) const;
     friend std::ostream &operator<<(std::ostream &os, const Ray &ray);
 
 private:

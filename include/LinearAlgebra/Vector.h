@@ -26,9 +26,9 @@ struct Vec2 {
     Vec2 operator-() const;
     Vec2& operator +=(const Vec2& rhs); // elementwise addition
     Vec2& operator -=(const Vec2& rhs); // elementwise subtraction
-    Vec2& operator *=(const float rhs); // elementwise multiplication
+    Vec2& operator *=(float rhs); // elementwise multiplication
     Vec2& operator *=(const Vec2& rhs); // elementwise multiplication
-    Vec2& operator /=(const float rhs); // elementwise division
+    Vec2& operator /=(float rhs); // elementwise division
     Vec2& operator /=(const Vec2& rhs); // elementwise division
 
     friend Vec2 operator +(Vec2 lhs, const Vec2& rhs);   //elementwise addition
@@ -52,7 +52,7 @@ private:
 };
 
 struct Vec3{
-    Vec3(float x = 0.0, float y = 0.0, float z = 0.0);
+    explicit Vec3(float x = 0.0, float y = 0.0, float z = 0.0);
 
     //get index
     float get(int index) const;
@@ -97,8 +97,8 @@ private:
 };
 
 struct Vec4{
-    Vec4(float x  = 0.0, float y = 0.0, float z = 0.0, float w = 0.0);
-    Vec4(Vec3 &vec3, float w = 0.0);
+    explicit Vec4(float x  = 0.0, float y = 0.0, float z = 0.0, float w = 0.0);
+    explicit Vec4(Vec3 &vec3, float w = 0.0);
 
     // Copy constructor
     Vec4(const Vec4& p1);

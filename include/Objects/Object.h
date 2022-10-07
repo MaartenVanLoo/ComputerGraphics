@@ -10,11 +10,19 @@
 #include <cmath>
 #include <algorithm>
 #include <ostream>
+#include "Camera/CameraUtils.h"
 #include "Transform/Transform.h"
+
+class Object;
+struct Hit {
+    float t = FLT_MAX;
+    Object *obj= nullptr;
+    Vec4 point;
+};
 
 class Object {
 public:
-    virtual bool hitPoint(Ray& ray, float &t1, float &t2) = 0;
+    virtual bool hitPoint(Ray& ray, Hit &hit1, Hit &hit2) = 0;
     virtual Vec4 normal(Ray& ray) = 0;
 
     /**
@@ -42,9 +50,12 @@ public:
      * Shear the object
      */
     void shear(float hxy, float hxz, float hyz, float hyx, float hzx, float hzy);
+
+    RGB color = RGB(0,0,0);
 protected:
     Matrix4 transform = Matrix4::identity();
     Matrix4 invtransform = Matrix4::identity();
+
 };
 
 

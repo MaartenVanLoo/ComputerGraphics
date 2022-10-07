@@ -4,14 +4,16 @@
 
 #include <Objects/Plane.h>
 
-bool Plane::hitPoint(Ray &ray, float &t1, float &t2) {
+bool Plane::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
     //assuming all vectors are normalized
     float denom = Vec4::dot(ray.dir(), this->normal);
     if (denom > 1e-6){
         Vec4 oc = ray.pos() - this->pos;
-        t1 = Vec4::dot(oc,this->normal);
-        t2 = t1; //only one intersection is possible
-        return (t1 >= 0);
+        hit1.t = Vec4::dot(oc,this->normal);
+        hit2.t = hit1.t; //only one intersection is possible
+        hit1.obj = this;
+        hit2.obj = this;
+        return (hit1.t >= 0);
     }
     return false;
 }

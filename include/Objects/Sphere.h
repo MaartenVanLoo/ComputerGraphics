@@ -10,9 +10,10 @@
 class Sphere : public Object{
 public:
     Sphere(){};
+    Sphere(const Vec4 &position);
     Sphere(const Vec4 &position, float radius);
 
-    bool hitPoint(Ray &ray, float &t1, float&t2) override;
+    bool hitPoint(Ray &ray, Hit &hit1, Hit &hit2) override;
     /// Compute the normal vector in a point on the circle.
     /// Doesn't check if the point is actually on the circle!
     /// \return
@@ -24,7 +25,6 @@ public:
 
 protected:
     Vec4 position;
-    float radius = 1.0;
 };
 
 

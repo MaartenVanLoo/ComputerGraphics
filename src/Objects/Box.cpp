@@ -9,36 +9,39 @@
 //https://iquilezles.org/articles/intersectors/
 //https://www.shadertoy.com/view/ld23DV
 //https://iquilezles.org/articles/boxfunctions/
-bool Box::hitPoint(Ray &ray, float &t1, float &t2) {
+bool Box::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
 // convert from world to box space
-    //vec4 rd = (txx*vec4(rdw,0.0)).xyz;
-    //vec4 ro = (txx*vec4(row,1.0)).xyz;
-    Vec4 rd = ray.dir();
-    Vec4 ro = ray.pos() - this->pos;
-    Vec4 rad = this->halfSize;
+    Ray tr = ray.transform(this->invtransform);
+
+    //Vec4 rd = ray.dir();
+    Vec4 rad = Vec4(1,1,1,0); //this->halfSize;
 
     // ray-box intersection in box space
-    Vec4 m = 1.0/rd;
-    Vec4 s = Vec4((rd.get(0)<0.0)?1.0f:-1.0f,
-                  (rd.get(1)<0.0)?1.0f:-1.0f,
-                  (rd.get(2)<0.0)?1.0f:-1.0f,
+    Vec4 m = 1.0/tr.dir();
+    Vec4 s = Vec4((tr.dir().get(0)<0.0)?1.0f:-1.0f,
+                  (tr.dir().get(1)<0.0)?1.0f:-1.0f,
+                  (tr.dir().get(2)<0.0)?1.0f:-1.0f,
                   0);
-    Vec4 tN = m * (-ro + s * rad);
-    Vec4 tF = m * (-ro - s * rad);
+    Vec4 tN = m * (  s - tr.pos());
+    Vec4 tF = m * (- s - tr.pos());
 
-    t1 = tN.max3(); //std::max(std::max(tN[0], tN[1] ), tN[2]);
-    t2 = tF.min3(); //std::min(std::min(tF[0], tF[1] ), tF[2]);
+    hit1.t = tN.max3(); //std::max(std::max(tN[0], tN[1] ), tN[2]);
+    hit2.t = tF.min3(); //std::min(std::min(tF[0], tF[1] ), tF[2]);
 
-    if( t1>t2 || t2<0.0) return false;
-
+    if( hit1.t>hit2.t || hit2.t<0.0) return false;
+    hit1.obj = this;
+    hit1.point = this->transform * tr.at(hit1.t);
+    hit2.obj = this;
+    hit2.point = this->transform * tr.at(hit2.t);
     return true;
 }
 
 std::ostream &operator<<(std::ostream &os, const Box &box) {
-    os << "Box: {" << "pos: " << box.pos << " size: " << box.size << "}";
+    os << "Box: {}";
     return os;
 }
 
-Box::Box(const Vec4 &pos, const Vec4 &size): pos(pos), size(size), halfSize(size/2) {
-
+Box::Box(const Vec4 &pos, const Vec4 &size) {
+    this->scale(size.get<0>(), size.get<1>(),size.get<2>());
+    this->translate(pos.get<0>(),pos.get<1>(),pos.get<2>());
 }

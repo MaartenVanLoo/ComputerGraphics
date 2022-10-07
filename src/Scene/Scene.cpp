@@ -24,8 +24,9 @@ std::ostream &operator<<(std::ostream &os, const Scene &scene) {
     return os;
 }
 
-void Scene::addObject(Object *obj) {
+void Scene::addObject(Object *obj, RGB rgb) {
     this->objects.push_back(obj);
+    this->objects.back()->color = rgb;
 }
 
 void Scene::Render(const Options &options) {
@@ -81,11 +82,26 @@ RGB Scene::computePixelColor(int x, int y) {
     RGB rgb;
     Ray primary =  this->camera.getPrimaryRay(x,y);
     //std::cout <<primary << std::endl;
+    Hit first = Hit();
+    Hit hit1,hit2;
     for (auto obj: this->objects){
-        float t1,t2;
-        if (obj->hitPoint(primary, t1, t2)){
-             rgb = RGB(x, y, 0);
+
+        if (obj->hitPoint(primary, hit1, hit2)){
+            if (first.t > hit1.t){
+                first = hit1;
+            }
+            if (first.t >hit2.t){
+                first = hit2;
+            }
         }
+    }
+    if (first.t == FLT_MAX){
+        //no hit = background
+        rgb = RGB(0,0,0);
+    }
+    else if (first.t>0){
+        rgb = first.obj->color;
+        //rgb = RGB(x, y, 0);
     }
     return rgb;
 }

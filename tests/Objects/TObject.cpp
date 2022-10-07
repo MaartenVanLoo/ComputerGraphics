@@ -8,7 +8,7 @@
 
 class TObject : public Object{
 public:
-    bool hitPoint(Ray &ray, float &t1, float &t2) override {
+    bool hitPoint(Ray &ray, Hit &t1, Hit &t2) override {
         return false;
     }
 
