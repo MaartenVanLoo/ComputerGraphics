@@ -7,7 +7,7 @@
 #include <Utils/Stopwatch.h>
 #include "../../include/RenderEngineCore.h"
 
-#define benchmark true
+#define benchmark false
 
 TEST_CASE("tMatrix"){
     Matrix4 mat1;
@@ -98,7 +98,7 @@ TEST_CASE("tMatrixBenchmark"){
     Vec4 vec1;
     Stopwatch stopwatch;
 
-    SECTION("Getter & Setters"){
+    SECTION("Matrix multiplications"){
         //templated getter and setters
         BENCHMARK_ADVANCED("Mat4*Vec4")(Catch::Benchmark::Chronometer meter) {
                 mat1.set<0>( 1, 2, 3, 4);
@@ -108,6 +108,20 @@ TEST_CASE("tMatrixBenchmark"){
                 vec1 = Vec4(4,8,12,1);
                 meter.measure([mat1,vec1] { return mat1*vec1; });
             };
+
+        BENCHMARK_ADVANCED("Mat4*Mat4")(Catch::Benchmark::Chronometer meter) {
+                mat1.set<0>(5 ,    7 ,    7 ,    7);
+                mat1.set<1>(10,     1,     8,     2);
+                mat1.set<2>(8 ,    9 ,    8 ,    8);
+                mat1.set<3>(10,    10,     4,     1);
+
+                mat2.set<0>(3,     7,     5,     2);
+                mat2.set<1>(1,     4,     4,     5);
+                mat2.set<2>(1,    10,     8,     5);
+                mat2.set<3>(9,     1,     8,     7);
+                meter.measure([mat1,mat2] { return mat1*mat2; });
+            };
+
 
     }
 }

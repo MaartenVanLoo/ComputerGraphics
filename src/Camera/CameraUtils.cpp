@@ -114,13 +114,4 @@ long long Resolution::getPixels() const{
 }
 
 
-#pragma region RGB
-RGB::RGB() {}
 
-RGB::RGB(int red, int green, int blue) {
-    this->red = red;
-    this->green = green;
-    this->blue = blue;
-}
-
-#pragma endregion

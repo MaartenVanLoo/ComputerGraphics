@@ -43,7 +43,7 @@ Image::Image(Resolution resolution) {
     this->imageBuffer = cv::Mat::zeros(cv::Size(resolution.width,resolution.height),CV_8UC3);
 }
 
-void Image::setPixel(int x, int y, RGB rgb) {
+void Image::setPixel(int x, int y, Color3 rgb) {
     cv::Vec3b & color = this->imageBuffer.at<cv::Vec3b>(y,x);
     color[0] = static_cast<unsigned char>(rgb.blue);
     color[1] = static_cast<unsigned char>(rgb.green);
@@ -52,9 +52,9 @@ void Image::setPixel(int x, int y, RGB rgb) {
     this->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 }
 
-RGB Image::getPixel(int x, int y){
+Color3 Image::getPixel(int x, int y){
     cv::Vec3b & color = this->imageBuffer.at<cv::Vec3b>(y,x);
-    return RGB(color[2], color[1], color[0]);
+    return Color3(color[2], color[1], color[0]);
 }
 
 long long Image::getLastUpdate() {
@@ -121,8 +121,17 @@ void Screen::onMouseCrop(int event,int x,int y,int flags,void *param){
 
 
 void showImage(const std::string& winname, const cv::Mat &image){
+    if (cv::getWindowProperty("Rendered Image",cv::WND_PROP_VISIBLE) ==0) return; //image not visible
     cv::Rect renderArea =  cv::getWindowImageRect(winname);
     cv::imshow(winname, resizeKeepAspectRatio(image, renderArea.size(),cv::Scalar(0,0,0)));
+}
+bool guiExists(const std::string &winname){
+    try{
+        return cv::getWindowProperty("Rendered Image",cv::WND_PROP_ASPECT_RATIO) > 0; //aspect_ratio = -1 when minimized
+    }
+    catch(const std::exception& e){
+        return false;
+    }
 }
 void Screen::loop() {
     cv::Rect2d rect;
@@ -136,18 +145,24 @@ void Screen::loop() {
     cv::setMouseCallback("Rendered Image",&Screen::onMouse,this);
 
 
-    while (gui_running && cv::getWindowProperty("Rendered Image",cv::WND_PROP_VISIBLE) == 1)
+    while (gui_running &&
+           guiExists("Rendered Image"))//cv::getWindowProperty("Rendered Image",cv::WND_PROP_VISIBLE) >= 1)
     {
-        if (this->lastUpdate <= this->image->getLastUpdate()+100){ //only update if pixels have changed (allow a difference of 100 ms to not miss a draw call;
-            showImage("Rendered Image",this->image->getImageBuffer());
+        //std::cout << cv::getWindowProperty("Rendered Image",cv::WND_PROP_VISIBLE) << std::endl;
+        //std::cout << cv::getWindowProperty("Rendered Image",cv::WND_PROP_ASPECT_RATIO)  << std::endl;
+        if (this->lastUpdate <= this->image->getLastUpdate() +
+                                100) { //only update if pixels have changed (allow a difference of 100 ms to not miss a draw call;
+            showImage("Rendered Image", this->image->getImageBuffer());
             //cv::Rect renderArea =  cv::getWindowImageRect("Rendered Image");
             //cv::imshow("Rendered Image", resizeKeepAspectRatio(this->image->getImageBuffer(), renderArea.size(),cv::Scalar(0,0,0)));
-            this->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+            this->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::steady_clock::now().time_since_epoch()).count();
         }
         key = cv::waitKey(50); //20 fps
         //std::cout << key << std::endl;
-        switch (key){
-            case -1: break; //No key pressed
+        switch (key) {
+            case -1:
+                break; //No key pressed
             case keycodes::esc:
                 cv::setWindowProperty("Rendered Image", cv::WND_PROP_FULLSCREEN, cv::WINDOW_NORMAL);
                 break;
@@ -155,13 +170,13 @@ void Screen::loop() {
                 cv::setWindowProperty("Rendered Image", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
                 break;
             case keycodes::s:
-                rect = cv::selectROI("Rendered Image",this->image->getImageBuffer(),true);
+                rect = cv::selectROI("Rendered Image", this->image->getImageBuffer(), true);
                 if (rect.empty()) break;
                 this->detailImage = this->image->getImageBuffer()(rect);
                 cv::namedWindow("Crop Image", cv::WINDOW_NORMAL | cv::WINDOW_KEEPRATIO);
-                cv::setMouseCallback("Crop Image",&Screen::onMouseCrop,this);
-                cv::resizeWindow("Crop Image",1280 ,720);
-                showImage("Crop Image",this->detailImage);
+                cv::setMouseCallback("Crop Image", &Screen::onMouseCrop, this);
+                cv::resizeWindow("Crop Image", 1280, 720);
+                showImage("Crop Image", this->detailImage);
                 break;
             default:
                 std::cout << "key pressed:" << key << std::endl;

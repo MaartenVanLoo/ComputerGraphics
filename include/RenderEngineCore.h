@@ -5,7 +5,7 @@
 #ifndef I_COMPUTERGRAPHICS_RENDERENGINECORE_H
 #define I_COMPUTERGRAPHICS_RENDERENGINECORE_H
 
-#undef RGB //Note test framework Catch2 already has an RGB macro defined which causes havoc with our own RGB class; this will disable the macro
+#undef RGB //Note test framework Catch2 already has an Color3 macro defined which causes havoc with our own Color3 class; this will disable the macro
 
 
 #include "Ray.h"

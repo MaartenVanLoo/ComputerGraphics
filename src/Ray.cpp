@@ -60,7 +60,6 @@ Ray Ray::transform(const Matrix4 &T) const {
     Ray r;
     r.position = T * this->position;
     r.direction = T * this->direction;
-    //r.normalizeDir();
     return r;
 }
 

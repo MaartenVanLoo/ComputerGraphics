@@ -9,7 +9,7 @@
 #include <immintrin.h>
 
 #ifndef SSE_AVX_EXTENSIONS
-#define SSE_AVX_EXTENSIONS false
+#define SSE_AVX_EXTENSIONS true
 #endif
 #define SET_DATA (true && SSE_AVX_EXTENSIONS)
 

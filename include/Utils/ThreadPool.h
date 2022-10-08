@@ -14,7 +14,7 @@
 #include <sstream>
 #include <sstream>
 #include <iomanip> //getTime
-#include "config.h"
+//#include "config.h"
 
 template <typename  Result>
 class Task{

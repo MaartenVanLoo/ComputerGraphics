@@ -58,3 +58,15 @@ void Object::shear(float shXy, float shXz, float shYx, float shYz, float shZx, f
     this->invtransform = this->invtransform * Ty;
     this->invtransform = this->invtransform * Tz;
 }
+
+Object::~Object() {
+
+}
+
+void Object::setMaterial(Material &mtrl) {
+    this->mtrl = mtrl;
+}
+
+Material& Object::getMaterial() {
+    return this->mtrl;
+}

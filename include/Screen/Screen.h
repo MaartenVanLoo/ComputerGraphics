@@ -6,7 +6,8 @@
 #define I_COMPUTERGRAPHICS_SCREEN_H
 
 #include <opencv2/opencv.hpp>
-#include "../Camera/CameraUtils.h"
+#include <Utils/Color3.h>
+#include <Camera/CameraUtils.h>
 #include "LinearAlgebra/Vector.h"
 #include <thread>
 #include <chrono>
@@ -25,8 +26,8 @@ public:
 
     const cv::Mat &getImageBuffer() const;
 
-    void setPixel(int x, int y, RGB rgb);
-    RGB getPixel(int x, int y);
+    void setPixel(int x, int y, Color3 rgb);
+    Color3 getPixel(int x, int y);
 
     long long getLastUpdate();
 

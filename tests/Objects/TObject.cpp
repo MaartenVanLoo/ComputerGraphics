@@ -27,8 +27,6 @@ TEST_CASE("tObject") {
     Matrix4 result;
     SECTION("rotate"){
         object.rotate(1,2,3);
-        std::cout << "rotate" << std::endl;
-        std::cout << object.getTransform() * object.getInvTransform() << std::endl;
         result = object.getTransform() * object.getInvTransform(); //should be identity matrix
         for (int i = 0; i < 16; i++){
             if (i%4 == i/4) CHECK(std::abs(result.get(i%4,i/4) -1) < 5e-6);

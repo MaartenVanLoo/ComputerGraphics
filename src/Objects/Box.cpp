@@ -30,9 +30,9 @@ bool Box::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
 
     if( hit1.t>hit2.t || hit2.t<0.0) return false;
     hit1.obj = this;
-    hit1.point = this->transform * tr.at(hit1.t);
+    hit1.point = tr.at(hit1.t);
     hit2.obj = this;
-    hit2.point = this->transform * tr.at(hit2.t);
+    hit2.point = tr.at(hit2.t);
     return true;
 }
 

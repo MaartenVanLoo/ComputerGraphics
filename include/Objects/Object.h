@@ -10,6 +10,7 @@
 #include <cmath>
 #include <algorithm>
 #include <ostream>
+#include <Materials/Material.h>
 #include "Camera/CameraUtils.h"
 #include "Transform/Transform.h"
 
@@ -22,6 +23,8 @@ struct Hit {
 
 class Object {
 public:
+    virtual ~Object();
+
     virtual bool hitPoint(Ray& ray, Hit &hit1, Hit &hit2) = 0;
     virtual Vec4 normal(Ray& ray) = 0;
 
@@ -51,11 +54,12 @@ public:
      */
     void shear(float hxy, float hxz, float hyz, float hyx, float hzx, float hzy);
 
-    RGB color = RGB(0,0,0);
+    void setMaterial(Material &mtrl);
+    Material& getMaterial();
 protected:
     Matrix4 transform = Matrix4::identity();
     Matrix4 invtransform = Matrix4::identity();
-
+    Material mtrl;
 };
 
 

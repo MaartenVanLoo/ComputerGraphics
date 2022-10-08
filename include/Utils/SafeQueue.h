@@ -13,6 +13,7 @@ public:
     virtual ~SafeQueue() {
         terminate = true;
         popCV.notify_all();
+
     }
 
     void push(T& elem){

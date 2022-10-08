@@ -40,12 +40,6 @@ struct Resolution{
     int width = 1920, height = 1080;
 };
 
-struct RGB{
-    RGB();
-    RGB(int red, int green, int blue);
-    uint8_t red=0;
-    uint8_t green=0;
-    uint8_t blue=0;
-};
+
 
 #endif //I_COMPUTERGRAPHICS_CAMERAUTILS_H

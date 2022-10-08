@@ -23,10 +23,30 @@ int main() {
     camera.setResolution(Resolution(Screensize::_1080p));
     camera.setFocalLength(35);
 
+    Material material = Material();
+    Object* obj = nullptr;
+
     Scene scene = Scene();
-    scene.addObject(new Sphere(Vec4(0,1,0,1),1),RGB(255,0,0));
-    scene.addObject(new Box(Vec4(2,-0.5,0,1),Vec4(1,1,1,0)),RGB(0,255,0));
-    scene.addObject(new Box(Vec4(4,0,0.5,1),Vec4(1,1,1,0)),RGB(0,0,255));
+    obj = new  Sphere(Vec4(0,1,0,1),1);
+    material.emissive = Color3(255,0,0);
+    obj->setMaterial(material);
+    scene.addObject(obj);
+
+    obj = new Box(Vec4(2,-0.5,0,1),Vec4(1,1,1,0));
+    material.emissive = Color3(0, 255,0);
+    obj->setMaterial(material);
+    scene.addObject(obj)    ;
+
+    obj = new Box(Vec4(4,0,0.5,1),Vec4(1,1,1,0));
+    material.emissive = Color3(0, 0,255);
+    obj->setMaterial(material);
+    scene.addObject(obj);
+
+    obj = new Plane(Vec4(0,0,-1,0),Vec4(0,0,1,0));
+    material.emissive = Color3(200, 200,200);
+    obj->setMaterial(material);
+    scene.addObject(obj);
+
 
     Box box = Box();
     Sphere sphere = Sphere();
@@ -39,7 +59,8 @@ int main() {
     std::cout << "Hello, World!" << std::endl;
 
     Options options;
-    options.enableGui = false;
+    options.enableGui = true;
+    options.multicore = true;
     scene.Render(options);
     system("pause");
     return 0;

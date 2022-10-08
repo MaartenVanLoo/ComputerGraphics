@@ -53,8 +53,8 @@ TEST_CASE("tSphere_HitPoints"){
         //expected intersections:
         target1 = Vec4(0.7718656097,-0.6165138327,0.155351777,1);  // hit1
         target2 = Vec4(-0.7178115556,0.0219192381,-0.6958923175,1); //=hit2
-        p1 = hit1.point;
-        p2 = hit2.point;
+        p1 = ray.at(hit1.t);
+        p2 = ray.at(hit2.t);
         CHECK(std::abs((target1-p1).get(0)) < 5e-6);
         CHECK(std::abs((target1-p1).get(1)) < 5e-6);
         CHECK(std::abs((target1-p1).get(2)) < 5e-6);
@@ -77,7 +77,7 @@ TEST_CASE("tSphere_HitPoints"){
         hit = sphere.hitPoint(ray, hit1, hit2);
         CHECK(hit);
         target1 = Vec4(-0.6606293281,0.5321258656,-0.5295384348,1);
-        p2 = hit2.point; //hit2 contains the "exit"
+        p2 = ray.at(hit2.t); //hit2 contains the "exit"
         CHECK(std::abs((target1-p2).get(0)) < 5e-6);
         CHECK(std::abs((target1-p2).get(1)) < 5e-6);
         CHECK(std::abs((target1-p2).get(2)) < 5e-6);
@@ -109,8 +109,8 @@ TEST_CASE("tSphere_HitPoints"){
         #if (DEBUG_PRINT)
             std::cout << sphere << "\n" << ray << "\nhit1:" << hit1 << "\nhit2:" << hit2 << std::endl;
         #endif
-        p1 = hit1.point;
-        p2 = hit2.point;
+        p1 = ray.at(hit1.t);
+        p2 = ray.at(hit2.t);
         CHECK(std::abs((target1-p1).get(0)) <= 5e-6f);
         CHECK(std::abs((target1-p1).get(1)) <= 5e-6f);
         CHECK(std::abs((target1-p1).get(2)) <= 5e-6f);
@@ -132,8 +132,8 @@ TEST_CASE("tSphere_HitPoints"){
         #if (DEBUG_PRINT)
             std::cout << sphere << "\n" << ray << "\nhit1:" << hit1 << "\nhit2:" << hit2 << std::endl;
         #endif
-        p1 = hit1.point;
-        p2 = hit2.point;
+        p1 = ray.at(hit1.t);
+        p2 = ray.at(hit2.t);
         CHECK(std::abs((target1-p1).get(0)) <= 5e-6f);
         CHECK(std::abs((target1-p1).get(1)) <= 5e-6f);
         CHECK(std::abs((target1-p1).get(2)) <= 5e-6f);
@@ -156,7 +156,7 @@ TEST_CASE("tSphere_HitPoints"){
         target1 = Vec4(-4.0548429193,1.2109685839,-2.6630441207,1);
         hit = sphere.hitPoint(ray, hit1, hit2);
         CHECK(hit);
-        p2 = hit2.point; //hit2 contains the "exit"
+        p2 = ray.at(hit2.t); //hit2 contains the "exit"
         CHECK(std::abs((target1-p2).get(0)) <= 5e-6f);
         CHECK(std::abs((target1-p2).get(1)) <= 5e-6f);
         CHECK(std::abs((target1-p2).get(2)) <= 5e-6f);
@@ -202,8 +202,8 @@ TEST_CASE("tSphere_HitPoints"){
         #if (DEBUG_PRINT)
             std::cout << sphere << "\n" << ray << "\nhit1:" << hit1 << "\nhit2:" << hit2 << std::endl;
         #endif
-        p1 = hit1.point;
-        p2 = hit2.point;
+        p1 = ray.at(hit1.t);
+        p2 = ray.at(hit2.t);
         CHECK(std::abs((target1-p1).get(0)) <= 5e-6f);
         CHECK(std::abs((target1-p1).get(1)) <= 5e-6f);
         CHECK(std::abs((target1-p1).get(2)) <= 5e-6f);
@@ -227,7 +227,7 @@ TEST_CASE("tSphere_HitPoints"){
         hit = sphere.hitPoint(ray, hit1, hit2);
 
         CHECK(hit);
-        p2 = hit2.point; //hit2 contains the "exit"
+        p2 = ray.at(hit2.t); //hit2 contains the "exit"
         CHECK(std::abs((target1-p2).get(0)) <= 5e-6f);
         CHECK(std::abs((target1-p2).get(1)) <= 5e-6f);
         CHECK(std::abs((target1-p2).get(2)) <= 5e-6f);
@@ -260,8 +260,8 @@ TEST_CASE("tSphere_HitPoints"){
         #if (DEBUG_PRINT)
         std::cout << sphere << "\n" << ray << "\nhit1:" << hit1 << "\nhit2:" << hit2 << std::endl;
         #endif
-        p1 = hit1.point;
-        p2 = hit2.point;
+        p1 = ray.at(hit1.t);
+        p2 = ray.at(hit2.t);
         CHECK(std::abs((target1-p1).get(0)) <= 5e-6f);
         CHECK(std::abs((target1-p1).get(1)) <= 5e-6f);
         CHECK(std::abs((target1-p1).get(2)) <= 5e-6f);
@@ -284,8 +284,8 @@ TEST_CASE("tSphere_HitPoints"){
         #if (DEBUG_PRINT)
             std::cout << sphere << "\n" << ray << "\nhit1:" << hit1 << "\nhit2:" << hit2 << std::endl;
         #endif
-        p1 = hit1.point;
-        p2 = hit2.point;
+        p1 = ray.at(hit1.t);
+        p2 = ray.at(hit2.t);
         CHECK(std::abs((target1-p1).get(0)) <= 5e-6f);
         CHECK(std::abs((target1-p1).get(1)) <= 5e-6f);
         CHECK(std::abs((target1-p1).get(2)) <= 5e-6f);
@@ -308,7 +308,7 @@ TEST_CASE("tSphere_HitPoints"){
         target1 = Vec4(-1.2849028658,1.2863228506,4.2849028658,1);
         hit = sphere.hitPoint(ray, hit1, hit2);
         CHECK(hit);
-        p2 = hit2.point; //hit2 contains the "exit"
+        p2 = ray.at(hit2.t); //hit2 contains the "exit"
         CHECK(std::abs((target1-p2).get(0)) <= 5e-6f);
         CHECK(std::abs((target1-p2).get(1)) <= 5e-6f);
         CHECK(std::abs((target1-p2).get(2)) <= 5e-6f);

@@ -33,7 +33,7 @@ bool Sphere::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
     }
     if (hit2.t > 0){
         hit2.obj = this;
-        hit2.point = this->transform * tr.at(hit2.t);
+        hit2.point = tr.at(hit2.t);
         num++;
     }
 
@@ -52,9 +52,6 @@ Sphere::Sphere(const Vec4 &position) {
 Sphere::Sphere(const Vec4 &position, float radius){
     this->scale(radius,radius,radius);
     this->translate(position.get<0>(),position.get<1>(),position.get<2>());
-    std::cout << this->invtransform << std::endl;
-    std::cout << this->transform << std::endl;
-
 }
 
 Vec4 Sphere::normal(Vec4 point) {

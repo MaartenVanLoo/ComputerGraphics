@@ -7,5 +7,6 @@
 
 struct Options{
     bool enableGui = false;
+    bool multicore = false;
 };
 #endif //I_COMPUTERGRAPHICS_OPTIONS_H

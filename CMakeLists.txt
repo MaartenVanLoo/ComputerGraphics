@@ -23,14 +23,15 @@ set(ProjectSourceFiles
         ${CMAKE_SOURCE_DIR}/src/Transform/Transform.cpp
         ${CMAKE_SOURCE_DIR}/src/LinearAlgebra/Matrix.cpp
         ${CMAKE_SOURCE_DIR}/src/Light/Light.cpp
-        )
+        ${CMAKE_SOURCE_DIR}/src/Light/PointLight.cpp
+        ${CMAKE_SOURCE_DIR}/src/Utils/Color3.cpp)
 add_subdirectory(tests)
 
 set(CMAKE_CXX_STANDARD 17)
 
 
 #resource files
-set (APP_ICON_RESOURCE_WINDOWS "resources.rc")
+set (APP_ICON_RESOURCE_WINDOWS "resources.rc" )
 
 
 add_executable(I_ComputerGraphics main.cpp ${ProjectSourceFiles} ${APP_ICON_RESOURCE_WINDOWS})
