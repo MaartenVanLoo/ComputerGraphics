@@ -13,7 +13,6 @@ TEST_CASE("tCamera"){
     SECTION("usable space"){
         Camera camera = Camera();
         camera.setPosition(Vec4(0,0,0,1));
-        camera.setDirection(Vec4(1,0,0, 0));
         camera.setSensor(Sensor(100,100));
         camera.setResolution(Resolution(200,100));
         camera.setFocalLength(35);

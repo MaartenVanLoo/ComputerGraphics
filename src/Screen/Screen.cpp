@@ -103,12 +103,15 @@ void Screen::onMouse(int event,int x,int y,int flags,void *param){
     cv::imshow("Rendered Image", resizeKeepAspectRatio(((Screen*)(param))->image->getImageBuffer(), renderArea.size(),cv::Scalar(0,0,0)));
     ((Screen*)(param))->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
     cv::waitKey(1);
-    //std::cout << "Mouse event " << flags << std::endl;
+    std::cout << "Mouse event " << flags << std::endl;
 }
 
 void Screen::onMouseCrop(int event,int x,int y,int flags,void *param){
-    auto test = cvGetWindowHandle("Crop Image");
-    if (cvGetWindowHandle("Crop Image") == 0) return; //window closed
+    try{
+        if(cvGetWindowHandle("Crop Image") == nullptr) return; //window closed
+    }catch(const std::exception&){
+        return; //window doesn't exist?
+    }
     if (((Screen*)(param))->lastUpdate + 100 > std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count()){
         return; //only once every 100 ms;
     }
@@ -129,25 +132,30 @@ bool guiExists(const std::string &winname){
     try{
         return cv::getWindowProperty("Rendered Image",cv::WND_PROP_ASPECT_RATIO) > 0; //aspect_ratio = -1 when minimized
     }
-    catch(const std::exception& e){
+    catch(const std::exception&){
         return false;
     }
 }
 void Screen::loop() {
     cv::Rect2d rect;
-
+    cv::Rect renderArea;
+    cv::Mat tmp;
     int key;
+
     cv::namedWindow("Rendered Image", cv::WINDOW_NORMAL);
     cv::setWindowProperty("Rendered Image", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
 
-    cv::Rect renderArea =  cv::getWindowImageRect("Rendered Image");
-    cv::imshow("Rendered Image", resizeKeepAspectRatio(this->image->getImageBuffer(), renderArea.size(),cv::Scalar(0,0,0)));
+    showImage("Rendered Image", this->image->getImageBuffer());
     cv::setMouseCallback("Rendered Image",&Screen::onMouse,this);
 
 
     while (gui_running &&
            guiExists("Rendered Image"))//cv::getWindowProperty("Rendered Image",cv::WND_PROP_VISIBLE) >= 1)
     {
+        if (this->image == nullptr){
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            continue;
+        }
         //std::cout << cv::getWindowProperty("Rendered Image",cv::WND_PROP_VISIBLE) << std::endl;
         //std::cout << cv::getWindowProperty("Rendered Image",cv::WND_PROP_ASPECT_RATIO)  << std::endl;
         if (this->lastUpdate <= this->image->getLastUpdate() +
@@ -170,13 +178,16 @@ void Screen::loop() {
                 cv::setWindowProperty("Rendered Image", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
                 break;
             case keycodes::s:
-                rect = cv::selectROI("Rendered Image", this->image->getImageBuffer(), true);
+                renderArea =  cv::getWindowImageRect("Rendered Image");
+                tmp = resizeKeepAspectRatio(this->image->getImageBuffer(), renderArea.size(),cv::Scalar(0,0,0));
+                rect = cv::selectROI("Rendered Image", tmp, true);
                 if (rect.empty()) break;
-                this->detailImage = this->image->getImageBuffer()(rect);
+                this->detailImage = tmp(rect);
                 cv::namedWindow("Crop Image", cv::WINDOW_NORMAL | cv::WINDOW_KEEPRATIO);
-                cv::setMouseCallback("Crop Image", &Screen::onMouseCrop, this);
                 cv::resizeWindow("Crop Image", 1280, 720);
                 showImage("Crop Image", this->detailImage);
+                cv::setMouseCallback("Rendered Image",&Screen::onMouse,this);
+                cv::setMouseCallback("Crop Image",&Screen::onMouseCrop,this);
                 break;
             default:
                 std::cout << "key pressed:" << key << std::endl;

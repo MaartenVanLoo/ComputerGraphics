@@ -16,15 +16,21 @@ public:
     bool operator==(const Matrix4 &rhs) const;
     bool operator!=(const Matrix4 &rhs) const;
 
-    float get(int row,int col){
+    float get(int row,int col)const{
         assert(col <= 3 & col >= 0);
         return this->data[col].get(row);
     };
-    template<int row, int col> float get(){
+    template<int row, int col> float get() const{
         assert(col <= 3 & col >= 0);
         return this->data[col].get<row>(); //data = column based
     };
-
+    Vec4 get(int col){
+        assert(col <= 3 & col >= 0);
+        return this->data[col];
+    }
+    template<int col> Vec4 get() const{
+        return this->data[3];
+    }
 
     template<int row, int col> float set(float value){
         assert(col <= 3 & col >= 0);

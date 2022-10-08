@@ -7,11 +7,13 @@
 
 
 #include <ostream>
-#include "LinearAlgebra/Vector.h"
-#include "../Ray.h"
-#include "CameraUtils.h"
+#include <Transform/Transform.h>
+#include <LinearAlgebra/Vector.h>
+#include <Ray.h>
+#include <Camera/CameraUtils.h>
 
-class Camera {
+
+class Camera: public Transform{
 public:
     Camera(){};
     Camera(Vec3 position, Vec3 direction, Resolution resolution, Sensor s, float focalLength);
@@ -22,8 +24,8 @@ public:
 
     const Sensor &getSensor() const;
     const Resolution &getResolution() const;
-    const Vec4 &getPosition() const;
-    const Vec4 &getDirection() const;
+    //const Vec4 &getPosition() const;
+    Vec4 getDirection() const;
     float getFocalLength() const;
     float getUsableSensorWidth() const;
     float getUsableSensorHeight() const;
@@ -32,16 +34,14 @@ public:
     void setSensor(const Sensor &sensor);
     void setResolution(const Resolution &resolution);
     void setResolution(const Screensize &resolution);
+
     void setPosition(const Vec4 &position);
-    void setDirection(const Vec4 &direction);
+
     void setFocalLength(float focalLength);
 
     friend std::ostream &operator<<(std::ostream &os, const Camera &camera);
 
 private:
-    Vec4 position;
-    Vec4 direction;
-
     float focalLength;      // in mm distance between eye and sensor in mm
     Sensor sensor;          // sensor size in mm!
     Resolution resolution;  // px width and height => used to divide the sensor

@@ -36,8 +36,8 @@ TEST_CASE("tBox_HitPoints"){
         target1 = Vec4(-0.5,-1,0,1);
         target2 = Vec4(1,0.5,0,1);
         CHECK(box.hitPoint(ray7, hit1, hit2));
-        p1 = hit1.point;
-        p2 = hit2.point;
+        p1 = ray7.at(hit1.t);
+        p2 = ray7.at(hit2.t);
         CHECK(std::abs((target1-p1).get(0)) < 5e-6);
         CHECK(std::abs((target1-p1).get(1)) < 5e-6);
         CHECK(std::abs((target1-p1).get(2)) < 5e-6);

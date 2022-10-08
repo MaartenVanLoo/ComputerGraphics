@@ -8,6 +8,7 @@
 #include <ostream>
 #include "LinearAlgebra/Vector.h"
 #include "LinearAlgebra/Matrix.h"
+
 class Ray {
 public:
     Ray(){};
@@ -29,8 +30,10 @@ public:
 private:
     Vec4 position = Vec4(0,0,0,1);
     Vec4 direction = Vec4(0,0,0,0);;
-
 };
+
+class PrimaryRay: public Ray{};
+class ShadowRay: public Ray{};
 
 
 #endif //I_COMPUTERGRAPHICS_RAY_H

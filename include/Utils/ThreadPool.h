@@ -12,9 +12,8 @@
 #include <type_traits>
 #include <atomic>
 #include <sstream>
-#include <sstream>
 #include <iomanip> //getTime
-//#include "config.h"
+
 
 template <typename  Result>
 class Task{
@@ -113,7 +112,7 @@ private:
     };
 
 public:
-    ThreadPool(int processor_count = -1){
+    explicit ThreadPool(int processor_count = -1){
         if (processor_count == -1){
             processor_count = (int)std::thread::hardware_concurrency();
         }

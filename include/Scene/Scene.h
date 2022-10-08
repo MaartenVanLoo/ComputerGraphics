@@ -14,10 +14,11 @@
 #include <Utils/Options.h>
 #include "../Objects/Object.h"
 #include <Utils/ThreadPool.h>
-
+#include <Utils/Stopwatch.h>
 
 #define workerjobs 12 //minimum number of jobs for a worker
 #define artificaldelay false
+
 class RenderTask;
 
 class Scene {

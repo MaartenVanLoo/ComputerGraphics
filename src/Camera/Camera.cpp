@@ -7,13 +7,13 @@
 
 
 Camera::Camera(Vec3 position, Vec3 direction,Resolution resolution, Sensor s, float focalLength): resolution(resolution), sensor(sensor), focalLength(focalLength) {
-    this->position = Vec4(position, 1);
-    this->direction = Vec4(direction , 0);
+    //this->position = Vec4(position, 1);
+    //this->direction = Vec4(direction , 0);
     this->setUsableSensorSize();
 }
 Camera::Camera(Vec3 position, Vec3 direction,Screensize resolution, Sensor s, float focalLength): resolution(resolution), sensor(sensor), focalLength(focalLength) {
-    this->position = Vec4(position, 1);
-    this->direction = Vec4(direction , 0);
+    //this->position = Vec4(position, 1);
+    //this->direction = Vec4(direction , 0);
     this->setUsableSensorSize();
 }
 
@@ -33,14 +33,12 @@ Ray Camera::getPrimaryRay(int x, int y) {
     float lcs_z = this->usableSensorHeight/2 - y_sensor;
 
     Ray ray = Ray();
-    ray.setPos(this->position); //translate ray to camera position
-    ray.setDir(lcs_X, lcs_y, lcs_z); //compute the direction of the ray
-    //std::cout << "x:" << lcs_X  << " y: " << lcs_y << " z: " << lcs_z << "\n";
+    //ray.setPos(this->position); //translate ray to camera position but default position = (0,0,0,1)!
+    ray.setDir(lcs_X, lcs_y, lcs_z); //set the direction of the ray
     // TODO: Transform ray according to camera direction.
 
     //transform ray from "camera-space" to "global-space"
-
-    return ray;
+    return ray.transform(this->transform);;
 }
 
 
@@ -58,28 +56,35 @@ const Resolution &Camera::getResolution() const {
 }
 
 void Camera::setResolution(const Resolution &resolution) {
-    Camera::resolution = resolution;
+    this->resolution = resolution;
     this->setUsableSensorSize();
 }
 void Camera::setResolution(const Screensize &resolution) {
-    Camera::resolution = Resolution(resolution);
+    this->resolution = Resolution(resolution);
 }
 
-const Vec4 &Camera::getPosition() const {
+/*const Vec4 &Camera::getPosition() const {
     return position;
-}
+
+    //TODO: experimental
+    return this->transform.get<3>(p);
+}*/
 
 void Camera::setPosition(const Vec4 &position) {
-    Camera::position = position;
+    Vec4 p = position;
+    p.set<3>(1); //make sure the bottom value equals 1 in case position doesn't (fool proofing)
+    this->transform.set(3,p); //override third column of transform
+    //compute inv transform:
+    p = -p;
+    p.set<3>(1);
+    this->invtransform.set(3,p);
 }
 
-const Vec4 &Camera::getDirection() const {
-    return direction;
+Vec4 Camera::getDirection() const {
+    Vec4 xAxis = Vec4(1,0,0,0);
+    return this->transform*xAxis; //compute direction from transformation matrix; result is not normalized;
 }
 
-void Camera::setDirection(const Vec4 &direction) {
-    Camera::direction = direction;
-}
 
 float Camera::getFocalLength() const {
     return focalLength;
