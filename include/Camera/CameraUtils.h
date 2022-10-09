@@ -15,7 +15,9 @@ enum Screensize{
     _480p,
     _720p, _HD,
     _1080p,_FHD,
-    _2160p, _UHD,_4K
+    _1440p,_QHD,
+    _2160p, _UHD,_4K,
+    _4320p,_8K_UHD, _8K
 };
 struct Sensor{
     Sensor(){};

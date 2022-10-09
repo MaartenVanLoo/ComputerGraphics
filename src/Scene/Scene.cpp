@@ -127,6 +127,7 @@ Color3 Scene::shade(int x, int y) {
 
     for (const Light* light: this->lights){
         if (isInShadow(first.point,obj, light, intersect)) continue;
+        //diffuse
         Vec4 s = light->getVec(first.point);
         s.normalize();
         float mDotS = s.dot(normal); // lambert term;
@@ -134,8 +135,7 @@ Color3 Scene::shade(int x, int y) {
             Color3 diffuse = mDotS * obj->getMaterial().diffuse * light->color;
             color.add(diffuse);
         }
-
-        //todo: add specular;
+        //specular
         Vec4 h  = v + s;
         h.normalize();
         float mDotH = h.dot(normal);
@@ -143,7 +143,8 @@ Color3 Scene::shade(int x, int y) {
         Color3 specColor = phong* obj->getMaterial().specular * light->color;
         color.add(specColor);
     }
-    //only emmissive model:
+
+    //only emissive model:
     /*if (first.t>=0){
         color = first.obj->getMaterial().emissive;
         //rgb = Color3(x, y, 0);

@@ -59,10 +59,10 @@ int main() {
     scene.addObject(obj);
 
     Light* light = new PointLight(Vec4(-3,-10,10,1));
-    light->diffuse = Vec3(0.9,0.9,0.9);
+    //light->diffuse = Vec3(0.9,0.9,0.9);
     scene.addLight(light);
     light = new PointLight(Vec4(-5,4,6,1));
-    light->diffuse = Vec3(0.9,0.9,0.9);
+    //light->diffuse = Vec3(0.9,0.9,0.9);
     scene.addLight(light);
 
     Box box = Box();

@@ -48,9 +48,17 @@ Sensor::Sensor(Screensize screensize) {
             this->width  = 1920;
             this->height = 1080;
             break;
+        case _1440p: case _QHD:
+            this->width  = 2560;
+            this->height = 1440;
+            break;
         case _2160p: case _UHD: case _4K:
             this->width  = 3860;
             this->height = 2160;
+            break;
+        case _4320p: case _8K_UHD: case _8K:
+            this->width  = 7680;
+            this->height = 4320;
             break;
         default:
             throw std::invalid_argument("Unrecognized screensize");
@@ -103,6 +111,10 @@ Resolution::Resolution(Screensize screensize) {
         case _2160p: case _UHD: case _4K:
             this->width  = 3860;
             this->height = 2160;
+            break;
+        case _4320p: case _8K_UHD: case _8K:
+            this->width  = 7680;
+            this->height = 4320;
             break;
         default:
             throw std::invalid_argument("Unrecognized screensize");
