@@ -4,16 +4,21 @@
 
 #include <Objects/Plane.h>
 
-bool Plane::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
+bool Plane::hitPoint(Ray &ray, Intersection &intersection) {
     //assuming all vectors are normalized
     float denom = Vec4::dot(this->norm,ray.dir());
     if (std::abs(denom) > 1e-6){
         Vec4 oc = this->pos - ray.pos();
-        hit1.t = Vec4::dot(oc,this->norm) / denom;
-        hit2.t = hit1.t; //only one intersection is possible
-        hit1.obj = this;
-        hit2.obj = this;
-        return (hit1.t >= 0);
+        double tHit = Vec4::dot(oc,this->norm) / denom;
+        if (tHit >= 0.00001){
+            intersection.hit.emplace_back();
+            intersection.hit[0].t = tHit;
+            intersection.hit[0].obj = this;
+            intersection.hit[0].point = ray.at(float(tHit));
+            intersection.hit[0].normal = denom < 0?this->norm:-this->norm; //if denom > 0 hit on top of plane, otherwise on the bottom //todo: check if correct!
+            return true;
+        }
+
     }
     return false;
 }

@@ -16,8 +16,8 @@
 class Camera: public Transform{
 public:
     Camera(){};
-    Camera(Vec3 position, Vec3 direction, Resolution resolution, Sensor s, float focalLength);
-    Camera(Vec3 position, Vec3 direction, Screensize screensize, Sensor s, float focalLength);
+    Camera(Vec3 position, Resolution resolution, Sensor s, float focalLength);
+    Camera(Vec3 position, Screensize screensize, Sensor s, float focalLength);
 
     Ray getPrimaryRay(int x, int y);
 

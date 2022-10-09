@@ -56,7 +56,10 @@ struct Vec3{
 
     //get index
     float get(int index) const;
-
+    template <int index> float get() const noexcept {
+        assert(index <= 3 & index >= 0);
+        return this->data[index];
+    }
     float dot(const Vec3& rhs) const;
     static float dot(const Vec3& lhs, const Vec3& rhs);
 
@@ -161,6 +164,8 @@ struct Vec4{
     float min3() const;
     static float min3( const Vec4& vec);
 
+    //normalize vector
+    void normalize();
 
     //operators
     bool operator==(const Vec4 &rhs) const;
@@ -183,6 +188,11 @@ struct Vec4{
     friend Vec4 operator /(Vec4 lhs, const float& rhs);  //elementwise division
     friend Vec4 operator /(Vec4 lhs, const Vec4& rhs);   //elementwise division
 
+
+    //special vectors
+    static Vec4 xAxis();
+    static Vec4 yAxis();
+    static Vec4 zAxis();
 
 
     friend std::ostream &operator<<(std::ostream &os, const Vec4 &vec4);

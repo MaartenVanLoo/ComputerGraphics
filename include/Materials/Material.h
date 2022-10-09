@@ -5,16 +5,16 @@
 #ifndef I_COMPUTERGRAPHICS_MATERIAL_H
 #define I_COMPUTERGRAPHICS_MATERIAL_H
 
-#include <Utils/Color3.h>
+#include <Light/Color3.h>
 #include <LinearAlgebra/Vector.h>
 struct Material{
     Vec3 ambient;
     Vec3 diffuse;
     Vec3 specular;
+    float specularExponent;
     Color3 emissive;
-    Vec3 shininess;
 
-    Color3 color = Color3(0, 0, 0);
+    //Color3 color = Color3(0, 0, 0);
 };
 
 

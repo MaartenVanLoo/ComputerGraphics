@@ -8,7 +8,7 @@
 //https://iquilezles.org/articles/intersectors/
 //https://www.shadertoy.com/view/4d2XWV
 //https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
-bool Sphere::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
+bool Sphere::hitPoint(Ray &ray, Intersection& intersection) {
 
     Ray tr = ray.transform(this->invtransform);
 
@@ -22,21 +22,27 @@ bool Sphere::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
         return false;
     }
     float discRoot = sqrt(discrim);
-    hit1.t = (-b-discRoot)/a;
-    hit2.t = (-b+discRoot)/a;
+    float hit1 = (-b-discRoot)/a;
+    float hit2 = (-b+discRoot)/a;
 
     int num = 0;
-    if (hit1.t > 0){
-        hit1.obj = this;
-        hit1.point = this->transform * tr.at(hit1.t);
+    if (hit1 > 0){
+        intersection.hit.emplace_back();
+        intersection.hit[0].t = hit1;
+        intersection.hit[0].obj = this;
+        intersection.hit[0].point = this->transform * tr.at(hit1);
+        intersection.hit[0].normal = tr.at(hit1);
         num++;
     }
-    if (hit2.t > 0){
-        hit2.obj = this;
-        hit2.point = tr.at(hit2.t);
-        num++;
-    }
+    if (hit2 > 0){
+        intersection.hit.emplace_back();
+        intersection.hit[num].t = hit2;
+        intersection.hit[num].obj = this;
+        intersection.hit[num].point = this->transform * tr.at(hit2);
+        intersection.hit[num].normal = tr.at(hit2);
 
+        num++;
+    }
     return num > 0;
 }
 

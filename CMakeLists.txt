@@ -24,14 +24,15 @@ set(ProjectSourceFiles
         ${CMAKE_SOURCE_DIR}/src/LinearAlgebra/Matrix.cpp
         ${CMAKE_SOURCE_DIR}/src/Light/Light.cpp
         ${CMAKE_SOURCE_DIR}/src/Light/PointLight.cpp
-        ${CMAKE_SOURCE_DIR}/src/Utils/Color3.cpp)
+        ${CMAKE_SOURCE_DIR}/src/Light/Color3.cpp
+        ${CMAKE_SOURCE_DIR}/src/Utils/Intersection.cpp)
 add_subdirectory(tests)
 
 set(CMAKE_CXX_STANDARD 17)
 
 
 #resource files
-set (APP_ICON_RESOURCE_WINDOWS "resources.rc" )
+set (APP_ICON_RESOURCE_WINDOWS "resources.rc" include/Light/LightCore.h)
 
 
 add_executable(I_ComputerGraphics main.cpp ${ProjectSourceFiles} ${APP_ICON_RESOURCE_WINDOWS})

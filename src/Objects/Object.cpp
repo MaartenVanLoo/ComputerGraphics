@@ -20,3 +20,7 @@ void Object::setMaterial(Material &mtrl) {
 Material& Object::getMaterial() {
     return this->mtrl;
 }
+
+void Intersection::clear() {
+    this->hit.clear();
+}

@@ -62,6 +62,14 @@ void Transform::shear(float shXy, float shXz, float shYx, float shYz, float shZx
     this->invtransform = this->invtransform * Tz;
 }
 
+const Matrix4 &Transform::getTransform() const {
+    return transform;
+}
+
+const Matrix4 &Transform::getInvtransform() const {
+    return invtransform;
+}
+
 #pragma endregion
 
 #pragma region AffineTransform

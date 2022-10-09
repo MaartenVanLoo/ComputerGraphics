@@ -40,6 +40,10 @@ public:
      */
     void shear(float hxy, float hxz, float hyz, float hyx, float hzx, float hzy);
 
+    const Matrix4 &getTransform() const;
+
+    const Matrix4 &getInvtransform() const;
+
 protected:
     Matrix4 transform = Matrix4::identity();
     Matrix4 invtransform = Matrix4::identity();

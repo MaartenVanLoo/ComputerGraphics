@@ -8,6 +8,8 @@
 #include <Objects/Object.h>
 
 //TODO: test class!!
+
+//https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection
 /**
  * Class describing an infinite plane
  * Potential use: ground plane of scene
@@ -18,7 +20,7 @@ public:
     Plane(float px, float py, float pz, float nx, float ny, float nz);
 
     Vec4 normal(Ray &ray) override;
-    bool hitPoint(Ray& ray, Hit &t1, Hit &t2) override;
+    bool hitPoint(Ray& ray, Intersection& intersection) override;
 
 protected:
     Vec4 pos;    // position describes to translation of the plane

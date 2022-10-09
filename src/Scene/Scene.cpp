@@ -4,6 +4,7 @@
 
 
 #include <Scene/Scene.h>
+#include <Objects/Plane.h>
 
 
 Scene::~Scene() {
@@ -106,40 +107,82 @@ Scene::Scene() {
 }
 
 Color3 Scene::shade(int x, int y) {
-    Color3 rgb;
+    Intersection intersect; //object to store intersections, can be reused!
+    Color3 color;
     Ray primary =  this->camera.getPrimaryRay(x,y);
-    //std::cout <<primary << std::endl;
+
     Hit first = Hit();
-
-    getFirstHit(primary, first);
-    if (first.t == DBL_MAX || first.t < 0){
-        //no hit = background
-        rgb = Color3(0x87, 0xCE, 0xFA);
-
+    if (!getFirstHit(primary, first, intersect)){
+        //no hit, set background color:
+        color = Color3(0x87, 0xCE, 0xFA);
+        return color;
     }
-    else if (first.t>=0){
-        rgb = first.obj->getMaterial().emissive;
+
+    Vec4 v = - primary.dir(); //always normalized
+    Object* obj = first.obj;
+
+    color = obj->getMaterial().emissive;
+    Vec4 normal = obj->getTransform() * first.normal;
+    normal.normalize();
+
+    for (const Light* light: this->lights){
+        if (isInShadow(first.point,obj, light, intersect)) continue;
+        Vec4 s = light->getVec(first.point);
+        s.normalize();
+        float mDotS = s.dot(normal); // lambert term;
+        if (mDotS > 0.0){
+            Color3 diffuse = mDotS * obj->getMaterial().diffuse * light->color;
+            color.add(diffuse);
+        }
+
+        //todo: add specular;
+        Vec4 h  = v + s;
+        h.normalize();
+        float mDotH = h.dot(normal);
+        float phong = std::pow(mDotH, obj->getMaterial().specularExponent);
+        Color3 specColor = phong* obj->getMaterial().specular * light->color;
+        color.add(specColor);
+    }
+    //only emmissive model:
+    /*if (first.t>=0){
+        color = first.obj->getMaterial().emissive;
         //rgb = Color3(x, y, 0);
-    }
-    return rgb;
+    }*/
+    return color;
 }
 
-void Scene::getFirstHit(Ray &ray, Hit &hit) {
-    hit = Hit();
-    Hit hit1,hit2;
+bool Scene::getFirstHit(Ray &ray, Hit &best, Intersection& intersect,  const Object* ignore) const {
+    bool flag = false;
     for (auto obj: this->objects){
-        if (obj->hitPoint(ray, hit1, hit2)){
-            if (hit.t > hit1.t && hit1.t >= 0){
-                hit = hit1;
-            }
-            if (hit.t > hit2.t && hit2.t >= 0){
-                hit = hit2;
+        if (obj == ignore) continue;
+        intersect.clear();
+        if (obj->hitPoint(ray, intersect)){
+            Hit hit = intersect.hit[0];
+            if (best.t > hit.t && hit.t >= 0){
+                best = hit;
+                flag = true;
             }
         }
     }
-
+    return flag;
 }
 
+bool Scene::isInShadow(const Vec4 &point, const Object* obj, const Light* light, Intersection& intersect) const {
+    //ray to light source
+    Ray ray = light->getRay(point);
+
+    //look for intersections:
+    Hit best;
+    intersect.clear();
+    if (!getFirstHit(ray, best, intersect,obj)) return false; //no hit= not in shadow
+
+    //get distance between point and light:
+    float dist = light->getDist(point); //square of the distance!
+    if (dist >= best.t * best.t) return true;
+    return true;
+}
+
+#pragma region MultiThreading tools
 //https://www.geeksforgeeks.org/print-given-matrix-counter-clock-wise-spiral-form/
 std::vector<int> spiralMap(int row, int col){
     std::vector<int> output;
@@ -236,7 +279,7 @@ void reorder(std::vector<RenderTask*>& vA, std::vector<int>& vOrder)
     // for all elements to put in place
     for( int i = 0; i < vA.size(); ++i )
     {
-       std::cout << vOrder[i] << "\n";
+       //std::cout << vOrder[i] << "\n";
        if (vOrder[i] > vA.size()) continue;
        vA[i] = copy[vOrder[i]];
     }
@@ -266,11 +309,11 @@ void Scene::createTasks(std::vector<RenderTask*> &tasks) {
     }
 
     //remap:
-    std::vector spiral = spiralMap(row, col);
+    std::vector<int> spiral = spiralMap(row, col);
     std::reverse(spiral.begin(),spiral.end());
     reorder(tasks,spiral);
 }
-
+#pragma endregion
 
 void Image::save(std::string filename) {
     cv::imwrite(filename, this->imageBuffer);

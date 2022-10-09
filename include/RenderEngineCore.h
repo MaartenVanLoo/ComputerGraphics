@@ -21,4 +21,6 @@
 
 #include "Utils/Options.h"
 
+#include "Light/LightCore.h"
+
 #endif //I_COMPUTERGRAPHICS_RENDERENGINECORE_H

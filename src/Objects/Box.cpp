@@ -9,7 +9,7 @@
 //https://iquilezles.org/articles/intersectors/
 //https://www.shadertoy.com/view/ld23DV
 //https://iquilezles.org/articles/boxfunctions/
-bool Box::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
+bool Box::hitPoint(Ray &ray,Intersection &intersection) {
 // convert from world to box space
     Ray tr = ray.transform(this->invtransform);
 /*
@@ -25,14 +25,16 @@ bool Box::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
     Vec4 tN = m * (  s - tr.pos());
     Vec4 tF = m * (- s - tr.pos());
 
-    hit1.t = tN.max3(); //std::max(std::max(tN[0], tN[1] ), tN[2]);
-    hit2.t = tF.min3(); //std::min(std::min(tF[0], tF[1] ), tF[2]);
+    float hit1 = tN.max3(); //std::max(std::max(tN[0], tN[1] ), tN[2]);
+    float hit2 = tF.min3(); //std::min(std::min(tF[0], tF[1] ), tF[2]);
 
-    if( hit1.t>hit2.t || hit2.t<0.0) return false;
-    hit1.obj = this;
-    hit1.point = tr.at(hit1.t);
-    hit2.obj = this;
-    hit2.point = tr.at(hit2.t);
+    if( hit1>hit2 || hit2<0.0) return false;
+    intersection.hit[0].t = hit1;
+    intersection.hit[0].obj = this;
+    intersection.hit[0].point = ray.at(hit1);
+    intersection.hit[1].t = hit2;
+    intersection.hit[1].obj = this;
+    intersection.hit[1].point = ray.at(hit2);
     return true;
 */
     double tHit, numer, denom;
@@ -75,7 +77,7 @@ bool Box::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
             if (numer < 0) return false; // ray is out;
             else;                        // ray inside, no change to tIn, tOut
         }
-        else { //ray is not parrellel
+        else { //ray is not parallel
             tHit = numer /denom;
             if(denom > 0){ //exiting
                 if (tHit < tOut){ // a new earlier exit
@@ -92,25 +94,31 @@ bool Box::hitPoint(Ray &ray, Hit &hit1, Hit &hit2) {
     } //end of for loop
     int num = 0; //no positive hits yet;
     if (tIn > 0.00001) {// first hit in front of eye
-        hit1.t = tIn;
-        hit1.obj = this;
-        hit1.point = tr.at(float(tIn));
+        intersection.hit.emplace_back();
+        intersection.hit[0].t = tIn;
+        intersection.hit[0].obj = this;
+        intersection.hit[0].point = ray.at(float(tIn));
+        intersection.hit[0].normal = boxNormal(inSurf);
         num++;
     }
     if (tOut > 0.0001){  //hit in front of eye
-        if (num == 1){
-            hit2.t = tOut;
-            hit2.obj = this;
-            hit2.point = tr.at(float(tOut));
-        }else{
-            hit1.t = tOut;
-            hit1.obj = this;
-            hit1.point = tr.at(float(tOut));
-            hit2 = hit1;
-        }
+        intersection.hit.emplace_back();
+        intersection.hit[num].t = tOut;
+        intersection.hit[num].obj = this;
+        intersection.hit[num].point = ray.at(float(tOut));
+        intersection.hit[num].normal = boxNormal(outSurf);
         num++;
     }
     return (num > 0);
+}
+
+Vec4 Box::boxNormal(int surf) {
+    Vec4 v;
+    int m = surf/2, n = (surf%2)?-1:1;
+    if (m == 0) v = Vec4(0, float(n),0,0);
+    else if (m == 1) v = Vec4(n,0,0,0);
+    else v = Vec4(0,0,n,0);
+    return v;
 }
 
 std::ostream &operator<<(std::ostream &os, const Box &box) {
@@ -122,3 +130,5 @@ Box::Box(const Vec4 &pos, const Vec4 &size) {
     this->scale(size.get<0>(), size.get<1>(),size.get<2>());
     this->translate(pos.get<0>(),pos.get<1>(),pos.get<2>());
 }
+
+

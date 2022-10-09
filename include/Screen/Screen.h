@@ -6,7 +6,7 @@
 #define I_COMPUTERGRAPHICS_SCREEN_H
 
 #include <opencv2/opencv.hpp>
-#include <Utils/Color3.h>
+#include <Light/Color3.h>
 #include <Camera/CameraUtils.h>
 #include "LinearAlgebra/Vector.h"
 #include <thread>

@@ -9,12 +9,13 @@
 #include <vector>
 #include <ostream>
 #include <Camera/Camera.h>
-#include <Light/Light.h>
+#include <Light/LightCore.h>
 #include <Screen/Screen.h>
 #include <Utils/Options.h>
 #include "../Objects/Object.h"
 #include <Utils/ThreadPool.h>
 #include <Utils/Stopwatch.h>
+#include <vector>
 
 #define workerjobs 12 //minimum number of jobs for a worker
 #define artificaldelay false
@@ -35,7 +36,8 @@ public:
 
     Color3 shade(int x, int y);
 private:
-    void getFirstHit(Ray& ray, Hit& hit);
+    bool getFirstHit(Ray& ray, Hit &best, Intersection& intersect, const Object* ignore = nullptr) const;
+    bool isInShadow(const Vec4 &point,const Object* ignore, const Light* light, Intersection& intersect) const;
     void createTasks(std::vector<RenderTask*>& tasks);
     Camera camera;
     std::vector<Light*> lights;

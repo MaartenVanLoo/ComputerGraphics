@@ -14,8 +14,9 @@ public:
     Box(){};
     Box(const Vec4 &pos, const Vec4 &size);
 
-    bool hitPoint(Ray &ray, Hit &hit1, Hit &hit2) override;
+    bool hitPoint(Ray &ray, Intersection& intersection) override;
 
+    Vec4 boxNormal(int surf);
     Vec4 normal(Ray &ray) override{return Vec4();};
 
     friend std::ostream &operator<<(std::ostream &os, const Box &box);

@@ -723,6 +723,20 @@ std::ostream &operator<<(std::ostream &os, const Vec4 &vec4) {
 
 }
 
+Vec4 Vec4::xAxis() {
+    return Vec4(1,0,0,0);
+}
+Vec4 Vec4::yAxis() {
+    return Vec4(0,1,0,0);
+}
+Vec4 Vec4::zAxis() {
+    return Vec4(0,0,1,0);
+}
+
+void Vec4::normalize() {
+    (*this) = (*this)/this->abs();
+}
+
 #pragma endregion
 
 

@@ -6,14 +6,11 @@
 #include "../../include/Camera/Camera.h"
 
 
-Camera::Camera(Vec3 position, Vec3 direction,Resolution resolution, Sensor s, float focalLength): resolution(resolution), sensor(sensor), focalLength(focalLength) {
-    //this->position = Vec4(position, 1);
-    //this->direction = Vec4(direction , 0);
+Camera::Camera(Vec3 position,Resolution resolution, Sensor s, float focalLength): resolution(resolution), sensor(sensor), focalLength(focalLength) {
+    this->setPosition(Vec4(position,1));
     this->setUsableSensorSize();
 }
-Camera::Camera(Vec3 position, Vec3 direction,Screensize resolution, Sensor s, float focalLength): resolution(resolution), sensor(sensor), focalLength(focalLength) {
-    //this->position = Vec4(position, 1);
-    //this->direction = Vec4(direction , 0);
+Camera::Camera(Vec3 position,Screensize resolution, Sensor s, float focalLength): resolution(resolution), sensor(sensor), focalLength(focalLength) {
     this->setUsableSensorSize();
 }
 
