@@ -4,11 +4,11 @@
 
 #include <iostream>
 #include "../../include/Objects/Sphere.h"
-
+using namespace MRay;
 //https://iquilezles.org/articles/intersectors/
 //https://www.shadertoy.com/view/4d2XWV
 //https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
-bool Sphere::hitPoint(Ray &ray, Intersection& intersection) {
+bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
 
     Ray tr = ray.transform(this->invtransform);
 
@@ -32,6 +32,7 @@ bool Sphere::hitPoint(Ray &ray, Intersection& intersection) {
         intersection.hit[0].obj = this;
         intersection.hit[0].point = this->transform * tr.at(hit1);
         intersection.hit[0].normal = tr.at(hit1);
+        intersection.hit[0].entering = true;
         num++;
     }
     if (hit2 > 0){
@@ -40,31 +41,32 @@ bool Sphere::hitPoint(Ray &ray, Intersection& intersection) {
         intersection.hit[num].obj = this;
         intersection.hit[num].point = this->transform * tr.at(hit2);
         intersection.hit[num].normal = tr.at(hit2);
+        intersection.hit[num].entering = false;
 
         num++;
     }
     return num > 0;
 }
 
-std::ostream &operator<<(std::ostream &os, const Sphere &sphere) {
+std::ostream &MRay::operator<<(std::ostream &os, const Sphere &sphere) {
     os << "Sphere: {" << " position: " << sphere.position << "}";
     return os;
 }
 
-Sphere::Sphere(const Vec4 &position) {
+MRay::Sphere::Sphere(const Vec4 &position) {
     this->translate(position.get<0>(),position.get<1>(),position.get<2>());
 }
 
-Sphere::Sphere(const Vec4 &position, float radius){
+MRay::Sphere::Sphere(const Vec4 &position, float radius){
     this->scale(radius,radius,radius);
     this->translate(position.get<0>(),position.get<1>(),position.get<2>());
 }
 
-Vec4 Sphere::normal(Vec4 point) {
+Vec4 MRay::Sphere::normal(Vec4 point) {
     return point;
 }
 
-Vec4 Sphere::normal(Ray &ray) {
+Vec4 MRay::Sphere::normal(Ray &ray) {
     return Vec4();
 }
 

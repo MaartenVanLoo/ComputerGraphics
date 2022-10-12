@@ -4,8 +4,8 @@
 
 #include <catch2/catch_all.hpp>
 #include <iostream>
-#include "../../include/RenderEngineCore.h"
-
+#include <Objects/Box.h>
+using namespace MRay;
 TEST_CASE("tBox_HitPoints"){
     Box box = Box();
     Ray ray;

@@ -4,8 +4,8 @@
 
 #include <catch2/catch_all.hpp>
 #include <iostream>
-#include "../../include/RenderEngineCore.h"
-
+#include <Objects/Object.h>
+using namespace MRay;
 class TObject : public Object{
 public:
     bool hitPoint(Ray &ray,Intersection &intersect) override {

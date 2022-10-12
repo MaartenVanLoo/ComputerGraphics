@@ -7,25 +7,30 @@
 
 #include <ostream>
 #include "Object.h"
-class Sphere : public Object{
-public:
-    Sphere(){};
-    Sphere(const Vec4 &position);
-    Sphere(const Vec4 &position, float radius);
+namespace MRay {
 
-    bool hitPoint(Ray &ray, Intersection& intersection) override;
-    /// Compute the normal vector in a point on the circle.
-    /// Doesn't check if the point is actually on the circle!
-    /// \return
-    Vec4 normal(Vec4 point);
+    class Sphere : public Object {
+    public:
+        Sphere() {};
 
-    Vec4 normal(Ray &ray) override;
+        Sphere(const Vec4 &position);
 
-    friend std::ostream &operator<<(std::ostream &os, const Sphere &sphere);
+        Sphere(const Vec4 &position, float radius);
 
-protected:
-    Vec4 position;
-};
+        bool hitPoint(Ray &ray, Intersection &intersection) override;
 
+        /// Compute the normal vector in a point on the circle.
+        /// Doesn't check if the point is actually on the circle!
+        /// \return
+        Vec4 normal(Vec4 point);
+
+        Vec4 normal(Ray &ray) override;
+
+        friend std::ostream &operator<<(std::ostream &os, const Sphere &sphere);
+
+    protected:
+        Vec4 position;
+    };
+}
 
 #endif //I_COMPUTERGRAPHICS_SPHERE_H

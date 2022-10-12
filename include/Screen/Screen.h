@@ -13,56 +13,70 @@
 #include <chrono>
 #include <atomic>
 #include <opencv2/highgui/highgui_c.h>
-enum keycodes{
-    esc = 27,
-    f = 102,
-    s = 115
-};
 
-class Image{
-public:
-    Image();
-    Image(Resolution resolution);
+namespace MRay {
 
-    const cv::Mat &getImageBuffer() const;
+    enum keycodes {
+        esc = 27,
+        f = 102,
+        s = 115
+    };
 
-    void setPixel(int x, int y, Color3 rgb);
-    Color3 getPixel(int x, int y);
+    class Image {
+    public:
+        Image();
 
-    long long getLastUpdate();
+        Image(Resolution resolution);
 
-    void update();
-    void save(std::string filename);
-private:
-    cv::Mat imageBuffer;
-    std::atomic<long long> lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
-};
+        const cv::Mat &getImageBuffer() const;
 
-class Screen {
-public:
-    Screen()= default;;
-    Screen(Image &image);
+        void setPixel(int x, int y, Color3 rgb);
 
-    void show();
-    void hide();
-    void waitClose();
-    virtual ~Screen();
+        Color3 getPixel(int x, int y);
 
-private:
-    Image* image = nullptr;
-    std::thread* gui = nullptr;
-    std::atomic<bool> gui_running= false;
-    long long lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+        long long getLastUpdate();
 
-    void loop();
+        void update();
 
-    cv::Mat detailImage;
+        void save(const std::string &filename);
 
-    static void onMouse(int event,int x,int y,int flags,void *param);
-    static void onMouseCrop(int event,int x,int y,int flags,void *param);
-};
+    private:
+        cv::Mat imageBuffer;
+        std::atomic<long long> lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::steady_clock::now().time_since_epoch()).count();
+    };
 
+    class Screen {
+    public:
+        Screen() = default;;
 
+        Screen(Image &image);
+
+        void show();
+
+        void hide();
+
+        void waitClose();
+
+        virtual ~Screen();
+
+    private:
+        Image *image = nullptr;
+        std::thread *gui = nullptr;
+        std::atomic<bool> gui_running = false;
+        long long lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::steady_clock::now().time_since_epoch()).count();
+
+        void loop();
+
+        cv::Mat detailImage;
+
+        static void onMouse(int event, int x, int y, int flags, void *param);
+
+        static void onMouseCrop(int event, int x, int y, int flags, void *param);
+    };
+
+}
 
 
 #endif //I_COMPUTERGRAPHICS_SCREEN_H

@@ -1,0 +1,10 @@
+target_sources(MRay
+        PUBLIC
+        Material.cpp
+        MaterialsLibrary.cpp
+        )
+#[[target_sources(I_ComputerGraphics
+        PUBLIC
+        Material.cpp
+        MaterialsLibrary.cpp
+        )]]

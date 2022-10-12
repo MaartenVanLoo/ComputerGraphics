@@ -2,82 +2,53 @@
 #include <Utils/Stopwatch.h>
 
 #include "include/RenderEngineCore.h"
+#include <cmath>
+#include <sstream>
+#include <Materials/Material.h>
+#include <Scene/Scene.h>
+#include <iomanip>
+#include <Textures/Checkerboard.h>
 
 int main() {
     Stopwatch stopwatch = Stopwatch();
     stopwatch.start();
-    for (int i = 0; i< 1e6; i++) {
-        Vec4 v1 = Vec4((float)(rand() % 8), (float)(rand() % 8), (float)(rand() % 8), 0.0f);
-        Vec4 v2 = Vec4((float)(rand() % 8), (float)(rand() % 8), (float)(rand() % 8), 0.0f);
-        Vec4 res = v1.cross(v2);
-    }
-    stopwatch.stop();
-    std::cout << stopwatch << std::endl;
-    Vec4 v = Vec4(1,2,3,4);
-    v.set<2>(5);
 
 
-    Material material = Material();
-    material.specularExponent = 100;
-    material.specular = Vec3(0.99,0.99,0.99);
+    //MRay::Texture* text = new MRay::Checkboard();
+    //std::cout << text->compute(0,0,0) << " ";
+    //std::cout << text->compute(1,0,0) << " ";
+    //std::cout << text->compute(2,0,0) << " ";
+    //std::cout << text->compute(0,1,-2) << " ";
+    //std::cout << text->compute(0,2,-2) << " ";
+    //std::cout << text->compute(0,3,-2) << " ";
+    //std::cout << text->compute(0,4,-2) << " ";
 
-    Object* obj = nullptr;
-
-    Scene scene = Scene();
-    obj = new Plane(Vec4(0,0,-2,0),Vec4(0,0,1,0));
-    material.emissive = Color3(5, 5,5);
-    material.diffuse = Vec3(0.9,0.9,0.9);
-    obj->setMaterial(material);
-    scene.addObject(obj);
-
-    obj = new  Sphere(Vec4(0,0,0,1),1);
-    material.emissive = Color3(5,0,0);
-    material.diffuse = Vec3(0.9,0.1,0.1);
-    obj->setMaterial(material);
-    scene.addObject(obj);
-
-    /* creates problems
-    obj = new  Sphere(Vec4(4,1,5,1),1);
-    obj->scale(.01,1,1);
-    material.emissive = Color3(5,0,0);
-    material.diffuse = Vec3(0.9,0.1,0.1);
-    obj->setMaterial(material);
-    scene.addObject(obj);
-    */
-
-    obj = new Box(Vec4(2,-0.5,0.5,1),Vec4(1,1,1,0));
-    material.emissive = Color3(0, 5,0);
-    material.diffuse = Vec3(0.1,0.9,0.1);
-    obj->setMaterial(material);
-    scene.addObject(obj);
-
-    obj = new Box(Vec4(4,0,1,1),Vec4(1,1,1,0));
-    material.emissive = Color3(0, 0,5);
-    material.diffuse = Vec3(0.1,0.1,0.9);
-    obj->setMaterial(material);
-    obj->rotate(0.0,0.0,0.5);
-    scene.addObject(obj);
-
-    Light* light = new PointLight(Vec4(-3,-10,10,1));
-    //light->diffuse = Vec3(0.9,0.9,0.9);
-    scene.addLight(light);
-    light = new PointLight(Vec4(-5,4,6,1));
-    //light->diffuse = Vec3(0.9,0.9,0.9);
-    scene.addLight(light);
-
-    Box box = Box();
-    Sphere sphere = Sphere();
-    Ray ray = Ray();
-    std::cout << "Scene:" << scene << "\n";
-    std::cout << "Box:" << box << "\n";
-    std::cout << "Sphere:" << sphere << "\n";
-    std::cout << "Ray:" << ray << "\n";
-    std::cout << "Hello, World!" << std::endl;
-
-    Options options;
-    options.enableGui = true;
+    MRay::Scene scene = MRay::Scene();
+    scene.load((std::string &) "");
+    MRay::Options options;
+    options.enableGui = false;
     options.multicore = true;
-    scene.Render(options);
+    //scene.Render(options);
+
+    //sequence render:
+    for(int i =0; i < 720; i+=5){
+        std::ostringstream oss;
+        oss << "Render_"<<std::setw(3) << i;
+        options.renderName = oss.str();
+
+
+        scene.clearLights();
+        scene.getCamera().rotate(0,0,2.5*CV_PI/180);
+        //rotate light
+        MRay::Light* light = new MRay::PointLight(MRay::Vec4(float(10.0*cos(i*CV_PI/180)),float(10.0 *sin((i*CV_PI/180))),10));
+        //move light
+        //MRay::Light* light = new MRay::PointLight(MRay::Vec4(i/3.6,0,10));
+        scene.addLight(light);
+
+        std::cout << (*dynamic_cast<MRay::PointLight*>(light)) << "\n";
+        scene.Render(options);
+    }
+
     system("pause");
     return 0;
 }

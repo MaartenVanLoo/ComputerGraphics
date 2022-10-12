@@ -1,0 +1,12 @@
+target_sources(MRay
+        PUBLIC
+        Color3.cpp
+        Light.cpp
+        PointLight.cpp
+        )
+#[[target_sources(I_ComputerGraphics
+        PUBLIC
+        Color3.cpp
+        Light.cpp
+        PointLight.cpp
+        )]]

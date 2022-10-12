@@ -5,9 +5,10 @@
 #include <catch2/catch_all.hpp>
 #include <iostream>
 #include <Utils/Stopwatch.h>
-#include "../../include/RenderEngineCore.h"
+#include <LinearAlgebra/Vector.h>
 
 #define benchmark false
+using namespace MRay;
 TEST_CASE("tVector"){
     Vec4 vec1;
     Vec4 vec2;

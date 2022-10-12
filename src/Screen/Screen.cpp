@@ -5,7 +5,7 @@
 #include "Screen/Screen.h"
 
 
-
+using namespace MRay;
 cv::Mat resizeKeepAspectRatio(const cv::Mat &input, const cv::Size &dstSize, const cv::Scalar &bgcolor)
 {
     cv::Mat output;
@@ -35,15 +35,15 @@ cv::Mat resizeKeepAspectRatio(const cv::Mat &input, const cv::Size &dstSize, con
     return output;
 }
 
-Image::Image() {
+MRay::Image::Image() {
     Resolution resolution = Resolution();
     this->imageBuffer = cv::Mat::zeros(cv::Size(resolution.width,resolution.height),CV_8UC3);
 }
-Image::Image(Resolution resolution) {
+MRay::Image::Image(Resolution resolution) {
     this->imageBuffer = cv::Mat::zeros(cv::Size(resolution.width,resolution.height),CV_8UC3);
 }
 
-void Image::setPixel(int x, int y, Color3 rgb) {
+void MRay::Image::setPixel(int x, int y, Color3 rgb) {
     cv::Vec3b & color = this->imageBuffer.at<cv::Vec3b>(y,x);
     color[0] = static_cast<unsigned char>(rgb.blue);
     color[1] = static_cast<unsigned char>(rgb.green);
@@ -52,42 +52,46 @@ void Image::setPixel(int x, int y, Color3 rgb) {
     this->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 }
 
-Color3 Image::getPixel(int x, int y){
+Color3 MRay::Image::getPixel(int x, int y){
     cv::Vec3b & color = this->imageBuffer.at<cv::Vec3b>(y,x);
     return Color3(color[2], color[1], color[0]);
 }
 
-long long Image::getLastUpdate() {
+long long MRay::Image::getLastUpdate() {
     return this->lastUpdate;
 }
 
-void Image::update() {
+void MRay::Image::update() {
     //forces last update time to make a draw call in the screen
     this->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 }
 
-const cv::Mat &Image::getImageBuffer() const {
+const cv::Mat &MRay::Image::getImageBuffer() const {
     return this->imageBuffer;
 }
 
-Screen::Screen(Image &image) {
+void MRay::Image::save(const std::string &filename) {
+    cv::imwrite(filename, this->imageBuffer);
+}
+
+MRay::Screen::Screen(Image &image) {
     this->image = &image;
 }
 
 
-void Screen::show() {
+void MRay::Screen::show() {
     gui_running = true,
-    this->gui = new std::thread(&Screen::loop, this);
+    this->gui = new std::thread(&MRay::Screen::loop, this);
 }
 
-void Screen::hide(){
+void MRay::Screen::hide(){
     gui_running = false;
     this->gui->join();
     free(this->gui);
     this->gui = nullptr;
 }
 
-void Screen::waitClose(){
+void MRay::Screen::waitClose(){
     if (this->gui == nullptr) return;
     while (cv::getWindowProperty("Rendered Image",cv::WND_PROP_VISIBLE) == 1) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -95,7 +99,7 @@ void Screen::waitClose(){
 }
 
 
-void Screen::onMouse(int event,int x,int y,int flags,void *param){
+void MRay::Screen::onMouse(int event,int x,int y,int flags,void *param){
     if (((Screen*)(param))->lastUpdate + 100 > std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count()){
         return; //only once every 100 ms;
     }
@@ -106,7 +110,7 @@ void Screen::onMouse(int event,int x,int y,int flags,void *param){
     std::cout << "Mouse event " << flags << std::endl;
 }
 
-void Screen::onMouseCrop(int event,int x,int y,int flags,void *param){
+void MRay::Screen::onMouseCrop(int event,int x,int y,int flags,void *param){
     try{
         if(cvGetWindowHandle("Crop Image") == nullptr) return; //window closed
     }catch(const std::exception&){
@@ -136,7 +140,7 @@ bool guiExists(const std::string &winname){
         return false;
     }
 }
-void Screen::loop() {
+void MRay::Screen::loop() {
     cv::Rect2d rect;
     cv::Rect renderArea;
     cv::Mat tmp;
@@ -146,7 +150,7 @@ void Screen::loop() {
     cv::setWindowProperty("Rendered Image", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
 
     showImage("Rendered Image", this->image->getImageBuffer());
-    cv::setMouseCallback("Rendered Image",&Screen::onMouse,this);
+    cv::setMouseCallback("Rendered Image",&MRay::Screen::onMouse,this);
 
 
     while (gui_running &&
@@ -186,8 +190,8 @@ void Screen::loop() {
                 cv::namedWindow("Crop Image", cv::WINDOW_NORMAL | cv::WINDOW_KEEPRATIO);
                 cv::resizeWindow("Crop Image", 1280, 720);
                 showImage("Crop Image", this->detailImage);
-                cv::setMouseCallback("Rendered Image",&Screen::onMouse,this);
-                cv::setMouseCallback("Crop Image",&Screen::onMouseCrop,this);
+                cv::setMouseCallback("Rendered Image",&MRay::Screen::onMouse,this);
+                cv::setMouseCallback("Crop Image",&MRay::Screen::onMouseCrop,this);
                 break;
             default:
                 std::cout << "key pressed:" << key << std::endl;
@@ -198,7 +202,7 @@ void Screen::loop() {
 }
 
 
-Screen::~Screen() {
+MRay::Screen::~Screen() {
     gui_running = false;
     if (this->gui != nullptr){
         this->gui->join();

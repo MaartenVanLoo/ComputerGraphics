@@ -3,10 +3,10 @@
 //
 #include <catch2/catch_all.hpp>
 #include <iostream>
-#include "../../include/RenderEngineCore.h"
+#include <Objects/Sphere.h>
 
 #define DEBUG_PRINT false
-
+using namespace MRay;
 TEST_CASE("tSphere_HitPoints"){
     Sphere sphere;
     Ray ray;

@@ -17,3 +17,4 @@ add_executable(I_ComputerGraphics_tests tests.cpp ${ProjectSourceFiles} ${testSo
 target_include_directories(I_ComputerGraphics_tests PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(I_ComputerGraphics_tests PRIVATE Catch2::Catch2WithMain)
 target_link_libraries( I_ComputerGraphics_tests PRIVATE  ${OpenCV_LIBS} )
+target_link_libraries(I_ComputerGraphics_tests PRIVATE MRay)

@@ -5,10 +5,10 @@
 #include <catch2/catch_all.hpp>
 #include <iostream>
 #include <Utils/Stopwatch.h>
-#include "../../include/RenderEngineCore.h"
+#include <LinearAlgebra/Matrix.h>
 
 #define benchmark false
-
+using namespace MRay;
 TEST_CASE("tMatrix"){
     Matrix4 mat1;
     Matrix4 mat2;

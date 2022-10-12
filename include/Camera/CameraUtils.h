@@ -9,39 +9,48 @@
 #include <stdexcept>
 #include <ostream>
 
-enum Screensize{
-    _240p,
-    _360p,
-    _480p,
-    _720p, _HD,
-    _1080p,_FHD,
-    _1440p,_QHD,
-    _2160p, _UHD,_4K,
-    _4320p,_8K_UHD, _8K
-};
-struct Sensor{
-    Sensor(){};
-    Sensor(float width, float height);
-    Sensor(Screensize screensize);
-    Sensor(std::string ratio, float width);
+namespace MRay {
+    enum Screensize {
+        _240p,
+        _360p,
+        _480p,
+        _720p, _HD,
+        _1080p, _FHD,
+        _1440p, _QHD,
+        _2160p, _UHD, _4K,
+        _4320p, _8K_UHD, _8K
+    };
 
-    friend std::ostream &operator<<(std::ostream &os, const Sensor &sensor);
+    struct Sensor {
+        Sensor() {};
 
-    float width = 160, height = 90;
-};
+        Sensor(float width, float height);
 
-struct Resolution{
-    Resolution(){}
-    Resolution(int width, int height);
-    Resolution(std::string ratio, int width);
-    Resolution(Screensize screensize);
+        Sensor(Screensize screensize);
 
-    long long getPixels() const;
-    friend std::ostream &operator<<(std::ostream &os, const Resolution &resolution);
+        Sensor(std::string ratio, float width);
 
-    int width = 1920, height = 1080;
-};
+        friend std::ostream &operator<<(std::ostream &os, const Sensor &sensor);
 
+        float width = 160, height = 90;
+    };
 
+    struct Resolution {
+        Resolution() {}
+
+        Resolution(int width, int height);
+
+        Resolution(std::string ratio, int width);
+
+        Resolution(Screensize screensize);
+
+        long long getPixels() const;
+
+        friend std::ostream &operator<<(std::ostream &os, const Resolution &resolution);
+
+        int width = 1920, height = 1080;
+    };
+
+}
 
 #endif //I_COMPUTERGRAPHICS_CAMERAUTILS_H

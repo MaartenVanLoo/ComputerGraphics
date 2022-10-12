@@ -3,11 +3,11 @@
 //
 
 #include "../../include/Camera/CameraUtils.h"
+using namespace MRay;
 
+MRay::Sensor::Sensor(float width, float height): width(width), height(height){}
 
-Sensor::Sensor(float width, float height): width(width), height(height){}
-
-Sensor::Sensor(std::string ratio, float width) {
+MRay::Sensor::Sensor(std::string ratio, float width) {
         if (ratio == "4:3"){
             this->width = width;
             this->height = width * 3.0f / 4.0f;
@@ -21,12 +21,12 @@ Sensor::Sensor(std::string ratio, float width) {
         }
 }
 
-std::ostream &operator<<(std::ostream &os, const Sensor &sensor) {
+std::ostream &MRay::operator<<(std::ostream &os, const Sensor &sensor) {
     os << "w: " << sensor.width << " h: " << sensor.height;
     return os;
 }
 
-Sensor::Sensor(Screensize screensize) {
+MRay::Sensor::Sensor(Screensize screensize) {
     switch(screensize){
         case _240p:
             this->width  = 352;
@@ -81,7 +81,7 @@ Resolution::Resolution(std::string ratio, int width) {
     }
 }
 
-std::ostream &operator<<(std::ostream &os, const Resolution &resolution) {
+std::ostream &MRay::operator<<(std::ostream &os, const Resolution &resolution) {
     os << "w: " << resolution.width << " h: " << resolution.height;
     return os;
 }

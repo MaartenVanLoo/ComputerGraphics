@@ -2,40 +2,43 @@
 // Created by maart on 30/09/2022.
 //
 
-
+#include <Materials/MaterialsLibrary.h>
 #include <Scene/Scene.h>
 #include <Objects/Plane.h>
-
-
-Scene::~Scene() {
+#include <Scene/PhongShader.h>
+#include <Objects/Sphere.h>
+#include <Objects/Box.h>
+#include <Textures/Checkerboard.h>
+using namespace MRay;
+MRay::Scene::~Scene() {
     for (auto obj : this->objects){
-        free(obj);
+        delete obj;
     }
     for (auto light: this->lights){
-        free(light);
+        delete light;
     }
     if (this->screen != nullptr){
         this->screen->waitClose();
-        free(this->screen);
+        delete this->screen;
     }
     if (this->image != nullptr){
-        free(this->image);
+        delete this->image;
     }
 }
 
-std::ostream &operator<<(std::ostream &os, const Scene &scene) {
+std::ostream &MRay::operator<<(std::ostream &os, const Scene &scene) {
     os << "Scene: {" <<"objects: " << scene.objects.size() << "}";
     return os;
 }
 
-void Scene::addObject(Object *obj) {
+void MRay::Scene::addObject(Object *obj) {
     this->objects.push_back(obj);
 }
-void Scene::addLight(Light* light) {
+void MRay::Scene::addLight(Light* light) {
     this->lights.push_back(light);
 }
 
-void Scene::Render(const Options &options) {
+void MRay::Scene::Render(const Options &options) {
     if (this->image != nullptr) free(this->image);
     this->image = new Image(camera.getResolution());
 
@@ -66,8 +69,9 @@ void Scene::Render(const Options &options) {
     else {
         for (int y = 0; y < this->camera.getResolution().height; y++) {
             for (int x = 0; x < this->camera.getResolution().width; x++) {
+                Shader* shader = new PhongShader(this);
+                Color3 test = shader->shade(x,y);
                 Color3 rgb = this->shade(x, y);
-
                 this->image->setPixel(x, y, rgb);
             }
 #if artificaldelay
@@ -83,14 +87,15 @@ void Scene::Render(const Options &options) {
     stopwatch.reset();
     stopwatch.start();
     this->image->update();
-    this->image->save("render.png");
-    this->image->save("render.bmp");
+    this->image->save(options.renderName + ".png");
+    //this->image->save(options.renderName+ ".bmp");
     stopwatch.stop();
     std::cout << "File saved in :" << stopwatch.elapsedms() << " ms" << std::endl;
 
     //close gui
     if (options.enableGui) {
-        this->screen->waitClose();
+        this->screen->hide();
+        //this->screen->waitClose();
         //cleanup screen
         free(this->screen);
         this->screen = nullptr;
@@ -98,61 +103,81 @@ void Scene::Render(const Options &options) {
 
 }
 
-Scene::Scene() {
+MRay::Scene::Scene() {
     this->camera.rotate(0,0,0);
-    this->camera.setPosition(Vec4(-7.5,0,3,1));
+    this->camera.setPosition(Vec4(-9.5,0,5,1));
     this->camera.setSensor(Sensor(360,240));
     this->camera.setResolution(Resolution(Screensize::_4K));
     this->camera.setFocalLength(100);
 }
 
-Color3 Scene::shade(int x, int y) {
+Color3 MRay::Scene::shade(int x, int y) {
+    const int N = 3; //super sampling ratio //not smart! => dynamic super sampling?
     Intersection intersect; //object to store intersections, can be reused!
     Color3 color;
-    Ray primary =  this->camera.getPrimaryRay(x,y);
+    Color3 sample;
+    color.openTransaction();
+    //super sample:
 
-    Hit first = Hit();
-    if (!getFirstHit(primary, first, intersect)){
-        //no hit, set background color:
-        color = Color3(0x87, 0xCE, 0xFA);
-        return color;
-    }
+    for (int i =0; i < N; i++){
+        sample.clear();
+        Ray primary =  this->camera.getPrimaryRay(x,y,float(rand())/RAND_MAX,float(rand())/RAND_MAX);
 
-    Vec4 v = - primary.dir(); //always normalized
-    Object* obj = first.obj;
-
-    color = obj->getMaterial().emissive;
-    Vec4 normal = obj->getTransform() * first.normal;
-    normal.normalize();
-
-    for (const Light* light: this->lights){
-        if (isInShadow(first.point,obj, light, intersect)) continue;
-        //diffuse
-        Vec4 s = light->getVec(first.point);
-        s.normalize();
-        float mDotS = s.dot(normal); // lambert term;
-        if (mDotS > 0.0){
-            Color3 diffuse = mDotS * obj->getMaterial().diffuse * light->color;
-            color.add(diffuse);
+        Hit first = Hit();
+        if (!getFirstHit(primary, first, intersect)){
+            //no hit, set background color:
+            color.add(Color3(0x87, 0xCE, 0xFA));
+            continue;
+            //return color;
         }
-        //specular
-        Vec4 h  = v + s;
-        h.normalize();
-        float mDotH = h.dot(normal);
-        float phong = std::pow(mDotH, obj->getMaterial().specularExponent);
-        Color3 specColor = phong* obj->getMaterial().specular * light->color;
-        color.add(specColor);
-    }
 
-    //only emissive model:
-    /*if (first.t>=0){
-        color = first.obj->getMaterial().emissive;
-        //rgb = Color3(x, y, 0);
-    }*/
+        Vec4 v = - primary.dir(); //always normalized
+        Object* obj = first.obj;
+
+        sample.add(obj->getMaterial().emissive);
+        sample.add(Color3(obj->getMaterial().ambient));
+
+        Vec4 normal = obj->getTransform() * first.normal;
+        normal.normalize();
+
+        // diff & spec
+        for (const Light* light: this->lights){
+            if (isInShadow(first.point,obj, light, intersect)) continue;
+            //diffuse
+            Vec4 s = light->getVec(first.point);
+            s.normalize();
+            float mDotS = s.dot(normal); // lambert term;
+            if (mDotS > 0.0){
+                Color3 diffuse = mDotS * obj->getMaterial().diffuse * light->color;
+                if (obj->getTexture() != nullptr){
+                    diffuse *= first.obj->getTexture()->compute(first.point.get<0>(),first.point.get<1>(),first.point.get<2>(),10);
+                }
+                sample.add(diffuse);
+            }
+            //specular
+            Vec4 h  = v + s;
+            h.normalize();
+            float mDotH = h.dot(normal);
+            if (mDotH > 0){
+                float phong = std::pow(mDotH, obj->getMaterial().specularExponent);
+                Color3 specColor = phong* obj->getMaterial().specular * light->color;
+                sample.add(specColor);
+            }
+
+        }
+        color.add(sample);
+        //only emissive model:
+        /*if (first.t>=0){
+            color = first.obj->getMaterial().emissive;
+            //rgb = Color3(x, y, 0);
+        }*/
+
+    }
+    color.closeTransaction();
     return color;
 }
 
-bool Scene::getFirstHit(Ray &ray, Hit &best, Intersection& intersect,  const Object* ignore) const {
+bool MRay::Scene::getFirstHit(Ray &ray, Hit &best, Intersection& intersect,  const Object* ignore) const {
     bool flag = false;
     for (auto obj: this->objects){
         if (obj == ignore) continue;
@@ -168,19 +193,95 @@ bool Scene::getFirstHit(Ray &ray, Hit &best, Intersection& intersect,  const Obj
     return flag;
 }
 
-bool Scene::isInShadow(const Vec4 &point, const Object* obj, const Light* light, Intersection& intersect) const {
+bool MRay::Scene::isInShadow(const Vec4 &point, const Object* ignore, const Light* light, Intersection& intersect) const {
     //ray to light source
     Ray ray = light->getRay(point);
+
+    //get distance between point and light:
+    float dist = light->getDist(point); //square of the distance!
 
     //look for intersections:
     Hit best;
     intersect.clear();
-    if (!getFirstHit(ray, best, intersect,obj)) return false; //no hit= not in shadow
+    for (auto obj: this->objects){
+        if (obj->hitPoint(ray, intersect)){
+            for (const auto& h: intersect.hit){
+                if (h.obj == ignore){
+                    Vec4 p = h.point - point;
+                    if (p.dot(p) < 1e-6) continue; //this is the original point
+                }
+                if (dist > h.t * h.t)
+                    return true; //object between point and light
+            }
+        }
+    }
+    //no object found between point and light => not in shadow
+    return false;
 
-    //get distance between point and light:
-    float dist = light->getDist(point); //square of the distance!
-    if (dist >= best.t * best.t) return true;
-    return true;
+
+
+}
+
+
+void MRay::Scene::clearLights() {
+    for (auto l: this->lights){
+        delete l;
+    }
+    this->lights.clear();
+}
+
+const std::vector<Object *> &MRay::Scene::getObjects() const {
+    return objects;
+}
+
+const std::vector<Light *> &MRay::Scene::getLights() const {
+    return lights;
+}
+
+Camera &MRay::Scene::getCamera() {
+    return camera;
+}
+
+void Scene::load(std::string &file) {
+
+    Object* obj = nullptr;
+    Texture* texture = nullptr;
+    //Scene scene = Scene();
+    obj = new Plane(Vec4(0,0,0,0),Vec4(0,0,1,0));
+    //obj->setTexture(new Checkboard(5,5,5));
+    obj->setMaterial(MaterialsLibrary::gray_rubber());
+    this->addObject(obj);
+
+    obj = new Sphere(Vec4(0,-2,2,1),1);
+    obj->setMaterial(MaterialsLibrary::red_plastic());
+    this->addObject(obj);
+
+    obj = new Sphere(Vec4(0,2,2,1),1);
+    obj->setMaterial(MaterialsLibrary::bronze());
+    this->addObject(obj);
+
+    // creates problems
+//    obj = new  Sphere(Vec4(4,1,5,1),1);
+//    obj->scale(.01,1,1);
+//    material.emissive = Color3(5,0,0);
+//    material.diffuse = Vec3(0.9,0.1,0.1);
+//    obj->setMaterial(material);
+//    this->addObject(obj);
+
+
+    obj = new Box(Vec4(0,-0.5f,2.5f,1),Vec4(1,1,1,0));
+    obj->setMaterial(MaterialsLibrary::green_plastic());
+    this->addObject(obj);
+
+    obj = new Box(Vec4(2,0,2,1),Vec4(1,1,1,0));
+    obj->setMaterial(MaterialsLibrary::yellow_plastic());
+    obj->rotate(0.0,0.0,0.5);
+    this->addObject(obj);
+
+    Light* light = new PointLight(Vec4(0,0,10,1));
+    this->addLight(light);
+    //light = new PointLight(Vec4(0,-10,10,1));
+    //scene.addLight(light);
 }
 
 #pragma region MultiThreading tools
@@ -285,7 +386,7 @@ void reorder(std::vector<RenderTask*>& vA, std::vector<int>& vOrder)
        vA[i] = copy[vOrder[i]];
     }
 }
-void Scene::createTasks(std::vector<RenderTask*> &tasks) {
+void MRay::Scene::createTasks(std::vector<RenderTask*> &tasks) {
     //find suitable size, minimum 16x16, always square, power of 2
     int size = 16;
     const Resolution resolution = this->camera.getResolution();
@@ -314,11 +415,15 @@ void Scene::createTasks(std::vector<RenderTask*> &tasks) {
     std::reverse(spiral.begin(),spiral.end());
     reorder(tasks,spiral);
 }
+
+void Scene::setCamera(Camera &c) {
+    this->camera = c;
+}
+
+
 #pragma endregion
 
-void Image::save(std::string filename) {
-    cv::imwrite(filename, this->imageBuffer);
-}
+
 
 
 

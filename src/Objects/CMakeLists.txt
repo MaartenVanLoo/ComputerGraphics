@@ -1,0 +1,15 @@
+target_sources(MRay
+        PUBLIC
+        Object.cpp
+        Plane.cpp
+        Box.cpp
+        Sphere.cpp
+        Intersection.cpp
+        )
+#[[target_sources(I_ComputerGraphics
+        PUBLIC
+        Object.cpp
+        Plane.cpp
+        Box.cpp
+        Sphere.cpp
+        )]]

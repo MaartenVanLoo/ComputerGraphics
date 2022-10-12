@@ -3,3 +3,4 @@
 //
 
 #include "Utils/Intersection.h"
+using namespace MRay;

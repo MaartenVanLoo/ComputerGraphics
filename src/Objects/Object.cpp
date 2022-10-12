@@ -3,24 +3,26 @@
 //
 
 #include "../../include/Objects/Object.h"
+using namespace MRay;
 
-std::ostream &operator<<(std::ostream &os, const Object &object) {
-    return os;
-}
-
-
-Object::~Object() {
+MRay::Object::~Object() {
 
 }
 
-void Object::setMaterial(Material &mtrl) {
+void MRay::Object::setMaterial(Material mtrl) {
     this->mtrl = mtrl;
 }
 
-Material& Object::getMaterial() {
+Material& MRay::Object::getMaterial() {
     return this->mtrl;
 }
 
-void Intersection::clear() {
-    this->hit.clear();
+void Object::setTexture(Texture* texture) {
+    this->texture = texture;
 }
+
+Texture *Object::getTexture() {
+    return this->texture;
+}
+
+

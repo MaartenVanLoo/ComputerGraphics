@@ -4,4 +4,7 @@
 
 #include "Light/Light.h"
 
+using namespace MRay;
+MRay::Light::~Light() {
 
+}

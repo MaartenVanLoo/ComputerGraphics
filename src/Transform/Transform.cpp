@@ -4,59 +4,59 @@
 
 #include "../../include/Transform/Transform.h"
 
-
+using namespace MRay;
 #pragma region Transform
-void Transform::applyTransform(const Matrix4 &T, const Matrix4 &invT){
+void MRay::Transform::applyTransform(const Matrix4 &T, const Matrix4 &invT){
     this->transform = T * this->transform;
     this->invtransform = this->invtransform * invT;
 }
 
-void Transform::rotate(float rx, float ry, float rz) {
+void MRay::Transform::rotate(float rx, float ry, float rz) {
     Matrix4 Tx,Ty,Tz;
-    AffineTransform::rotateX(Tx, rx);
-    AffineTransform::rotateY(Ty, ry);
-    AffineTransform::rotateZ(Tz, rz);
+      MRay::AffineTransform::rotateX(Tx, rx);
+      MRay::AffineTransform::rotateY(Ty, ry);
+      MRay::AffineTransform::rotateZ(Tz, rz);
     this->transform = Tx * this->transform;
     this->transform = Ty * this->transform;
     this->transform = Tz * this->transform;
     //inverse transform
-    AffineTransform::rotateX(Tx, -rx);
-    AffineTransform::rotateY(Ty, -ry);
-    AffineTransform::rotateZ(Tz, -rz);
+      MRay::AffineTransform::rotateX(Tx, -rx);
+      MRay::AffineTransform::rotateY(Ty, -ry);
+      MRay::AffineTransform::rotateZ(Tz, -rz);
     this->invtransform = this->invtransform * Tx; //reverse order of transform!
     this->invtransform = this->invtransform * Ty;
     this->invtransform = this->invtransform * Tz;
 }
 
-void Transform::translate(float tx, float ty, float tz) {
+void MRay::Transform::translate(float tx, float ty, float tz) {
     Matrix4 T;
-    AffineTransform::translate(T, tx, ty, tz);
+      MRay::AffineTransform::translate(T, tx, ty, tz);
     this->transform = T * this->transform;
     //inverse transform
-    AffineTransform::translate(T, -tx, -ty, -tz);
+      MRay::AffineTransform::translate(T, -tx, -ty, -tz);
     this->invtransform = this->invtransform * T; //reverse order of transform!
 }
 
-void Transform::scale(float sx, float sy, float sz) {
+void MRay::Transform::scale(float sx, float sy, float sz) {
     Matrix4 T;
-    AffineTransform::scale(T, sx, sy, sz);
+      MRay::AffineTransform::scale(T, sx, sy, sz);
     this->transform = T * this->transform;
-    AffineTransform::scale(T, 1 / sx, 1 / sy, 1 / sz);
+      MRay::AffineTransform::scale(T, 1 / sx, 1 / sy, 1 / sz);
     this->invtransform = this->invtransform * T; //reverse order of transform!
 }
 
-void Transform::shear(float shXy, float shXz, float shYx, float shYz, float shZx, float shZy ) {
+void MRay::Transform::shear(float shXy, float shXz, float shYx, float shYz, float shZx, float shZy ) {
     Matrix4 Tx,Ty,Tz;
-    AffineTransform::shearX(Tx, shXy, shXz);
-    AffineTransform::shearY(Ty, shYx, shYz);
-    AffineTransform::shearZ(Tz, shZx, shZy);
+      MRay::AffineTransform::shearX(Tx, shXy, shXz);
+      MRay::AffineTransform::shearY(Ty, shYx, shYz);
+      MRay::AffineTransform::shearZ(Tz, shZx, shZy);
     this->transform = Tx * this->transform;
     this->transform = Ty * this->transform;
     this->transform = Tz * this->transform;
     //inverse transform
-    AffineTransform::shearX(Tx, -shXy, -shXz);
-    AffineTransform::shearY(Ty, -shYx, -shYz);
-    AffineTransform::shearZ(Tz, -shZx, -shZy);
+      MRay::AffineTransform::shearX(Tx, -shXy, -shXz);
+      MRay::AffineTransform::shearY(Ty, -shYx, -shYz);
+      MRay::AffineTransform::shearZ(Tz, -shZx, -shZy);
     this->invtransform = this->invtransform * Tx; //reverse order of transform!
     this->invtransform = this->invtransform * Ty;
     this->invtransform = this->invtransform * Tz;
@@ -73,12 +73,12 @@ const Matrix4 &Transform::getInvtransform() const {
 #pragma endregion
 
 #pragma region AffineTransform
-Vec4 AffineTransform::applyTransform(const Matrix4 &T, const Vec4 &vec) {
+Vec4 MRay::AffineTransform::applyTransform(const Matrix4 &T, const Vec4 &vec) {
     //T = 4x4 matrix!
     return T*vec;
 }
 
-void AffineTransform::rotatef(Matrix4 &T, float angle, float x, float y, float z) {
+void MRay::AffineTransform::rotatef(Matrix4 &T, float angle, float x, float y, float z) {
     //T must be a 4x4 matrix, each vec4 is a row
     //normalize x y z
     float invnorm = 1.0f/sqrt(x*x+y*y+z*z);
@@ -94,7 +94,7 @@ void AffineTransform::rotatef(Matrix4 &T, float angle, float x, float y, float z
     T.set<2>(Vec4(x*z*(1-cosa)-y*sina,       y*z*(1-cosa) + x*sina,  cosa + z*z * (1-cosa) , 0 ));
     T.set<3>(Vec4(0,                         0,                      0,                      1 ));
 }
-void AffineTransform::rotatef(Matrix4 &T, float angle, const Vec3 &axis) {
+void MRay::AffineTransform::rotatef(Matrix4 &T, float angle, const Vec3 &axis) {
     //T must be a 4x4 matrix, each vec4 is a row
     float invnorm = 1.0f/std::sqrt(Vec3::dot(axis,axis));
     float cosa = std::cos(angle);
@@ -107,7 +107,7 @@ void AffineTransform::rotatef(Matrix4 &T, float angle, const Vec3 &axis) {
     T.set<2>(Vec4(x*z*(1-cosa)-y*sina,       y*z*(1-cosa) + x*sina,  cosa + z*z * (1-cosa) , 0 ));
     T.set<3>(Vec4(0,                         0,                      0,                      1 ));
 }
-void AffineTransform::rotatef(Matrix4 &T, float angle, const Vec4 &axis) {
+void MRay::AffineTransform::rotatef(Matrix4 &T, float angle, const Vec4 &axis) {
     //T must be a 4x4 matrix, each vec4 is a row
     float invnorm = 1.0f/std::sqrt(Vec4::dot(axis,axis));
     float cosa = std::cos(angle);
@@ -120,109 +120,109 @@ void AffineTransform::rotatef(Matrix4 &T, float angle, const Vec4 &axis) {
     T.set<2>(Vec4(x*z*(1-cosa)-y*sina,       y*z*(1-cosa) + x*sina,  cosa + z*z * (1-cosa) , 0 ));
     T.set<3>(Vec4(0,                         0,                      0,                      1 ));
 }
-Matrix4 AffineTransform::rotatef(float angle, float x, float y ,float z){
+Matrix4 MRay::AffineTransform::rotatef(float angle, float x, float y ,float z){
     Matrix4 mat4;
-    AffineTransform::rotatef(mat4, angle, x,y,z);
+      MRay::AffineTransform::rotatef(mat4, angle, x,y,z);
     return mat4;
 }
-Matrix4 AffineTransform::rotatef(float angle, const Vec3 &axis){
+Matrix4 MRay::AffineTransform::rotatef(float angle, const Vec3 &axis){
     Matrix4 mat4;
-    AffineTransform::rotatef(mat4, angle, axis);
+      MRay::AffineTransform::rotatef(mat4, angle, axis);
     return mat4;
 }
-Matrix4 AffineTransform::rotatef(float angle, const Vec4 &axis){
+Matrix4 MRay::AffineTransform::rotatef(float angle, const Vec4 &axis){
     Matrix4 mat4;
-    AffineTransform::rotatef(mat4, angle, axis);
+      MRay::AffineTransform::rotatef(mat4, angle, axis);
     return mat4;
 }
 
 
-void AffineTransform::translate(Matrix4 &T, float dx, float dy, float dz) {
+void   MRay::AffineTransform::translate(Matrix4 &T, float dx, float dy, float dz) {
     //T must be a 4x4 matrix, each vec4 is a row
     T.set<0>(Vec4(1,0,0,dx));
     T.set<1>(Vec4(0,1,0,dy));
     T.set<2>(Vec4(0,0,1,dz));
     T.set<3>(Vec4(0,0,0,1));
 }
-Matrix4 AffineTransform::translate(float dx, float dy, float dz){
+Matrix4   MRay::AffineTransform::translate(float dx, float dy, float dz){
     Matrix4 mat4;
-    AffineTransform::translate(mat4, dx, dy, dz);
+      MRay::AffineTransform::translate(mat4, dx, dy, dz);
     return mat4;
 }
 
-void AffineTransform::scale(Matrix4 &T, float s) {
+void   MRay::AffineTransform::scale(Matrix4 &T, float s) {
     //T must be a 4x4 matrix, each vec4 is a row
     T.set<0>(Vec4( s,0,0,0));
     T.set<1>(Vec4( 0,   s,0,0));
     T.set<2>(Vec4( 0,0 ,  s,0));
     T.set<3>(Vec4( 0,0,0,1));
 }
-void AffineTransform::scale(Matrix4 &T, float sx, float sy, float sz) {
+void   MRay::AffineTransform::scale(Matrix4 &T, float sx, float sy, float sz) {
     //T must be a 4x4 matrix, each vec4 is a row
     T.set<0>(Vec4(sx,0,0,0));
     T.set<1>(Vec4( 0,  sy,0,0));
     T.set<2>(Vec4( 0,0,  sz,0));
     T.set<3>(Vec4( 0,0,0,1));
 }
-Matrix4 AffineTransform::scale(float s){
+Matrix4   MRay::AffineTransform::scale(float s){
     Matrix4 mat4;
-    AffineTransform::scale(mat4, s);
+      MRay::AffineTransform::scale(mat4, s);
     return mat4;
 }
-Matrix4 AffineTransform::scale(float sx, float sy, float sz){
+Matrix4   MRay::AffineTransform::scale(float sx, float sy, float sz){
     Matrix4 mat4;
-    AffineTransform::scale(mat4, sx, sy, sz);
+      MRay::AffineTransform::scale(mat4, sx, sy, sz);
     return mat4;
 }
 
 //https://en.wikipedia.org/wiki/Shear_matrix
-void AffineTransform::shear(Matrix4 &T, float hxy, float hxz, float hyz, float hyx, float hzx, float hzy) {
+void   MRay::AffineTransform::shear(Matrix4 &T, float hxy, float hxz, float hyz, float hyx, float hzx, float hzy) {
     //T must be a 4x4 matrix, each vec4 is a row
     T.set<0>(Vec4(1, hxy, hxz,0));
     T.set<1>(Vec4( hyx,1, hyz,0));
     T.set<2>(Vec4( hzx, hzy,1,0));
     T.set<3>(Vec4(0,0,0,1));
 }
-void AffineTransform::shearX(Matrix4 &T, float shy, float shz) {
+void   MRay::AffineTransform::shearX(Matrix4 &T, float shy, float shz) {
     T.set<0>(Vec4(1, 0, 0,0));
     T.set<1>(Vec4( shy,1, 0,0));
     T.set<2>(Vec4( shz, 0,1,0));
     T.set<3>(Vec4(0,0,0,1));
 }
-void AffineTransform::shearY(Matrix4 &T, float shx, float shz) {
+void   MRay::AffineTransform::shearY(Matrix4 &T, float shx, float shz) {
     T.set<0>(Vec4(1, shx, 0,0));
     T.set<1>(Vec4( 0,1, 0,0));
     T.set<2>(Vec4( 0, shz,1,0));
     T.set<3>(Vec4(0,0,0,1));
 }
-void AffineTransform::shearZ(Matrix4 &T, float shx, float shy) {
+void   MRay::AffineTransform::shearZ(Matrix4 &T, float shx, float shy) {
     T.set<0>(Vec4(1, 0, shx,0));
     T.set<1>(Vec4( 0,1, shy,0));
     T.set<2>(Vec4( 0, 0,1,0));
     T.set<3>(Vec4(0,0,0,1));
 }
-Matrix4 AffineTransform::shear(float hxy, float hxz, float hyz, float hyx, float hzx, float hzy){
+Matrix4   MRay::AffineTransform::shear(float hxy, float hxz, float hyz, float hyx, float hzx, float hzy){
     Matrix4 mat4;
-    AffineTransform::shear(mat4, hxy, hxz, hyz, hyx, hzx, hzy);
+      MRay::AffineTransform::shear(mat4, hxy, hxz, hyz, hyx, hzx, hzy);
     return mat4;
 }
-Matrix4 AffineTransform::shearX(float shy, float shz){
+Matrix4   MRay::AffineTransform::shearX(float shy, float shz){
     Matrix4 mat4;
-    AffineTransform::shearX(mat4, shy, shz);
+      MRay::AffineTransform::shearX(mat4, shy, shz);
     return mat4;
 }
-Matrix4 AffineTransform::shearY(float shx, float shz){
+Matrix4   MRay::AffineTransform::shearY(float shx, float shz){
     Matrix4 mat4;
-    AffineTransform::shearY(mat4, shx, shz);
+      MRay::AffineTransform::shearY(mat4, shx, shz);
     return mat4;
 }
-Matrix4 AffineTransform::shearZ(float shx, float shy){
+Matrix4   MRay::AffineTransform::shearZ(float shx, float shy){
     Matrix4 mat4;
-    AffineTransform::shearZ(mat4, shx, shy);
+      MRay::AffineTransform::shearZ(mat4, shx, shy);
     return mat4;
 }
 
-void AffineTransform::rotateX(Matrix4 &T, float angle) {
+void   MRay::AffineTransform::rotateX(Matrix4 &T, float angle) {
     float cosa = std::cos(angle);
     float sina = std::sin(angle);
     T.set<0>(Vec4( 1, 0,  0,0));
@@ -230,7 +230,7 @@ void AffineTransform::rotateX(Matrix4 &T, float angle) {
     T.set<2>(Vec4( 0, sina,  cosa,0));
     T.set<3>(Vec4( 0, 0,  0,1));
 }
-void AffineTransform::rotateY(Matrix4 &T, float angle) {
+void   MRay::AffineTransform::rotateY(Matrix4 &T, float angle) {
     float cosa = std::cos(angle);
     float sina = std::sin(angle);
     T.set<0>(Vec4(  cosa, 0, sina,0));
@@ -238,7 +238,7 @@ void AffineTransform::rotateY(Matrix4 &T, float angle) {
     T.set<2>(Vec4( -sina, 0, cosa,0));
     T.set<3>(Vec4(     0, 0, 0,1));
 }
-void AffineTransform::rotateZ(Matrix4 &T, float angle) {
+void   MRay::AffineTransform::rotateZ(Matrix4 &T, float angle) {
     float cosa = std::cos(angle);
     float sina = std::sin(angle);
 
@@ -248,19 +248,19 @@ void AffineTransform::rotateZ(Matrix4 &T, float angle) {
     T.set<2>(Vec4(    0,  0,1,0));
     T.set<3>(Vec4(    0,  0,0,1));
 }
-Matrix4 AffineTransform::rotateX(float angle){
+Matrix4   MRay::AffineTransform::rotateX(float angle){
     Matrix4 mat4;
-    AffineTransform::rotateX(mat4, angle);
+      MRay::AffineTransform::rotateX(mat4, angle);
     return mat4;
 }
-Matrix4 AffineTransform::rotateY(float angle){
+Matrix4   MRay::AffineTransform::rotateY(float angle){
     Matrix4 mat4;
-    AffineTransform::rotateY(mat4, angle);
+      MRay::AffineTransform::rotateY(mat4, angle);
     return mat4;
 }
-Matrix4 AffineTransform::rotateZ(float angle){
+Matrix4   MRay::AffineTransform::rotateZ(float angle){
     Matrix4 mat4;
-    AffineTransform::rotateZ(mat4, angle);
+      MRay::AffineTransform::rotateZ(mat4, angle);
     return mat4;
 }
 #pragma endregion

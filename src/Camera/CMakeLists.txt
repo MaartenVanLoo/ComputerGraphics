@@ -1,0 +1,10 @@
+target_sources(MRay
+        PUBLIC
+        Camera.cpp
+        CameraUtils.cpp
+        )
+#[[target_sources(I_ComputerGraphics
+        PUBLIC
+        Camera.cpp
+        CameraUtils.cpp
+        )]]

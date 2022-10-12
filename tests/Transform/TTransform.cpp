@@ -4,7 +4,8 @@
 
 #include <catch2/catch_all.hpp>
 #include <iostream>
-#include "../../include/RenderEngineCore.h"
+#include <Transform//Transform.h>
+using namespace MRay;
 
 TEST_CASE("tTransform") {
     Matrix4 mat4;

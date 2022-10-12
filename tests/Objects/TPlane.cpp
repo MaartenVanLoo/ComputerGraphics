@@ -4,8 +4,8 @@
 
 #include <catch2/catch_all.hpp>
 #include <iostream>
-#include "../../include/RenderEngineCore.h"
-
+#include <Objects/Plane.h>
+using namespace MRay;
 TEST_CASE("tPlane") {
 
 

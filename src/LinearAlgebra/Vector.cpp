@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "LinearAlgebra/Vector.h"
-
+using namespace MRay;
 //https://stackoverflow.com/questions/49941645/get-sum-of-values-stored-in-m256d-with-sse-avx/49943540#49943540
 inline
 double hsum_double_avx(__m256d v) {
@@ -17,106 +17,106 @@ double hsum_double_avx(__m256d v) {
 }
 
 #pragma region Vec2
-Vec2::Vec2(float x, float y) {
+MRay::Vec2::Vec2(float x, float y) {
     this->data[0] = x;
     this->data[1] = y;
 }
 
-float Vec2::get(int index) const {
+float MRay::Vec2::get(int index) const {
     assert(index <= 1 & index >= 0);
     return this->data[index];
 }
 
-float Vec2::dot(const Vec2 &rhs) const {
+float MRay::Vec2::dot(const Vec2 &rhs) const {
     return this->data[0] * rhs.data[0] + this->data[1] * rhs.data[1];
 }
 
-float Vec2::dot(const Vec2 &lhs, const Vec2 &rhs) {
+float MRay::Vec2::dot(const Vec2 &lhs, const Vec2 &rhs) {
     return lhs.dot(rhs);
 }
 
-#pragma region operators
-bool Vec2::operator==(const Vec2 &rhs) const {
+#pragma region MRay::operators
+bool MRay::Vec2::operator==(const Vec2 &rhs) const {
     return this->data[0] == rhs.data[0] &&
            this->data[1] == rhs.data[1];
 }
-bool Vec2::operator!=(const Vec2 &rhs) const {
+bool MRay::Vec2::operator!=(const Vec2 &rhs) const {
     return !(rhs == *this);
 }
 
-Vec2 Vec2::operator-() const {
+Vec2 MRay::Vec2::operator-() const {
     Vec2 res = *this;
     res.data[0] = -res.data[0];
     res.data[1] = -res.data[1];
     return res;
 }
-Vec2& Vec2::operator+=(const Vec2& rhs) {
+Vec2& MRay::Vec2::operator+=(const Vec2& rhs) {
     this->data[0]+=rhs.data[0];
     this->data[1]+=rhs.data[1];
     return *this;
 }
-Vec2& Vec2::operator-=(const Vec2& rhs) {
+Vec2& MRay::Vec2::operator-=(const Vec2& rhs) {
     this->data[0]-=rhs.data[0];
     this->data[1]-=rhs.data[1];
     return *this;
 }
-Vec2 &Vec2::operator*=(const float rhs) {
+Vec2 &MRay::Vec2::operator*=(const float rhs) {
     this->data[0]*=rhs;
     this->data[1]*=rhs;
     return *this;
 }
-Vec2 &Vec2::operator*=(const Vec2& rhs) {
+Vec2 &MRay::Vec2::operator*=(const Vec2& rhs) {
     this->data[0]*=rhs.data[0];
     this->data[1]*=rhs.data[1];
     return *this;
 }
-Vec2 &Vec2::operator/=(const float rhs) {
+Vec2 &MRay::Vec2::operator/=(const float rhs) {
     this->data[0]/=rhs;
     this->data[1]/=rhs;
     return *this;
 }
-Vec2 &Vec2::operator/=(const Vec2& rhs) {
+Vec2 &MRay::Vec2::operator/=(const Vec2& rhs) {
     this->data[0]/=rhs.data[0];
     this->data[1]/=rhs.data[1];
     return *this;
 }
 
-Vec2 operator+(Vec2 lhs, const Vec2 &rhs) {
+Vec2 MRay::operator+(Vec2 lhs, const Vec2 &rhs) {
     lhs += rhs;
     return lhs;
 }
-Vec2 operator-(Vec2 lhs, const Vec2 &rhs) {
+Vec2 MRay::operator-(Vec2 lhs, const Vec2 &rhs) {
     lhs-=rhs;
     return lhs;
 }
-Vec2 operator*(const float &lhs, Vec2 rhs) {
+Vec2 MRay::operator*(const float &lhs, Vec2 rhs) {
     rhs*=lhs;
     return rhs;
 }
-Vec2 operator*(Vec2 lhs, const float &rhs) {
+Vec2 MRay::operator*(Vec2 lhs, const float &rhs) {
     lhs*=rhs;
     return lhs;
 }
-Vec2 operator*(Vec2 lhs, const Vec2 &rhs) {
+Vec2 MRay::operator*(Vec2 lhs, const Vec2 &rhs) {
     lhs*=rhs;
     return lhs;
 }
-Vec2 operator/(Vec2 lhs, const float &rhs) {
+Vec2 MRay::operator/(Vec2 lhs, const float &rhs) {
     lhs/=rhs;
     return lhs;
 }
-Vec2 operator/(const float &lhs, Vec2 rhs ) {
+Vec2 MRay::operator/(const float &lhs, Vec2 rhs ) {
     rhs.data[0] = lhs/rhs.data[0];
     rhs.data[1] = lhs/rhs.data[1];
     return rhs;
 }
-Vec2 operator/(Vec2 lhs, const Vec2 &rhs) {
+Vec2 MRay::operator/(Vec2 lhs, const Vec2 &rhs) {
     lhs/=rhs;
     return lhs;
 }
 #pragma endregion
 
-std::ostream &operator<<(std::ostream &os, const Vec2 &vec2) {
+std::ostream &MRay::operator<<(std::ostream &os, const Vec2 &vec2) {
     os <<"[" << vec2.data[0] << ", " << vec2.data[1] << "]";
     return os;
 }
@@ -126,126 +126,126 @@ std::ostream &operator<<(std::ostream &os, const Vec2 &vec2) {
 
 #pragma region Vec3
 
-Vec3::Vec3(float x, float y, float z) {
+MRay::Vec3::Vec3(float x, float y, float z) {
     this->data[0] = x;
     this->data[1] = y;
     this->data[2] = z;
 }
-float Vec3::get(int index) const {
+float MRay::Vec3::get(int index) const {
     assert(index <= 2 & index >= 0);
     return this->data[index];
 }
 
-float Vec3::dot(const Vec3 &rhs) const {
+float MRay::Vec3::dot(const Vec3 &rhs) const {
     return this->data[0] * rhs.data[0] + this->data[1] * rhs.data[1] +  this->data[2] * rhs.data[2];
 }
-float Vec3::dot(const Vec3 &lhs, const Vec3 &rhs) {
+float MRay::Vec3::dot(const Vec3 &lhs, const Vec3 &rhs) {
     return lhs.dot(rhs);
 }
 
-Vec3 Vec3::cross(const Vec3& rhs) const {
+Vec3 MRay::Vec3::cross(const Vec3& rhs) const {
     return Vec3(this->data[1]*rhs.data[2] - this->data[2]*rhs.data[1],
                 this->data[2]*rhs.data[0] - this->data[0]*rhs.data[2],
                 this->data[0]*rhs.data[1] - this->data[1]*rhs.data[0]);
 }
 
-Vec3 Vec3::cross(const Vec3& lhs, const Vec3& rhs) {
+Vec3 MRay::Vec3::cross(const Vec3& lhs, const Vec3& rhs) {
     return Vec3(lhs.data[1]*rhs.data[2] - lhs.data[2]*rhs.data[1],
                 lhs.data[2]*rhs.data[0] - lhs.data[0]*rhs.data[2],
                 lhs.data[0]*rhs.data[1] - lhs.data[1]*rhs.data[0]);
 }
 
-#pragma region operators
-bool Vec3::operator==(const Vec3 &rhs) const {
+#pragma region MRay::operators
+bool MRay::Vec3::operator==(const Vec3 &rhs) const {
     return this->data[0] == rhs.data[0] &&
            this->data[1] == rhs.data[1] &&
            this->data[2] == rhs.data[2];
 }
-bool Vec3::operator!=(const Vec3 &rhs) const {
+bool MRay::Vec3::operator!=(const Vec3 &rhs) const {
     return !(rhs == *this);
 }
 
-Vec3 Vec3::operator-() const {
+Vec3 MRay::Vec3::operator-() const {
     Vec3 res = *this;
     res.data[0] = -res.data[0];
     res.data[1] = -res.data[1];
     res.data[2] = -res.data[2];
     return res;
 }
-Vec3& Vec3::operator+=(const Vec3& rhs) {
+Vec3& MRay::Vec3::operator+=(const Vec3& rhs) {
     this->data[0]+=rhs.data[0];
     this->data[1]+=rhs.data[1];
     this->data[2]+=rhs.data[2];
     return *this;
 }
-Vec3& Vec3::operator-=(const Vec3& rhs) {
+Vec3& MRay::Vec3::operator-=(const Vec3& rhs) {
     this->data[0]-=rhs.data[0];
     this->data[1]-=rhs.data[1];
     this->data[2]-=rhs.data[2];
     return *this;
 }
-Vec3 &Vec3::operator*=(const float rhs) {
+Vec3 &MRay::Vec3::operator*=(const float rhs) {
     this->data[0]*=rhs;
     this->data[1]*=rhs;
     this->data[2]*=rhs;
     return *this;
 }
-Vec3 &Vec3::operator*=(const Vec3& rhs) {
+Vec3 &MRay::Vec3::operator*=(const Vec3& rhs) {
     this->data[0]*=rhs.data[0];
     this->data[1]*=rhs.data[1];
     this->data[2]*=rhs.data[2];
     return *this;
 }
-Vec3 &Vec3::operator/=(const float rhs) {
+Vec3 &MRay::Vec3::operator/=(const float rhs) {
     this->data[0]/=rhs;
     this->data[1]/=rhs;
     this->data[2]/=rhs;
     return *this;
 }
-Vec3 &Vec3::operator/=(const Vec3& rhs) {
+Vec3 &MRay::Vec3::operator/=(const Vec3& rhs) {
     this->data[0]/=rhs.data[0];
     this->data[1]/=rhs.data[1];
     this->data[2]/=rhs.data[2];
     return *this;
 }
 
-Vec3 operator+(Vec3 lhs, const Vec3 &rhs) {
+Vec3 MRay::operator+(Vec3 lhs, const Vec3 &rhs) {
     lhs += rhs;
     return lhs;
 }
-Vec3 operator-(Vec3 lhs, const Vec3 &rhs) {
+Vec3 MRay::operator-(Vec3 lhs, const Vec3 &rhs) {
     lhs-=rhs;
     return lhs;
 }
-Vec3 operator*(const float &lhs, Vec3 rhs) {
+Vec3 MRay::operator*(const float &lhs, Vec3 rhs) {
     rhs*=lhs;
     return rhs;
 }
-Vec3 operator*(Vec3 lhs, const float &rhs) {
+Vec3 MRay::operator*(Vec3 lhs, const float &rhs) {
     lhs*=rhs;
     return lhs;
 }
-Vec3 operator*(Vec3 lhs, const Vec3 &rhs) {
+Vec3 MRay::operator*(Vec3 lhs, const Vec3 &rhs) {
     lhs*=rhs;
     return lhs;
 }
-Vec3 operator/(Vec3 lhs, const float &rhs) {
+Vec3 MRay::operator/(Vec3 lhs, const float &rhs) {
     lhs/=rhs;
     return lhs;
 }
-Vec3 operator/(const float &lhs, Vec3 rhs ) {
+Vec3 MRay::operator/(const float &lhs, Vec3 rhs ) {
     rhs.data[0] = lhs/rhs.data[0];
     rhs.data[1] = lhs/rhs.data[1];
     rhs.data[2] = lhs/rhs.data[2];
     return rhs;
 }
-Vec3 operator/(Vec3 lhs, const Vec3 &rhs) {
+Vec3 MRay::operator/(Vec3 lhs, const Vec3 &rhs) {
     lhs/=rhs;
     return lhs;
 }
 #pragma endregion
 
-std::ostream &operator<<(std::ostream &os, const Vec3 &vec3) {
+std::ostream &MRay::operator<<(std::ostream &os, const Vec3 &vec3) {
     os <<"[" << vec3.data[0] << ", " << vec3.data[0] << ", " << vec3.data[0] << "]";
     return os;
 }
@@ -256,7 +256,7 @@ std::ostream &operator<<(std::ostream &os, const Vec3 &vec3) {
 
 
 #pragma region Vec4
-Vec4::Vec4(float x, float y, float z, float w) {
+MRay::Vec4::Vec4(float x, float y, float z, float w) {
 #if SET_DATA
     // this->data = _mm256_set_pd (w,z,y,x); //double
     this->data = _mm_set_ps (w,z,y,x); //float
@@ -268,7 +268,7 @@ Vec4::Vec4(float x, float y, float z, float w) {
 #endif
 
 }
-Vec4::Vec4(Vec3 &vec3, float w) {
+MRay::Vec4::Vec4(Vec3 &vec3, float w) {
 #if SET_DATA
     //double:
     //this->data = _mm256_set_pd(w, vec3.data[2],vec3.data[1],vec3.data[0]); //double
@@ -284,7 +284,7 @@ Vec4::Vec4(Vec3 &vec3, float w) {
 
 }
 
-Vec4::Vec4(const Vec4 &p1) {
+MRay::Vec4::Vec4(const Vec4 &p1) {
 #if SET_DATA
     //float && double:
     this->data = p1.data;
@@ -297,7 +297,7 @@ Vec4::Vec4(const Vec4 &p1) {
 
 }
 
-float Vec4::get(const int index) const{
+float MRay::Vec4::get(const int index) const{
     assert(index <= 3 & index >= 0);
 #if SET_DATA
     // double:
@@ -315,7 +315,7 @@ float Vec4::get(const int index) const{
 
 
 #pragma region Vector operations
-float Vec4::dot(const Vec4 &rhs) const {
+float MRay::Vec4::dot(const Vec4 &rhs) const {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     __m128 temp = _mm_dp_ps(this->data,rhs.data,0x71); //store result in lowest bits, use only the first 3 values (lowest 96 bits);
@@ -341,11 +341,11 @@ float Vec4::dot(const Vec4 &rhs) const {
 
 
 }
-float Vec4::dot(const Vec4 &lhs, const Vec4 &rhs) {
+float MRay::Vec4::dot(const Vec4 &lhs, const Vec4 &rhs) {
     return lhs.dot(rhs);
 }
 
-Vec4 Vec4::cross(const Vec4 &rhs) const {
+Vec4 MRay::Vec4::cross(const Vec4 &rhs) const {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     __m128 tmp0 = _mm_shuffle_ps(this->data,this->data,_MM_SHUFFLE(3,0,2,1));
@@ -379,20 +379,20 @@ Vec4 Vec4::cross(const Vec4 &rhs) const {
 
 }
 
-Vec4 Vec4::cross(const Vec4 &lhs, const Vec4 &rhs) {
+Vec4 MRay::Vec4::cross(const Vec4 &lhs, const Vec4 &rhs) {
     return lhs.cross(rhs);
 }
 
-float Vec4::angle(const Vec4 &rhs) const {
+float MRay::Vec4::angle(const Vec4 &rhs) const {
     return this->dot(rhs)/(this->abs()*abs(rhs));;
 }
-float Vec4::angle(const Vec4 &v1, const Vec4 &v2) {
+float MRay::Vec4::angle(const Vec4 &v1, const Vec4 &v2) {
     return v1.angle(v2);
 }
 #pragma endregion
 
 #pragma region math
-float Vec4::abs() const {
+float MRay::Vec4::abs() const {
     /*return std::sqrt(this->data[0] * this->data[0] +
                      this->data[1] * this->data[1] +
                      this->data[2] * this->data[2] +
@@ -400,22 +400,22 @@ float Vec4::abs() const {
     return std::sqrt(this->dot(*this));
 }
 
-float Vec4::abs(const Vec4 &vec) {
+float MRay::Vec4::abs(const Vec4 &vec) {
     return vec.abs();
 }
 
-float Vec4::sum() const{
+float MRay::Vec4::sum() const{
 #if SSE_AVX_EXTENSIONS
     return this->get(0)+this->get(1)+this->get(2)+this->get(3);
 #else
     return this->data[0] + this->data[1] + this->data[2] + this->data[3];
 #endif
 }
-float Vec4::sum(const Vec4 &vec) {
+float MRay::Vec4::sum(const Vec4 &vec) {
     return vec.sum();
 }
 
-float Vec4::sum3() const {
+float MRay::Vec4::sum3() const {
 #if SSE_AVX_EXTENSIONS
     return this->get(0)+this->get(1)+this->get(2);
 #else
@@ -423,11 +423,11 @@ float Vec4::sum3() const {
 #endif
 }
 
-float Vec4::sum3(const Vec4 &vec) {
+float MRay::Vec4::sum3(const Vec4 &vec) {
     return vec.sum3();
 }
 
-float Vec4::max() const {
+float MRay::Vec4::max() const {
 #if SSE_AVX_EXTENSIONS
     //float tmp[4]
     //_mm_store_ps (this->data, tmp);
@@ -438,11 +438,11 @@ float Vec4::max() const {
     return std::max(std::max(this->data[0],this->data[1]),std::max(this->data[2],this->data[3]));
 #endif
 }
-float Vec4::max(const Vec4 &vec) {
+float MRay::Vec4::max(const Vec4 &vec) {
     return vec.max();
 }
 
-float Vec4::max3() const {
+float MRay::Vec4::max3() const {
 #if SSE_AVX_EXTENSIONS
     //notice, only 1 cycle latency for get in avx, without avx it is equivalent to [] => probably fine?
     return std::max(std::max(this->get(0),this->get(1)),this->get(2));
@@ -450,11 +450,11 @@ float Vec4::max3() const {
     return std::max(std::max(this->data[0],this->data[1]),this->data[2]);
 #endif
 }
-float Vec4::max3(const Vec4 &vec) {
+float MRay::Vec4::max3(const Vec4 &vec) {
     return vec.max3();
 }
 
-float Vec4::min() const {
+float MRay::Vec4::min() const {
 #if SSE_AVX_EXTENSIONS
     //float tmp[4]
     //_mm_store_ps (this->data, tmp);
@@ -465,10 +465,10 @@ float Vec4::min() const {
     return std::min(std::min(this->data[0],this->data[1]),std::min(this->data[2],this->data[3]));
 #endif
 }
-float Vec4::min(const Vec4 &vec) {
+float MRay::Vec4::min(const Vec4 &vec) {
     return vec.min();
 }
-float Vec4::min3() const {
+float MRay::Vec4::min3() const {
 #if SSE_AVX_EXTENSIONS
     //notice, only 1 cycle latency for get in avx, without avx it is equivalent to [] => probably fine?
     return std::min(std::min(this->get(0),this->get(1)),this->get(2));
@@ -476,13 +476,13 @@ float Vec4::min3() const {
     return std::min(std::min(this->data[0],this->data[1]),this->data[2]);
 #endif
 }
-float Vec4::min3(const Vec4 &vec) {
+float MRay::Vec4::min3(const Vec4 &vec) {
     return vec.min3();
 }
 #pragma endregion
 
-#pragma region operators
-bool Vec4::operator==(const Vec4 &rhs) const {
+#pragma region MRay::operators
+bool MRay::Vec4::operator==(const Vec4 &rhs) const {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     __m128 comp = _mm_cmpeq_ps(this->data,rhs.data);
@@ -500,11 +500,11 @@ bool Vec4::operator==(const Vec4 &rhs) const {
             this->data[3] == rhs.data[3];
 #endif
 }
-bool Vec4::operator!=(const Vec4 &rhs) const {
+bool MRay::Vec4::operator!=(const Vec4 &rhs) const {
     return !(rhs == *this);
 }
 
-Vec4 Vec4::operator-() const {
+Vec4 MRay::Vec4::operator-() const {
     Vec4 res = *this;
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
@@ -529,7 +529,7 @@ Vec4 Vec4::operator-() const {
 
 
 }
-Vec4& Vec4::operator+=(const Vec4& rhs) {
+Vec4& MRay::Vec4::operator+=(const Vec4& rhs) {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     this->data = _mm_add_ps(this->data,rhs.data); //float
@@ -549,7 +549,7 @@ Vec4& Vec4::operator+=(const Vec4& rhs) {
     return *this;
 
 }
-Vec4& Vec4::operator-=(const Vec4& rhs) {
+Vec4& MRay::Vec4::operator-=(const Vec4& rhs) {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     this->data = _mm_sub_ps(this->data,rhs.data); //float
@@ -570,7 +570,7 @@ Vec4& Vec4::operator-=(const Vec4& rhs) {
 
 
 }
-Vec4 &Vec4::operator*=(const float rhs) {
+Vec4 &MRay::Vec4::operator*=(const float rhs) {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     __m128 rhs_ps = _mm_set_ps(rhs, rhs, rhs, rhs); //float
@@ -594,7 +594,7 @@ Vec4 &Vec4::operator*=(const float rhs) {
 
 
 }
-Vec4 &Vec4::operator*=(const Vec4& rhs) {
+Vec4 &MRay::Vec4::operator*=(const Vec4& rhs) {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     this->data = _mm_mul_ps(this->data,rhs.data); //float
@@ -616,7 +616,7 @@ Vec4 &Vec4::operator*=(const Vec4& rhs) {
 
 
 }
-Vec4 &Vec4::operator/=(const float rhs) {
+Vec4 &MRay::Vec4::operator/=(const float rhs) {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     __m128 rhs_ps = _mm_set_ps(rhs, rhs, rhs, rhs); //float
@@ -638,7 +638,7 @@ Vec4 &Vec4::operator/=(const float rhs) {
     return *this;
 
 }
-Vec4 &Vec4::operator/=(const Vec4& rhs) {
+Vec4 &MRay::Vec4::operator/=(const Vec4& rhs) {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     this->data = _mm_div_ps(this->data,rhs.data); //float
@@ -658,31 +658,31 @@ Vec4 &Vec4::operator/=(const Vec4& rhs) {
     return *this;
 }
 
-Vec4 operator+(Vec4 lhs, const Vec4 &rhs) {
+Vec4 MRay::operator+(Vec4 lhs, const Vec4 &rhs) {
     lhs += rhs;
     return lhs;
 }
-Vec4 operator-(Vec4 lhs, const Vec4 &rhs) {
+Vec4 MRay::operator-(Vec4 lhs, const Vec4 &rhs) {
     lhs-=rhs;
     return lhs;
 }
-Vec4 operator*(const float &lhs, Vec4 rhs) {
+Vec4 MRay::operator*(const float &lhs, Vec4 rhs) {
     rhs*=lhs;
     return rhs;
 }
-Vec4 operator*(Vec4 lhs, const float &rhs) {
+Vec4 MRay::operator*(Vec4 lhs, const float &rhs) {
     lhs*=rhs;
     return lhs;
 }
-Vec4 operator*(Vec4 lhs, const Vec4 &rhs) {
+Vec4 MRay::operator*(Vec4 lhs, const Vec4 &rhs) {
     lhs*=rhs;
     return lhs;
 }
-Vec4 operator/(Vec4 lhs, const float &rhs) {
+Vec4 MRay::operator/(Vec4 lhs, const float &rhs) {
     lhs/=rhs;
     return lhs;
 }
-Vec4 operator/(const float &lhs, Vec4 rhs ) {
+Vec4 MRay::operator/(const float &lhs, MRay::Vec4 rhs ) {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     __m128 lhs_ps = _mm_set_ps(lhs, lhs, lhs, lhs); //float
@@ -703,14 +703,14 @@ Vec4 operator/(const float &lhs, Vec4 rhs ) {
 #endif
     return rhs;
 }
-Vec4 operator/(Vec4 lhs, const Vec4 &rhs) {
+Vec4 MRay::operator/(Vec4 lhs, const Vec4 &rhs) {
     lhs/=rhs;
     return lhs;
 }
 
 #pragma endregion
 
-std::ostream &operator<<(std::ostream &os, const Vec4 &vec4) {
+std::ostream &MRay::operator<<(std::ostream &os, const Vec4 &vec4) {
 #if SET_DATA
     //AVX float:
     float tmp[4];
@@ -723,17 +723,17 @@ std::ostream &operator<<(std::ostream &os, const Vec4 &vec4) {
 
 }
 
-Vec4 Vec4::xAxis() {
+Vec4 MRay::Vec4::xAxis() {
     return Vec4(1,0,0,0);
 }
-Vec4 Vec4::yAxis() {
+Vec4 MRay::Vec4::yAxis() {
     return Vec4(0,1,0,0);
 }
-Vec4 Vec4::zAxis() {
+Vec4 MRay::Vec4::zAxis() {
     return Vec4(0,0,1,0);
 }
 
-void Vec4::normalize() {
+void MRay::Vec4::normalize() {
     (*this) = (*this)/this->abs();
 }
 

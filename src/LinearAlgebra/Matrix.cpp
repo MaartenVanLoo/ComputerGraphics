@@ -5,9 +5,9 @@
 #include <LinearAlgebra/Matrix.h>
 #include <iostream>
 #include <cassert>
+using namespace MRay;
 
-
-std::ostream &operator<<(std::ostream &os, const Matrix4 &matrix4) {
+std::ostream &MRay::operator<<(std::ostream &os, const Matrix4 &matrix4) {
     os << "Matrix: " << "\n";
     os << "[" << matrix4.data[0].get<0>() <<", "<< matrix4.data[1].get<0>()<<", "<< matrix4.data[2].get<0>()<<", "<< matrix4.data[3].get<0>()<< "]\n";
     os << "[" << matrix4.data[0].get<1>() <<", "<< matrix4.data[1].get<1>()<<", "<< matrix4.data[2].get<1>()<<", "<< matrix4.data[3].get<1>()<< "]\n";
@@ -18,7 +18,7 @@ std::ostream &operator<<(std::ostream &os, const Matrix4 &matrix4) {
 
 
 //https://codereview.stackexchange.com/questions/208565/simd-product-of-a-4%C3%974-matrix-and-a-vector
-Vec4 Matrix4::operator*(const Vec4 &rhs) const{
+Vec4 MRay::Matrix4::operator*(const Vec4 &rhs) const{
     Vec4 result; //init with all zero's
 #if SSE_AVX_EXTENSIONS
     __m128 x = _mm_set1_ps(rhs.get<0>());
@@ -52,7 +52,7 @@ Vec4 Matrix4::operator*(const Vec4 &rhs) const{
 }
 
 //http://fhtr.blogspot.com/2010/02/4x4-float-matrix-multiplication-using.html
-Matrix4 &Matrix4::operator*=(const Matrix4 &rhs) {
+Matrix4 &MRay::Matrix4::operator*=(const Matrix4 &rhs) {
     Matrix4 tmp; //defaults to all zero's
 
     tmp.data[0] = (*this)*rhs.data[0];
@@ -66,24 +66,24 @@ Matrix4 &Matrix4::operator*=(const Matrix4 &rhs) {
     this->data[3] = tmp.data[3];
     return *this;
 }
-Matrix4 operator*(Matrix4 lhs, const Matrix4 &rhs) {
+Matrix4 MRay::operator*(Matrix4 lhs, const Matrix4 &rhs) {
     lhs*=rhs;
     return lhs;
 }
 
 
-bool Matrix4::operator==(const Matrix4 &rhs) const {
+bool MRay::Matrix4::operator==(const Matrix4 &rhs) const {
     for (int i = 0; i < 4; i++){
         if (this->data[i] != rhs.data[i]) return false;
     }
     return true;
 }
 
-bool Matrix4::operator!=(const Matrix4 &rhs) const {
+bool MRay::Matrix4::operator!=(const Matrix4 &rhs) const {
     return !(rhs == *this);
 }
 
-Matrix4 Matrix4::identity() {
+Matrix4 MRay::Matrix4::identity() {
     Matrix4 mat4;
     mat4.data[0] = Vec4(1,0,0,0);
     mat4.data[1] = Vec4(0,1,0,0);

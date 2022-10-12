@@ -12,37 +12,33 @@
 #include <ostream>
 #include <Materials/Material.h>
 #include <vector>
+#include <Textures/Texture.h>
 #include "Camera/CameraUtils.h"
 #include "Transform/Transform.h"
+#include "Intersection.h"
 
-class Object;
-struct Hit;
-struct Intersection;
+namespace MRay {
+    struct Hit;
+    struct Intersection;
+    class Object;
 
-class Object : public Transform{
-public:
-    virtual ~Object();
+    class Object : public Transform {
+    public:
+        virtual ~Object();
 
-    virtual bool hitPoint(Ray& ray, Intersection& intersection) = 0;
-    virtual Vec4 normal(Ray& ray) = 0;
+        virtual bool hitPoint(Ray &ray, Intersection &intersection) = 0;
 
-    void setMaterial(Material &mtrl);
-    Material& getMaterial();
-protected:
+        virtual Vec4 normal(Ray &ray) = 0;
 
-    Material mtrl;
-};
+        void setMaterial(Material mtrl);
+        void setTexture(Texture *texture);
 
-struct Hit {
-    double t = DBL_MAX;
-    Object *obj= nullptr;
-    Vec4 point; // GCS point
-    Vec4 normal; //LCS normal;
-};
+        Material &getMaterial();
+        Texture *getTexture();
+    protected:
+        Material mtrl;
+        Texture* texture=nullptr;
+    };
 
-struct Intersection{
-    std::vector<Hit> hit;
-
-    void clear();
-};
+}
 #endif //I_COMPUTERGRAPHICS_OBJECT_H

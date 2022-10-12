@@ -5,11 +5,11 @@
 //
 // Created by maart on 30/09/2022.
 //
-
+using namespace MRay;
 //https://iquilezles.org/articles/intersectors/
 //https://www.shadertoy.com/view/ld23DV
 //https://iquilezles.org/articles/boxfunctions/
-bool Box::hitPoint(Ray &ray,Intersection &intersection) {
+bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
 // convert from world to box space
     Ray tr = ray.transform(this->invtransform);
 /*
@@ -112,21 +112,21 @@ bool Box::hitPoint(Ray &ray,Intersection &intersection) {
     return (num > 0);
 }
 
-Vec4 Box::boxNormal(int surf) {
+Vec4 MRay::Box::boxNormal(int surf) {
     Vec4 v;
     int m = surf/2, n = (surf%2)?-1:1;
     if (m == 0) v = Vec4(0, float(n),0,0);
-    else if (m == 1) v = Vec4(n,0,0,0);
-    else v = Vec4(0,0,n,0);
+    else if (m == 1) v = Vec4(float(n),0,0,0);
+    else v = Vec4(0,0,float(n),0);
     return v;
 }
 
-std::ostream &operator<<(std::ostream &os, const Box &box) {
+std::ostream &MRay::operator<<(std::ostream &os, const Box &box) {
     os << "Box: {}";
     return os;
 }
 
-Box::Box(const Vec4 &pos, const Vec4 &size) {
+MRay::Box::Box(const Vec4 &pos, const Vec4 &size) {
     this->scale(size.get<0>(), size.get<1>(),size.get<2>());
     this->translate(pos.get<0>(),pos.get<1>(),pos.get<2>());
 }
