@@ -114,7 +114,7 @@ MRay::Scene::Scene() {
 }
 
 Color3 MRay::Scene::shade(int x, int y) {
-    const int N = 40; //super sampling ratio //not smart! => dynamic super sampling?
+    const int N = 1; //super sampling ratio //not smart! => dynamic super sampling?
     Intersection intersect; //object to store intersections, can be reused!
     Color3 color;
     Color3 sample;
@@ -254,7 +254,7 @@ void Scene::load(std::string &file) {
     obj->setMaterial(MaterialsLibrary::gray_rubber());
     this->addObject(obj);
 
-    obj = new TaperedCylinder(1);
+    obj = new TaperedCylinder(0.5);
     Material mat = MaterialsLibrary::red_plastic();
     //mat.ambient = Vec3(255,255,255);
     obj->setMaterial(mat);
