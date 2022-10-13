@@ -5,6 +5,9 @@ target_sources(MRay
         Box.cpp
         Sphere.cpp
         Intersection.cpp
+        TaperedCylinder.cpp
+        BooleanObject.cpp
+        BooleanUnion.cpp
         )
 #[[target_sources(I_ComputerGraphics
         PUBLIC
@@ -12,4 +15,6 @@ target_sources(MRay
         Plane.cpp
         Box.cpp
         Sphere.cpp
+        Intersection.cpp
+        TaperedCylinder.cpp
         )]]

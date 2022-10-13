@@ -16,25 +16,25 @@ namespace MRay {
 
         /**
          * Rotate object
-         * @param rx Rotation around X-axis, in radians
-         * @param ry Rotation around Y-axis, in radians
-         * @param rz Rotation around Z-axis, in radians
+         * @param rx Rotation around _X-axis, in radians
+         * @param ry Rotation around _Y-axis, in radians
+         * @param rz Rotation around _Z-axis, in radians
          */
         void rotate(float rx, float ry, float rz);
 
         /**
         * Translate object
-        * @param rx Translation in X direction
-        * @param ry Translation in Y direction
-        * @param rz Translation in Z direction
+        * @param rx Translation in _X direction
+        * @param ry Translation in _Y direction
+        * @param rz Translation in _Z direction
         */
         void translate(float tx, float ty, float tz);
 
         /**
          * Scale the object
-         * @param sx X scaling
-         * @param sy Y scaling
-         * @param sz Z scaling
+         * @param sx _X scaling
+         * @param sy _Y scaling
+         * @param sz _Z scaling
          */
         void scale(float sx, float sy, float sz);
 
@@ -69,7 +69,7 @@ namespace MRay {
 
         static Matrix4 rotatef(float angle, const Vec4 &axis);
 
-        //https://people.cs.clemson.edu/~dhouse/courses/401/notes/affines-matrices.pdf => rotation Y and Z are swapped?
+        //https://people.cs.clemson.edu/~dhouse/courses/401/notes/affines-matrices.pdf => rotation _Y and _Z are swapped?
         //checked with matlab makehgtform function
         static void translate(Matrix4 &T, float dx, float dy, float dz);
 

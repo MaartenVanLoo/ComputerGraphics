@@ -12,7 +12,24 @@ namespace MRay {
         Object *obj = nullptr;
         Vec4 point; // GCS point
         Vec4 normal; //LCS normal;
+        int surface;
         bool entering = false;
+
+        bool operator<(const Hit &rhs) const {
+            return t < rhs.t;
+        }
+
+        bool operator>(const Hit &rhs) const {
+            return rhs < *this;
+        }
+
+        bool operator<=(const Hit &rhs) const {
+            return !(rhs < *this);
+        }
+
+        bool operator>=(const Hit &rhs) const {
+            return !(*this < rhs);
+        }
     };
 }
 #endif //I_COMPUTERGRAPHICS_HIT_H

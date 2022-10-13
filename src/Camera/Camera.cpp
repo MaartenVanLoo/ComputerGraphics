@@ -18,7 +18,7 @@ MRay::Camera::Camera(Vec3 position,Screensize resolution, Sensor s, float focalL
 
 Ray MRay::Camera::getPrimaryRay(int x, int y) const{
     // normal now camera in a given point and pointing in positive x direction
-    if (x < 0 || x > this->resolution.width) throw std::invalid_argument("X pixel is not on sensor");
+    if (x < 0 || x > this->resolution.width) throw std::invalid_argument("_X pixel is not on sensor");
     if (y < 0 || y > this->resolution.height) throw std::invalid_argument("y pixel is not on sensor");
 
     //Transform x and y from pixel space to sensor space
@@ -40,7 +40,7 @@ Ray MRay::Camera::getPrimaryRay(int x, int y) const{
 //dx and dy between 0 and 1
 Ray MRay::Camera::getPrimaryRay(int x, int y, float dx, float dy) const{
     // normal now camera in a given point and pointing in positive x direction
-    if (x < 0 || x > this->resolution.width) throw std::invalid_argument("X pixel is not on sensor");
+    if (x < 0 || x > this->resolution.width) throw std::invalid_argument("_X pixel is not on sensor");
     if (y < 0 || y > this->resolution.height) throw std::invalid_argument("y pixel is not on sensor");
 
     //Transform x and y from pixel space to sensor space

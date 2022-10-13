@@ -9,5 +9,6 @@
 #include "Box.h"
 #include "Sphere.h"
 #include "Plane.h"
+#include "TaperedCylinder.h"
 
 #endif //I_COMPUTERGRAPHICS_OBJECTCORE_H

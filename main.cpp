@@ -13,23 +13,13 @@ int main() {
     Stopwatch stopwatch = Stopwatch();
     stopwatch.start();
 
-
-    //MRay::Texture* text = new MRay::Checkboard();
-    //std::cout << text->compute(0,0,0) << " ";
-    //std::cout << text->compute(1,0,0) << " ";
-    //std::cout << text->compute(2,0,0) << " ";
-    //std::cout << text->compute(0,1,-2) << " ";
-    //std::cout << text->compute(0,2,-2) << " ";
-    //std::cout << text->compute(0,3,-2) << " ";
-    //std::cout << text->compute(0,4,-2) << " ";
-
     MRay::Scene scene = MRay::Scene();
     scene.load((std::string &) "");
     MRay::Options options;
-    options.enableGui = false;
+    options.enableGui = true;
     options.multicore = true;
-    //scene.Render(options);
-
+    scene.Render(options);
+/*
     //sequence render:
     for(int i =0; i < 720; i+=5){
         std::ostringstream oss;
@@ -48,7 +38,7 @@ int main() {
         std::cout << (*dynamic_cast<MRay::PointLight*>(light)) << "\n";
         scene.Render(options);
     }
-
+*/
     system("pause");
     return 0;
 }

@@ -12,7 +12,7 @@ public:
         return false;
     }
 
-    Vec4 normal(Ray &ray) override {
+    Vec4 normal(Vec4 &point) const override {
         return Vec4();
     }
     Matrix4 getTransform(){

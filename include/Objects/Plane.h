@@ -21,7 +21,7 @@ namespace MRay {
 
         Plane(float px, float py, float pz, float nx, float ny, float nz);
 
-        Vec4 normal(Ray &ray) override;
+        Vec4 normal(Vec4 &point) const override;
 
         bool hitPoint(Ray &ray, Intersection &intersection) override;
 

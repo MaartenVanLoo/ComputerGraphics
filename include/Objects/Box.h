@@ -21,7 +21,7 @@ namespace MRay {
 
         Vec4 boxNormal(int surf);
 
-        Vec4 normal(Ray &ray) override { return Vec4(); };
+        Vec4 normal(Vec4 &vec4) const override { return Vec4(); };//not used!
 
         friend std::ostream &operator<<(std::ostream &os, const Box &box);
 

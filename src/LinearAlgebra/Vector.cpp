@@ -335,8 +335,7 @@ float MRay::Vec4::dot(const Vec4 &rhs) const {
     return
         this->data[0] * rhs.data[0] +
         this->data[1] * rhs.data[1] +
-        this->data[2] * rhs.data[2] +
-        this->data[3] * rhs.data[3];
+        this->data[2] * rhs.data[2];
 #endif
 
 

@@ -9,6 +9,8 @@
 #include <Objects/Sphere.h>
 #include <Objects/Box.h>
 #include <Textures/Checkerboard.h>
+#include <Objects/TaperedCylinder.h>
+#include <math.h>
 using namespace MRay;
 MRay::Scene::~Scene() {
     for (auto obj : this->objects){
@@ -94,8 +96,8 @@ void MRay::Scene::Render(const Options &options) {
 
     //close gui
     if (options.enableGui) {
-        this->screen->hide();
-        //this->screen->waitClose();
+        //this->screen->hide();
+        this->screen->waitClose();
         //cleanup screen
         free(this->screen);
         this->screen = nullptr;
@@ -107,12 +109,12 @@ MRay::Scene::Scene() {
     this->camera.rotate(0,0,0);
     this->camera.setPosition(Vec4(-9.5,0,5,1));
     this->camera.setSensor(Sensor(360,240));
-    this->camera.setResolution(Resolution(Screensize::_4K));
+    this->camera.setResolution(Resolution(Screensize::_8K));
     this->camera.setFocalLength(100);
 }
 
 Color3 MRay::Scene::shade(int x, int y) {
-    const int N = 3; //super sampling ratio //not smart! => dynamic super sampling?
+    const int N = 40; //super sampling ratio //not smart! => dynamic super sampling?
     Intersection intersect; //object to store intersections, can be reused!
     Color3 color;
     Color3 sample;
@@ -252,6 +254,15 @@ void Scene::load(std::string &file) {
     obj->setMaterial(MaterialsLibrary::gray_rubber());
     this->addObject(obj);
 
+    obj = new TaperedCylinder(1);
+    Material mat = MaterialsLibrary::red_plastic();
+    //mat.ambient = Vec3(255,255,255);
+    obj->setMaterial(mat);
+    obj->scale(1,1,2);
+    obj->rotate(CV_PI/2,0,-1);
+    obj->translate(0,-4.5,5);
+    this->addObject(obj);
+
     obj = new Sphere(Vec4(0,-2,2,1),1);
     obj->setMaterial(MaterialsLibrary::red_plastic());
     this->addObject(obj);
@@ -278,10 +289,10 @@ void Scene::load(std::string &file) {
     obj->rotate(0.0,0.0,0.5);
     this->addObject(obj);
 
-    Light* light = new PointLight(Vec4(0,0,10,1));
+    Light* light = new PointLight(Vec4(-10,0,15,1));
     this->addLight(light);
-    //light = new PointLight(Vec4(0,-10,10,1));
-    //scene.addLight(light);
+    light = new PointLight(Vec4(0,10,10,1));
+    this->addLight(light);
 }
 
 #pragma region MultiThreading tools

@@ -10,7 +10,15 @@ namespace MRay{
     struct Intersection {
         std::vector<Hit> hit;
 
+        //use in boolean objects
+        Intersection* leftHit = nullptr;
+        Intersection* rightHit = nullptr;
+
+        virtual ~Intersection();
+
         void clear();
+        bool empty();
+        void sort();
     };
 }
 #endif //I_COMPUTERGRAPHICS_INTERSECTION_H

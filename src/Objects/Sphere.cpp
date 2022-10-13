@@ -14,16 +14,16 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
 
     Vec4 oc = tr.pos()-Vec4(0,0,0,1);
 
-    float a = Vec4::dot(tr.dir(),tr.dir());
-    float b = Vec4::dot(oc,tr.dir());
-    float c = Vec4::dot(oc,oc)-1;
-    float discrim = b*b-a*c;
+    double a = Vec4::dot(tr.dir(),tr.dir());
+    double b = Vec4::dot(oc,tr.dir());
+    double c = Vec4::dot(oc,oc)-1;
+    double discrim = b*b-a*c;
     if (discrim < 0.0){
         return false;
     }
-    float discRoot = sqrt(discrim);
-    float hit1 = (-b-discRoot)/a;
-    float hit2 = (-b+discRoot)/a;
+    double discRoot = sqrt(discrim);
+    auto hit1 = float((-b-discRoot)/a);
+    auto hit2 = float((-b+discRoot)/a);
 
     int num = 0;
     if (hit1 > 0){
@@ -62,12 +62,11 @@ MRay::Sphere::Sphere(const Vec4 &position, float radius){
     this->translate(position.get<0>(),position.get<1>(),position.get<2>());
 }
 
-Vec4 MRay::Sphere::normal(Vec4 point) {
-    return point;
+Vec4 MRay::Sphere::normal(Vec4 &point) const{
+    const Vec4& n = point;
+    return n;
 }
 
-Vec4 MRay::Sphere::normal(Ray &ray) {
-    return Vec4();
-}
+
 
 

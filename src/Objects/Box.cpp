@@ -40,34 +40,31 @@ bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
     double tHit, numer, denom;
     double tIn = DBL_MIN, tOut = DBL_MAX;
     int inSurf, outSurf;
-#define X 0
-#define Y 1
-#define Z 2
     for (int i= 0; i < 6; i++) {
         switch (i) {
             case 0:
-                numer = 1.0 - tr.pos().get<Y>();
-                denom = tr.dir().get<Y>();
+                numer = 1.0 - tr.pos().get<_Y>();
+                denom = tr.dir().get<_Y>();
                 break;
             case 1:
-                numer = 1.0 + tr.pos().get<Y>();
-                denom = -tr.dir().get<Y>();
+                numer = 1.0 + tr.pos().get<_Y>();
+                denom = -tr.dir().get<_Y>();
                 break;
             case 2:
-                numer = 1.0 - tr.pos().get<X>();
-                denom = tr.dir().get<X>();
+                numer = 1.0 - tr.pos().get<_X>();
+                denom = tr.dir().get<_X>();
                 break;
             case 3:
-                numer = 1.0 + tr.pos().get<X>();
-                denom = -tr.dir().get<X>();
+                numer = 1.0 + tr.pos().get<_X>();
+                denom = -tr.dir().get<_X>();
                 break;
             case 4:
-                numer = 1.0 - tr.pos().get<Z>();
-                denom = tr.dir().get<Z>();
+                numer = 1.0 - tr.pos().get<_Z>();
+                denom = tr.dir().get<_Z>();
                 break;
             case 5:
-                numer = 1.0 + tr.pos().get<Z>();
-                denom = -tr.dir().get<Z>();
+                numer = 1.0 + tr.pos().get<_Z>();
+                denom = -tr.dir().get<_Z>();
                 break;
             default:
                 return false;
@@ -99,6 +96,7 @@ bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
         intersection.hit[0].obj = this;
         intersection.hit[0].point = ray.at(float(tIn));
         intersection.hit[0].normal = boxNormal(inSurf);
+        intersection.hit[0].entering = true;
         num++;
     }
     if (tOut > 0.0001){  //hit in front of eye
@@ -107,6 +105,7 @@ bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
         intersection.hit[num].obj = this;
         intersection.hit[num].point = ray.at(float(tOut));
         intersection.hit[num].normal = boxNormal(outSurf);
+        intersection.hit[num].entering = false;
         num++;
     }
     return (num > 0);

@@ -11,7 +11,9 @@ set(testSources
         ${CMAKE_CURRENT_SOURCE_DIR}/LinearAlgebra/TVector.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/LinearAlgebra/TMatrix.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TObject.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TPlane.cpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TPlane.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TTaperedCylinder.cpp
+        )
 
 add_executable(I_ComputerGraphics_tests tests.cpp ${ProjectSourceFiles} ${testSources})
 target_include_directories(I_ComputerGraphics_tests PUBLIC ${CMAKE_SOURCE_DIR}/include)

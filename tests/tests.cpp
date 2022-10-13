@@ -7,7 +7,7 @@
 int main(int argc, char ** argv)
 {
     // If the last argument is "-p", then pause after the tests are run.
-    // This allows us to run "leaks" on Mac OS X to check for memory leaks.
+    // This allows us to run "leaks" on Mac OS _X to check for memory leaks.
     bool pause_after_test = false;
     if (argc && std::string(argv[argc - 1]) == "-p")
     {

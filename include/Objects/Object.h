@@ -28,7 +28,7 @@ namespace MRay {
 
         virtual bool hitPoint(Ray &ray, Intersection &intersection) = 0;
 
-        virtual Vec4 normal(Ray &ray) = 0;
+        virtual Vec4 normal(Vec4 &point) const = 0;
 
         void setMaterial(Material mtrl);
         void setTexture(Texture *texture);
