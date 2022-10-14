@@ -7,7 +7,7 @@
 
 
 #include <vector>
-#include <Shader.h>
+#include <Render/Shader.h>
 
 namespace MRay {
 

@@ -201,6 +201,15 @@ namespace MRay {
 
         static float min3(const Vec4 &vec);
 
+        //square root elementwise
+        static Vec4 sqrt(Vec4 &vec);
+
+        //trigonometric functions
+        static Vec4 sin(Vec4 &vec);
+        static Vec4 cos(Vec4 &vec);
+        static Vec4 acos(Vec4 &vec);
+        static Vec4 tan(Vec4 &vec);
+
         //normalize vector
         void normalize();
 
@@ -219,7 +228,11 @@ namespace MRay {
         Vec4 &operator/=(const Vec4 &rhs); // elementwise division
 
         friend Vec4 operator+(Vec4 lhs, const Vec4 &rhs);   //elementwise addition
+        friend Vec4 operator+(Vec4 lhs, const float rhs);   //elementwise addition
+        friend Vec4 operator+(const float lhs, Vec4 rhs);   //elementwise addition
         friend Vec4 operator-(Vec4 lhs, const Vec4 &rhs);   //elementwise subtraction
+        friend Vec4 operator-(Vec4 lhs, const float rhs);   //elementwise addition
+        friend Vec4 operator-(const float lhs, Vec4 rhs);   //elementwise addition
         friend Vec4 operator*(const float &lhs, Vec4 rhs);  //elementwise multiplication
         friend Vec4 operator*(Vec4 lhs, const float &rhs);  //elementwise multiplication
         friend Vec4 operator*(Vec4 lhs, const Vec4 &rhs);   //elementwise multiplication

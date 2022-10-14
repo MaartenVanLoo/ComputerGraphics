@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <Ray.h>
+#include <ostream>
 
 namespace MRay {
     struct Color3 {
@@ -35,6 +36,9 @@ namespace MRay {
         friend Color3 operator*(const Vec4 &lhs, Color3 rhs);   //elementwise multiplication
         friend Color3 operator*(Color3 lhs, float rhs);         //elementwise subtraction
         friend Color3 operator*(float lhs, Color3 rhs);         //elementwise subtraction
+
+        friend std::ostream &operator<<(std::ostream &os, const Color3 &color3);
+
         uint8_t red = 0;
         uint8_t green = 0;
         uint8_t blue = 0;
@@ -42,10 +46,10 @@ namespace MRay {
 
         //transaction variables
         bool transactionOpen = false;
-        int accRed  =0;     // red   accumulator
-        int accGreen=0;   // green accumulator
-        int accBlue =0;    // blue  accumulator
-        int n;          // number of samples
+        int accRed  =0; // red   accumulator
+        int accGreen=0; // green accumulator
+        int accBlue =0; // blue  accumulator
+        int n       =0; // number of samples
     };
 }
 #endif //I_COMPUTERGRAPHICS_COLOR3_H

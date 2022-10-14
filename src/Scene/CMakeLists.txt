@@ -1,6 +1,5 @@
 target_sources(MRay
         PUBLIC
-        PhongShader.cpp
         Scene.cpp
         )
 #[[target_sources(I_ComputerGraphics

@@ -22,9 +22,9 @@ Color3 &MRay::Color3::operator*=(const Vec3 &rhs) {
     return *this;
 }
 Color3 &MRay::Color3::operator*=(const Vec4 &rhs) {
-    this->red   *=rhs.get<2>();
+    this->red   *=rhs.get<0>();
     this->green *=rhs.get<1>();
-    this->blue  *=rhs.get<0>();
+    this->blue  *=rhs.get<2>();
     return *this;
 }
 Color3 &MRay::Color3::operator*=(float rhs) {
@@ -104,6 +104,11 @@ Color3::Color3(Vec3 v) {
     this->red = v.get<0>();
     this->green = v.get<1>();
     this->blue = v.get<2>();
+}
+
+std::ostream &MRay::operator<<(std::ostream &os, const Color3 &color3) {
+    os << "[red: " << int(color3.red) << " green: " << int(color3.green) << " blue: " << int(color3.blue) << "]";
+    return os;
 }
 
 

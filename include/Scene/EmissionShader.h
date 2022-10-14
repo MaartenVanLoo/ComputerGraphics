@@ -5,7 +5,7 @@
 #ifndef I_COMPUTERGRAPHICS_EMISSIONSHADER_H
 #define I_COMPUTERGRAPHICS_EMISSIONSHADER_H
 
-#include "Shader.h"
+#include "Render/Shader.h"
 namespace MRay {
 
     class EmissionShader : public Shader {

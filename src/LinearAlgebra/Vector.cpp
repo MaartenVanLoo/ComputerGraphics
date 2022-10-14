@@ -661,9 +661,25 @@ Vec4 MRay::operator+(Vec4 lhs, const Vec4 &rhs) {
     lhs += rhs;
     return lhs;
 }
+Vec4 MRay::operator+(Vec4 lhs, const float rhs) {
+    lhs += Vec4(rhs,rhs,rhs,rhs);
+    return lhs;
+}
+Vec4 MRay::operator+(const float lhs, Vec4 rhs) {
+    rhs += Vec4(lhs,lhs,lhs,lhs);
+    return rhs;
+}
 Vec4 MRay::operator-(Vec4 lhs, const Vec4 &rhs) {
     lhs-=rhs;
     return lhs;
+}
+Vec4 MRay::operator-(Vec4 lhs, const float rhs) {
+    lhs -= Vec4(rhs,rhs,rhs,rhs);
+    return lhs;
+}
+Vec4 MRay::operator-(const float lhs, Vec4 rhs) {
+    rhs -= Vec4(lhs,lhs,lhs,lhs);
+    return rhs;
 }
 Vec4 MRay::operator*(const float &lhs, Vec4 rhs) {
     rhs*=lhs;
@@ -735,6 +751,110 @@ Vec4 MRay::Vec4::zAxis() {
 void MRay::Vec4::normalize() {
     (*this) = (*this)/this->abs();
 }
+
+Vec4 Vec4::sqrt(Vec4 &vec) {
+#if SSE_AVX_EXTENSIONS
+#if SET_DATA
+    Vec4 res;
+    res.data = _mm_sqrt_ps(vec.data);
+    return res;
+#else
+    return Vec4(std::sqrt(vec.data[0]),
+                std::sqrt(vec.data[1]),
+                std::sqrt(vec.data[2]),
+                std::sqrt(vec.data[3]);
+#endif
+#else
+    return Vec4(std::sqrt(vec.data[0]),
+                std::sqrt(vec.data[1]),
+                std::sqrt(vec.data[2]),
+                std::sqrt(vec.data[3]);
+#endif
+}
+
+Vec4 Vec4::sin(Vec4 &vec) {
+#if SSE_AVX_EXTENSIONS
+#if SET_DATA
+    Vec4 res;
+    res.data = _mm_sin_ps(vec.data);
+    return res;
+#else
+    return Vec4(std::sin(vec.data[0]),
+                std::sin(vec.data[1]),
+                std::sin(vec.data[2]),
+                std::sin(vec.data[3]);
+#endif
+#else
+    return Vec4(std::sin(vec.data[0]),
+                std::sin(vec.data[1]),
+                std::sin(vec.data[2]),
+                std::sin(vec.data[3]);
+#endif
+}
+
+Vec4 Vec4::cos(Vec4 &vec) {
+#if SSE_AVX_EXTENSIONS
+#if SET_DATA
+    Vec4 res;
+    res.data = _mm_cos_ps(vec.data);
+    return res;
+#else
+    return Vec4(std::cos(vec.data[0]),
+                std::cos(vec.data[1]),
+                std::cos(vec.data[2]),
+                std::cos(vec.data[3]);
+#endif
+#else
+    return Vec4(std::cos(vec.data[0]),
+                std::cos(vec.data[1]),
+                std::cos(vec.data[2]),
+                std::cos(vec.data[3]);
+#endif
+}
+
+
+Vec4 Vec4::acos(Vec4 &vec) {
+#if SSE_AVX_EXTENSIONS
+#if SET_DATA
+    Vec4 res;
+    res.data = _mm_acos_ps(vec.data);
+    return res;
+#else
+    return Vec4(std::acos(vec.data[0]),
+                std::acos(vec.data[1]),
+                std::acos(vec.data[2]),
+                std::acos(vec.data[3]);
+#endif
+#else
+    return Vec4(std::acos(vec.data[0]),
+                std::acos(vec.data[1]),
+                std::acos(vec.data[2]),
+                std::acos(vec.data[3]);
+#endif
+}
+
+Vec4 Vec4::tan(Vec4 &vec) {
+#if SSE_AVX_EXTENSIONS
+#if SET_DATA
+    Vec4 res;
+    res.data = _mm_tan_ps(vec.data);
+    return res;
+#else
+    return Vec4(std::tan(vec.data[0]),
+                std::tan(vec.data[1]),
+                std::tan(vec.data[2]),
+                std::tan(vec.data[3]);
+#endif
+#else
+    return Vec4(std::tan(vec.data[0]),
+                std::tan(vec.data[1]),
+                std::tan(vec.data[2]),
+                std::tan(vec.data[3]);
+#endif
+}
+
+
+
 
 #pragma endregion
 

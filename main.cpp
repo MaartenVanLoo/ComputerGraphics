@@ -8,7 +8,7 @@
 #include <Scene/Scene.h>
 #include <iomanip>
 #include <Textures/Checkerboard.h>
-
+#include <Render/RenderEngine.h>
 int main() {
     Stopwatch stopwatch = Stopwatch();
     stopwatch.start();
@@ -18,7 +18,17 @@ int main() {
     MRay::Options options;
     options.enableGui = true;
     options.multicore = false;
-    scene.Render(options);
+    options.shaderType = MRay::ShaderTypes::Phong;
+
+    MRay::Camera camera = MRay::Camera();
+    camera.setPosition(MRay::Vec4(-9,0,2,1));
+    camera.setSensor(MRay::Sensor(360,240));
+    camera.setResolution(MRay::Resolution(MRay::Screensize::_720p));
+    camera.setFocalLength(100);
+
+    MRay::RenderEngine engine(&scene, &camera, options);
+    engine.render();
+
     /*
     //sequence render:
     for(int i =0; i < 720; i+=5){

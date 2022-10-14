@@ -8,6 +8,9 @@
 namespace MRay {
     class MaterialsLibrary {
     public:
+        //https://refractiveindex.info/?shelf=3d&book=metals&page=aluminium
+        //Red (650nm)		Green (550nm)		Blue (450nm)
+        // https://docs.google.com/spreadsheets/d/1-Irea_Zw0JeI652f4tt741Sd3-bL3rcSGuOtG0f02pI/edit#gid=0
         static Material emerald();
         static Material jade();
         static Material obsidian();

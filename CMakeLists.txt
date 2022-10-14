@@ -12,7 +12,7 @@ link_directories(${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_CXX_STANDARD 17)
 
 #resource files
-set (APP_ICON_RESOURCE_WINDOWS "resources.rc" include/Textures/Checkerboard.h include/Textures/Texture.h)
+set (APP_ICON_RESOURCE_WINDOWS "resources.rc" include/Textures/Checkerboard.h include/Textures/Texture.h src/Render/RenderEngine.cpp)
 
 add_library(MRay STATIC)
 set_target_properties(MRay PROPERTIES CXX_STANDARD 17)
