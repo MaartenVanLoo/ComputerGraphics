@@ -9,9 +9,7 @@ using namespace MRay;
 //https://www.shadertoy.com/view/4d2XWV
 //https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
-
     Ray tr = ray.transform(this->invtransform);
-
     Vec4 oc = tr.pos()-Vec4(0,0,0,1);
 
     double a = Vec4::dot(tr.dir(),tr.dir());
@@ -45,6 +43,7 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
 
         num++;
     }
+    //std::cout << "t1: " << hit1 << "\tt2:" << hit2 << "\n";
     return num > 0;
 }
 

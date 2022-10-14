@@ -18,7 +18,8 @@ namespace MRay {
         _1080p, _FHD,
         _1440p, _QHD,
         _2160p, _UHD, _4K,
-        _4320p, _8K_UHD, _8K
+        _4320p, _8K_UHD, _8K,
+        _8640p, _16K_UHD, _16K
     };
 
     struct Sensor {

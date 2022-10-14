@@ -18,6 +18,8 @@
 #include <Utils/Stopwatch.h>
 #include <vector>
 #include <Textures/Texture.h>
+#include <fstream>
+#include <iostream>
 
 #define workerjobs 12 //minimum number of jobs for a worker
 #define artificaldelay false
@@ -69,6 +71,9 @@ namespace MRay {
         //GUI
         Image *image = nullptr;
         Screen *screen = nullptr;
+
+        std::ofstream outfile;
+
 
         friend RenderTask;
     };

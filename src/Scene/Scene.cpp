@@ -11,6 +11,12 @@
 #include <Textures/Checkerboard.h>
 #include <Objects/TaperedCylinder.h>
 #include <math.h>
+#include <Objects/BooleanUnion.h>
+#include <Objects/BooleanIntersection.h>
+#include <Objects/BooleanDifference.h>
+
+
+
 using namespace MRay;
 MRay::Scene::~Scene() {
     for (auto obj : this->objects){
@@ -41,6 +47,7 @@ void MRay::Scene::addLight(Light* light) {
 }
 
 void MRay::Scene::Render(const Options &options) {
+    outfile.open("debug.txt", std::ios::out);
     if (this->image != nullptr) free(this->image);
     this->image = new Image(camera.getResolution());
 
@@ -69,9 +76,10 @@ void MRay::Scene::Render(const Options &options) {
         pool.terminate();
     }
     else {
+        Shader* shader = new PhongShader(this);
         for (int y = 0; y < this->camera.getResolution().height; y++) {
             for (int x = 0; x < this->camera.getResolution().width; x++) {
-                Shader* shader = new PhongShader(this);
+
                 Color3 test = shader->shade(x,y);
                 Color3 rgb = this->shade(x, y);
                 this->image->setPixel(x, y, rgb);
@@ -83,16 +91,19 @@ void MRay::Scene::Render(const Options &options) {
         }
     }
     stopwatch.stop();
-    std::cout << "Render finished in : " << stopwatch.elapsedms() << " ms" << std::endl;
-    std::cout << "Pixel count: " << this->camera.getResolution().getPixels() << std::endl;
-    std::cout << "Pixels / second : " << this->camera.getResolution().getPixels() * 1000/stopwatch.elapsedms() << std::endl;
+    std::cout << "Render finished in : " << stopwatch.elapsedms() << " ms\n";
+    std::cout << "Pixel count: " << this->camera.getResolution().getPixels() << "\n";
+    std::cout << "Pixels / second : " << this->camera.getResolution().getPixels() * 1000/stopwatch.elapsedms() << "\n";
     stopwatch.reset();
     stopwatch.start();
     this->image->update();
     this->image->save(options.renderName + ".png");
     //this->image->save(options.renderName+ ".bmp");
     stopwatch.stop();
-    std::cout << "File saved in :" << stopwatch.elapsedms() << " ms" << std::endl;
+    std::cout << "File saved in :" << stopwatch.elapsedms() << " ms\n";
+
+    outfile.flush();
+    outfile.close();
 
     //close gui
     if (options.enableGui) {
@@ -103,14 +114,11 @@ void MRay::Scene::Render(const Options &options) {
         this->screen = nullptr;
     }
 
+    std::cout << "\n\n\n" << std::endl;
 }
 
 MRay::Scene::Scene() {
-    this->camera.rotate(0,0,0);
-    this->camera.setPosition(Vec4(-9.5,0,5,1));
-    this->camera.setSensor(Sensor(360,240));
-    this->camera.setResolution(Resolution(Screensize::_8K));
-    this->camera.setFocalLength(100);
+
 }
 
 Color3 MRay::Scene::shade(int x, int y) {
@@ -121,16 +129,24 @@ Color3 MRay::Scene::shade(int x, int y) {
     color.openTransaction();
     //super sample:
 
+
     for (int i =0; i < N; i++){
         sample.clear();
         Ray primary =  this->camera.getPrimaryRay(x,y,float(rand())/RAND_MAX,float(rand())/RAND_MAX);
 
         Hit first = Hit();
+
+        if (y == 538 && x >= 928 && x <= 930 ) {
+            getFirstHit(primary, first, intersect);
+        }
         if (!getFirstHit(primary, first, intersect)){
             //no hit, set background color:
             color.add(Color3(0x87, 0xCE, 0xFA));
             continue;
             //return color;
+        }else{
+            color.add(Color3(255,0,0));
+            continue;
         }
 
         Vec4 v = - primary.dir(); //always normalized
@@ -175,6 +191,7 @@ Color3 MRay::Scene::shade(int x, int y) {
         }*/
 
     }
+
     color.closeTransaction();
     return color;
 }
@@ -245,15 +262,24 @@ Camera &MRay::Scene::getCamera() {
 }
 
 void Scene::load(std::string &file) {
+    // this->camera.setPosition(Vec4(0,3,7,1));
+    this->camera.setPosition(Vec4(0,0,0,1));
+    this->camera.rotate(0,CV_PI/2,0);
+    this->camera.translate(0,0,5);
+    this->camera.setSensor(Sensor(360,240));
+    this->camera.setResolution(Resolution(Screensize::_1080p));
+    this->camera.setFocalLength(1000);
 
     Object* obj = nullptr;
+    Object* obj1 = nullptr;
+    Object* obj2 = nullptr;
     Texture* texture = nullptr;
     //Scene scene = Scene();
-    obj = new Plane(Vec4(0,0,0,0),Vec4(0,0,1,0));
-    //obj->setTexture(new Checkboard(5,5,5));
-    obj->setMaterial(MaterialsLibrary::gray_rubber());
-    this->addObject(obj);
-
+    //obj = new Plane(Vec4(0,0,0,0),Vec4(0,0,1,0));
+    ////obj->setTexture(new Checkboard(5,5,5));
+    //obj->setMaterial(MaterialsLibrary::gray_rubber());
+    //this->addObject(obj);
+/*
     obj = new TaperedCylinder(0.5);
     Material mat = MaterialsLibrary::red_plastic();
     //mat.ambient = Vec3(255,255,255);
@@ -271,14 +297,39 @@ void Scene::load(std::string &file) {
     obj->setMaterial(MaterialsLibrary::bronze());
     this->addObject(obj);
 
-    // creates problems
-//    obj = new  Sphere(Vec4(4,1,5,1),1);
-//    obj->scale(.01,1,1);
-//    material.emissive = Color3(5,0,0);
-//    material.diffuse = Vec3(0.9,0.1,0.1);
-//    obj->setMaterial(material);
-//    this->addObject(obj);
+    //BooleanIntersection
+    obj1 = new Sphere(Vec4(3,-1.8,8,1),1);
+    obj1->setMaterial(MaterialsLibrary::red_plastic());
+    //this->addObject(obj);
 
+    obj2 = new Sphere(Vec4(3,-2.2,8,1),1);
+    obj2->setMaterial(MaterialsLibrary::bronze());
+
+    obj = new BooleanIntersection(obj1, obj2);
+    this->addObject(obj);
+
+    //BooleanUnion
+    obj1 = new Box(Vec4(4,3,5,1), Vec4(1,1,1,1));
+    obj1->setMaterial(MaterialsLibrary::jade());
+    obj2 = new Sphere(Vec4(2.75,3,5,1),0.5);
+    obj2->setMaterial(MaterialsLibrary::chrome());
+    obj = new BooleanUnion(obj1,obj2);
+    this->addObject(obj);
+
+    //Boolean Difference
+    obj1 = new Box(Vec4(4,3,7,1), Vec4(1,1,1,1));
+    obj1->setMaterial(MaterialsLibrary::green_plastic());
+    obj2 = new Sphere(Vec4(2.9,3,7,1),1.2);
+    obj2->setMaterial(MaterialsLibrary::red_plastic());
+    obj = new BooleanDifference(obj1,obj2);
+    this->addObject(obj);
+*/
+    // creates problems
+    obj = new  Sphere(Vec4(0,0,0,1),1);
+    obj->scale(.1,1,1);
+    obj->setMaterial(MaterialsLibrary::red_plastic());
+    this->addObject(obj);
+/*
 
     obj = new Box(Vec4(0,-0.5f,2.5f,1),Vec4(1,1,1,0));
     obj->setMaterial(MaterialsLibrary::green_plastic());
@@ -288,11 +339,13 @@ void Scene::load(std::string &file) {
     obj->setMaterial(MaterialsLibrary::yellow_plastic());
     obj->rotate(0.0,0.0,0.5);
     this->addObject(obj);
-
-    Light* light = new PointLight(Vec4(-10,0,15,1));
+*/
+    Light* light = new PointLight(Vec4(-10,0,30,1));
     this->addLight(light);
-    light = new PointLight(Vec4(0,10,10,1));
+    light = new PointLight(Vec4(-5,15,20,1));
     this->addLight(light);
+    //light = new PointLight(Vec4(-10,0,5,1));
+    //this->addLight(light);
 }
 
 #pragma region MultiThreading tools
@@ -399,7 +452,7 @@ void reorder(std::vector<RenderTask*>& vA, std::vector<int>& vOrder)
 }
 void MRay::Scene::createTasks(std::vector<RenderTask*> &tasks) {
     //find suitable size, minimum 16x16, always square, power of 2
-    int size = 16;
+    int size = 4;
     const Resolution resolution = this->camera.getResolution();
     int row = int(std::ceil(double(resolution.height) / size));
     int col = int(std::ceil(double(resolution.width) / size));

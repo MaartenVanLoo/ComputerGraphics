@@ -60,6 +60,10 @@ MRay::Sensor::Sensor(Screensize screensize) {
             this->width  = 7680;
             this->height = 4320;
             break;
+        case _8640p: case _16K_UHD: case _16K:
+            this->width  = 15360;
+            this->height = 8640;
+            break;
         default:
             throw std::invalid_argument("Unrecognized screensize");
     }
@@ -115,6 +119,10 @@ Resolution::Resolution(Screensize screensize) {
         case _4320p: case _8K_UHD: case _8K:
             this->width  = 7680;
             this->height = 4320;
+            break;
+        case _8640p: case _16K_UHD: case _16K:
+            this->width  = 15360;
+            this->height = 8640;
             break;
         default:
             throw std::invalid_argument("Unrecognized screensize");

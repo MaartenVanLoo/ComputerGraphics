@@ -8,6 +8,8 @@
 namespace MRay {
     class BooleanUnion : public BooleanObject {
     public:
+        BooleanUnion(Object *left, Object *right);
+
         bool hitPoint(Ray &ray, Intersection &intersection) override;
 
         Vec4 normal(Vec4 &point) const override;

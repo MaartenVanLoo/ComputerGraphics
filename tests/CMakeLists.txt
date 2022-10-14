@@ -13,6 +13,7 @@ set(testSources
         ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TObject.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TPlane.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TTaperedCylinder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/Objects/TBoolean.cpp
         )
 
 add_executable(I_ComputerGraphics_tests tests.cpp ${ProjectSourceFiles} ${testSources})

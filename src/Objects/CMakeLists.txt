@@ -6,8 +6,11 @@ target_sources(MRay
         Sphere.cpp
         Intersection.cpp
         TaperedCylinder.cpp
+
         BooleanObject.cpp
         BooleanUnion.cpp
+        BooleanIntersection.cpp
+        BooleanDifference.cpp
         )
 #[[target_sources(I_ComputerGraphics
         PUBLIC

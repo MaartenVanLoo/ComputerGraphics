@@ -4,7 +4,8 @@
 
 #include <Objects/BooleanIntersection.h>
 #include <algorithm>
-bool MRay::BooleanIntersection::hitPoint(MRay::Ray &ray, MRay::Intersection &intersection) {
+using namespace MRay;
+bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection) {
     if (intersection.leftHit == nullptr) intersection.leftHit = new Intersection();
     if (intersection.rightHit == nullptr) intersection.rightHit = new Intersection();
 
@@ -13,11 +14,12 @@ bool MRay::BooleanIntersection::hitPoint(MRay::Ray &ray, MRay::Intersection &int
     intersection.rightHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
 
     this->left->hitPoint(ray,*intersection.leftHit);
+    if (intersection.leftHit->empty()) return false; //No hitpoints with this object => not possible to hit the "intersection" of A & B, no need to compute "right hit"
     this->right->hitPoint(ray, *intersection.rightHit);
+    if (intersection.rightHit->empty()) return false; //No hitpoints with this object => not possible to hit the "intersection" of A & B, return false;
+    //if (intersection.leftHit->empty() || intersection.rightHit->empty())return false; //no hitpoints found when either one of the objects is empty
 
     //sort out the intersection of the union of the points
-    if (intersection.leftHit->empty() || intersection.rightHit->empty())return false; //no hitpoints found when either one of the objects is empty
-
     // merge all hits, sort them by time
     for (auto& hit : intersection.leftHit->hit) intersection.hit.push_back(hit);
     for (auto& hit : intersection.rightHit->hit) intersection.hit.push_back(hit);
@@ -29,17 +31,18 @@ bool MRay::BooleanIntersection::hitPoint(MRay::Ray &ray, MRay::Intersection &int
     bool insideLeft = !intersection.leftHit->hit[0].entering; //start condition for left object
     bool insideRight = !intersection.rightHit->hit[0].entering; //start condition for right object
     bool inside =  insideLeft && insideRight; //inside union object = OR operation
-    for ( auto hit_itt = intersection.hit.begin(); hit_itt < intersection.hit.end()) {
+    for ( auto hit_itt = intersection.hit.begin(); hit_itt < intersection.hit.end();) {
         if (hit_itt->obj == this->left){
             insideLeft = hit_itt->entering;
         }else{
             //hit.obj == this->right
             insideRight = hit_itt->entering;
         }
-        if (inside == insideLeft && insideRight){
+        if (inside == (insideLeft && insideRight)){
             //this hit doesn't change the state of the solid and is obsolete: remove
             hit_itt=intersection.hit.erase(hit_itt);
         }else{
+            inside = (insideLeft && insideRight);
             hit_itt++;
         }
     }
@@ -47,7 +50,8 @@ bool MRay::BooleanIntersection::hitPoint(MRay::Ray &ray, MRay::Intersection &int
 }
 
 
-
-MRay::Vec4 MRay::BooleanIntersection::normal(MRay::Vec4 &point) const {
+Vec4 BooleanIntersection::normal(Vec4 &point) const {
     return Vec4();
 }
+
+BooleanIntersection::BooleanIntersection(Object *left, Object *right) : BooleanObject(left, right) {}

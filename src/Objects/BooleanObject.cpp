@@ -10,3 +10,5 @@ BooleanObject::~BooleanObject() {
 
 }
 
+BooleanObject::BooleanObject(Object *left, Object *right) : left(left), right(right) {}
+

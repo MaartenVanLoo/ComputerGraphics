@@ -22,7 +22,7 @@ namespace MRay {
         virtual ~Light();
 
         //Color3 color = Color3(255, 255, 255); //white
-        Color3 color = Color3(255, 255,0); //white
+        Color3 color = Color3(255, 255,255); //white
     };
 }
 

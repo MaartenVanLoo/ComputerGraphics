@@ -19,6 +19,7 @@ set_target_properties(MRay PROPERTIES CXX_STANDARD 17)
 target_include_directories(MRay PUBLIC ${CMAKE_SOURCE_DIR}/include)
 add_subdirectory(src)
 
+
 add_executable(I_ComputerGraphics main.cpp ${APP_ICON_RESOURCE_WINDOWS})
 target_include_directories(I_ComputerGraphics PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(I_ComputerGraphics PRIVATE ${OpenCV_LIBS})
@@ -29,7 +30,10 @@ set_target_properties(I_ComputerGraphics PROPERTIES
 add_subdirectory(tests)
 #Optimization flags
 message("Build type: ${CMAKE_BUILD_TYPE}")
-if (CMAKE_BUILD_TYPE MATCHES "Release")
+if (CMAKE_BUILD_TYPE MATCHES "Release" OR CMAKE_BUILD_TYPE MATCHES "RelWithDebInfo ")
+    target_compile_options(MRay  PRIVATE
+            $<$<CXX_COMPILER_ID:MSVC>:/W3 /WX- /Oi /Ot /O2 /Zi /GL /MP>
+            $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -O3>)
     target_compile_options(I_ComputerGraphics  PRIVATE
             $<$<CXX_COMPILER_ID:MSVC>:/W3 /WX- /Oi /Ot /O2 /Zi /GL /MP>
             $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -O3>)
