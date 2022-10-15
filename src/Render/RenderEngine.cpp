@@ -57,6 +57,9 @@ void RenderEngine::setShader(Shader *shader) {
 #pragma endregion
 
 void RenderEngine::render() {
+    //track progress in cli:
+    int progress = 0; //0 = start, 100= finish
+
     //Set render image
     if (this->image != nullptr) free(this->image);
     this->image = new Image(camera->getResolution());
@@ -77,10 +80,19 @@ void RenderEngine::render() {
         for (auto task: renderTasks){
             pool.pushTaskQueue(task);
         }
-        for (auto task:renderTasks){
-            while (!task->done()){
+        stopwatch.stop();
+        std::cout << "Threads created and started:" << stopwatch;
+        std::cout.flush();
+        stopwatch.start();
+        for (auto task = renderTasks.begin(); task < renderTasks.end(); task ++){
+            while (!(*task)->done()){
                 using namespace std::chrono_literals;
                 std::this_thread::sleep_for(50ms);
+            }
+            int i = task - renderTasks.begin();
+            if (progress < i*100/renderTasks.size()){
+                progress = i*100/renderTasks.size();
+                RenderEngine::updateCli(progress);
             }
         }
         pool.terminate();
@@ -91,12 +103,18 @@ void RenderEngine::render() {
                 Color3 rgb = this->shader->shade(x,y);
                 this->image->setPixel(x, y, rgb);
             }
+            if (progress < y*100/this->camera->getResolution().height){
+                progress = y*100/this->camera->getResolution().height;
+                RenderEngine::updateCli(progress);
+            }
 #if artificaldelay
             using namespace std::chrono_literals;
             std::this_thread::sleep_for(5ms);
 #endif
         }
     }
+    RenderEngine::updateCli(100);
+    std::cout << std::endl;
     stopwatch.stop();
     // print render info
     std::cout << "Render finished in : " << stopwatch.elapsedms() << " ms\n";
@@ -257,6 +275,11 @@ void RenderEngine::createTasks(std::vector<RenderTask*> &tasks) {
 
 Image *RenderEngine::getImage() {
     return this->image;
+}
+
+void RenderEngine::updateCli(int progress) {
+    std::cout << "\r" << "Progress: " << std::setw(3) << progress << " %";
+    std::cout.flush();
 }
 
 

@@ -22,7 +22,7 @@ namespace MRay {
         /// Compute the normal vector in a point on the circle.
         /// Doesn't check if the point is actually on the circle!
         /// \return
-        Vec4 normal(Vec4 &point) const override;
+        Vec4 normal(const Vec4 &point) const;
 
 
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sphere);

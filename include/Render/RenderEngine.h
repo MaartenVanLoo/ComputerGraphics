@@ -25,9 +25,10 @@ namespace MRay {
         Image* getImage();
 #pragma endregion
 
-        void render();
-
+    void render();
+    private:
         void createTasks(std::vector<RenderTask *> &tasks);
+        static void updateCli(int progress);
     protected:
         Options options;
 

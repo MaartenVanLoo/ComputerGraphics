@@ -192,7 +192,7 @@ void Scene::load(std::string &file) {
     Texture* texture = nullptr;
 
     obj = new Plane(Vec4(0,0,0,0),Vec4(0,0,1,0));
-    //obj->setTexture(new Checkboard(5,5,5));
+    obj->setTexture(new Checkboard(5,5,5));
     obj->setMaterial(MaterialsLibrary::gray_rubber());
     this->addObject(obj);
 
@@ -219,7 +219,7 @@ void Scene::load(std::string &file) {
     //this->addObject(obj);
 
     obj2 = new Sphere(Vec4(3,-2.2,8,1),1);
-    obj2->setMaterial(MaterialsLibrary::bronze());
+    obj2->setMaterial(MaterialsLibrary::red_plastic());
 
     obj = new BooleanIntersection(obj1, obj2);
     this->addObject(obj);
@@ -235,8 +235,8 @@ void Scene::load(std::string &file) {
     //Boolean Difference
     obj1 = new Box(Vec4(4,3,7,1), Vec4(1,1,1,1));
     obj1->setMaterial(MaterialsLibrary::green_plastic());
-    obj2 = new Sphere(Vec4(2.9,3,7,1),1.2);
-    obj2->setMaterial(MaterialsLibrary::red_plastic());
+    obj2 = new Sphere(Vec4(2.9-9,3,7,1),10);
+    obj2->setMaterial(MaterialsLibrary::green_plastic());
     obj = new BooleanDifference(obj1,obj2);
     this->addObject(obj);
 /*

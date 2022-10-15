@@ -113,7 +113,11 @@ void MRay::LiveScreen::loop() {
     cv::Rect2d rect;
     cv::Rect renderArea;
     cv::Mat tmp;
+    Vec4 dir;
     int key;
+    bool pendingRender = false;
+    int pendingFrames = 0;
+    int maxPendingFrames = 5 ;
 
     cv::namedWindow("Rendered Image", cv::WINDOW_NORMAL);
     cv::setWindowProperty("Rendered Image", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
@@ -143,6 +147,14 @@ void MRay::LiveScreen::loop() {
         //std::cout << key << std::endl;
         switch (key) {
             case -1:
+                if (pendingRender){
+                    this->renderFast();
+                    showImage("Rendered Image", this->image->getImageBuffer());
+                    cv::waitKey(1); //force screen update
+                    pendingRender = false;
+                    pendingFrames = 0;
+                    pendingRender = false;
+                }
                 break; //No key pressed
             case keycodes::esc:
                 cv::setWindowProperty("Rendered Image", cv::WND_PROP_FULLSCREEN, cv::WINDOW_NORMAL);
@@ -151,69 +163,74 @@ void MRay::LiveScreen::loop() {
                 cv::setWindowProperty("Rendered Image", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
                 break;
             case keycodes::z:
-                this->camera->setFocalLength(this->camera->getFocalLength()*1.1); //TODO: move forwards
+                dir = this->camera->getDirection()*0.1;
+                this->camera->translate(dir.get<_X>(),dir.get<_Y>(),dir.get<_Z>());
+                //this->camera->setFocalLength(this->camera->getFocalLength()*1.1); //TODO: move forwards
                 std::cout << *this->camera << std::endl;
-                this->renderFast();
-                showImage("Rendered Image", this->image->getImageBuffer());
-                cv::waitKey(1); //force screen update
+                pendingRender = true;
+                pendingFrames++;
                 break;
             case keycodes::s:
-                this->camera->setFocalLength(this->camera->getFocalLength()/1.1); //TODO: move backwards
+                dir = this->camera->getDirection()*0.1;
+                this->camera->translate(-dir.get<_X>(),-dir.get<_Y>(),-dir.get<_Z>());
+                //this->camera->setFocalLength(this->camera->getFocalLength()/1.1); //TODO: move backwards
                 std::cout << *this->camera << std::endl;
-                this->renderFast();
-                showImage("Rendered Image", this->image->getImageBuffer());
-                cv::waitKey(1); //force screen update
+                pendingRender = true;
+                pendingFrames++;
                 break;
             case keycodes::_plus:
                 this->camera->setFocalLength(this->camera->getFocalLength()*1.1); //zoom in
                 std::cout << *this->camera << std::endl;
-                this->renderFast();
-                showImage("Rendered Image", this->image->getImageBuffer());
-                cv::waitKey(1); //force screen update
+                pendingRender = true;
+                pendingFrames++;
                 break;
             case keycodes::_minus:
                 this->camera->setFocalLength(this->camera->getFocalLength()/1.1); //zoom out
                 std::cout << *this->camera << std::endl;
-                this->renderFast();
-                showImage("Rendered Image", this->image->getImageBuffer());
-                cv::waitKey(1);//force screen update
+                pendingRender = true;
+                pendingFrames++;
                 break;
             case keycodes::d:
-                this->camera->rotate(0,0,0.0872665); //rotate cw 5 degrees
+                this->camera->rotate(0,0,0.0872665); //rotate cw 5 degrees around z = 0
                 std::cout << *this->camera << std::endl;
-                this->renderFast();
-                showImage("Rendered Image", this->image->getImageBuffer());
-                cv::waitKey(1);//force screen update
+                pendingRender = true;
+                pendingFrames++;
                 break;
             case keycodes::q:
-                this->camera->rotate(0,0,-0.0872665); //rotate ccw 5 degrees
+                this->camera->rotate(0,0,-0.0872665); //rotate ccw 5 degrees around z = 0
                 std::cout << *this->camera << std::endl;
-                this->renderFast();
-                showImage("Rendered Image", this->image->getImageBuffer());
-                cv::waitKey(1);//force screen update
+                pendingRender = true;
+                pendingFrames++;
                 break;
             case keycodes::e:
                 this->camera->translate(0,0,0.5); //move up
                 std::cout << *this->camera << std::endl;
-                this->renderFast();
-                showImage("Rendered Image", this->image->getImageBuffer());
-                cv::waitKey(1); //force screen update
+                pendingRender = true;
+                pendingFrames++;
                 break;
             case keycodes::a:
                 this->camera->translate(0,0,-0.5); //move down
                 std::cout << *this->camera << std::endl;
-                this->renderFast();
-                showImage("Rendered Image", this->image->getImageBuffer());
-                cv::waitKey(1); //force screen update
+                pendingRender = true;
+                pendingFrames++;
                 break;
             case keycodes::space:
                 this->renderSlow();
                 showImage("Rendered Image", this->image->getImageBuffer());
                 cv::waitKey(1); //force screen update
+                pendingFrames = 0;
+                pendingRender = false;
                 break;
             default:
                 std::cout << "key pressed:" << key << std::endl;
-
+        }
+        if (pendingRender && pendingFrames >= maxPendingFrames){ //force update after x numbers of updates (for smoother movement)
+            this->renderFast();
+            showImage("Rendered Image", this->image->getImageBuffer());
+            cv::waitKey(1); //force screen update
+            pendingRender = false;
+            pendingFrames = 0;
+            pendingRender = false;
         }
     }
     cv::destroyAllWindows();

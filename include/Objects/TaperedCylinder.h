@@ -21,7 +21,7 @@ namespace MRay {
 
         bool hitPoint(Ray &ray, Intersection &intersection) override;
 
-        Vec4 normal(Vec4 &point) const override;
+        Vec4 normal(Vec4 &point) const;
 
     protected:
         float s;

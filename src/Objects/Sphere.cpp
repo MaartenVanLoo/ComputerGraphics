@@ -29,7 +29,7 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
         intersection.hit[0].t = hit1;
         intersection.hit[0].obj = this;
         intersection.hit[0].point = this->transform * tr.at(hit1);
-        intersection.hit[0].normal = tr.at(hit1);
+        intersection.hit[0].normal = normal(tr.at(hit1));
         intersection.hit[0].entering = true;
         num++;
     }
@@ -38,7 +38,7 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
         intersection.hit[num].t = hit2;
         intersection.hit[num].obj = this;
         intersection.hit[num].point = this->transform * tr.at(hit2);
-        intersection.hit[num].normal = tr.at(hit2);
+        intersection.hit[num].normal = normal(tr.at(hit2));
         intersection.hit[num].entering = false;
 
         num++;
@@ -61,8 +61,9 @@ MRay::Sphere::Sphere(const Vec4 &position, float radius){
     this->translate(position.get<0>(),position.get<1>(),position.get<2>());
 }
 
-Vec4 MRay::Sphere::normal(Vec4 &point) const{
-    const Vec4& n = point;
+Vec4 MRay::Sphere::normal(const Vec4 &point) const{
+    Vec4 n = point;
+    n.set<3>(0); //set last value to zero, indicate 'vector' instead of point;
     return n;
 }
 
