@@ -24,9 +24,9 @@ namespace MRay {
         bool enableAliasing = false;
         int oversamplingRate = 1;
 
-        float shininessThreshold = 0.0001;
-        int maxRayBounce = 1;
-        float eps = 1e-4;
+        double shininessThreshold = 0.0001;
+        int maxRayBounce = 2;
+        double eps = 1e-4;
     };
 
 

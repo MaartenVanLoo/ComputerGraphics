@@ -112,7 +112,7 @@ void MRay::Screen::onMouse(int event,int x,int y,int flags,void *param){
     cv::imshow("Rendered Image", resizeKeepAspectRatio(((Screen*)(param))->image->getImageBuffer(), renderArea.size(),cv::Scalar(0,0,0)));
     ((Screen*)(param))->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
     cv::waitKey(1);
-    std::cout << "Mouse event " << flags << std::endl;
+    //std::cout << "Mouse event " << flags << std::endl;
 }
 
 void MRay::Screen::onMouseCrop(int event,int x,int y,int flags,void *param){

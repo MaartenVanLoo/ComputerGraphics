@@ -239,13 +239,13 @@ void Scene::load(std::string &file) {
     obj2->setMaterial(MaterialsLibrary::green_plastic());
     obj = new BooleanDifference(obj1,obj2);
     this->addObject(obj);
-/*
+
     // creates problems
-    obj = new  Sphere(Vec4(0,0,0,1),1);
+    obj = new  Sphere(Vec4(0,0,5,1),1);
     obj->scale(.1,1,1);
     obj->setMaterial(MaterialsLibrary::red_plastic());
     this->addObject(obj);
-*/
+
 
     obj = new Box(Vec4(0,-0.5f,2.5f,1),Vec4(1,1,1,0));
     obj->setMaterial(MaterialsLibrary::green_plastic());
