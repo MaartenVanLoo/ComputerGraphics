@@ -1,5 +1,5 @@
 //
-// Created by maart on 7/10/2022.
+// Created by Maarten Van Loo on 7/10/2022.
 //
 
 #include <Objects/Plane.h>
@@ -7,7 +7,7 @@ using namespace MRay;
 bool MRay::Plane::hitPoint(Ray &ray, Intersection &intersection) {
     //assuming all vectors are normalized
     float denom = Vec4::dot(this->norm,ray.dir());
-    if (std::abs(denom) > 1e-6){
+    if (std::abs(denom) > 0.00001){
         Vec4 oc = this->pos - ray.pos();
         double tHit = Vec4::dot(oc,this->norm) / denom;
         if (tHit >= 0.00001){

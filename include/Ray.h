@@ -1,5 +1,5 @@
 //
-// Created by maart on 30/09/2022.
+// Created by Maarten Van Loo on 30/09/2022.
 //
 
 #ifndef I_COMPUTERGRAPHICS_RAY_H
@@ -25,10 +25,10 @@ namespace MRay {
 
         void setPos(float x, float y, float z);
 
-        void setPos(Vec4 &pos);
+        void setPos(const Vec4& pos);
 
         void setDir(float x, float y, float z);
-
+        void setDir(const Vec4 &dir);
 
         void normalizeDir();
 
@@ -36,9 +36,13 @@ namespace MRay {
 
         friend std::ostream &operator<<(std::ostream &os, const Ray &ray);
 
+        void setDepth(int d);
+        void increaseDepth();
+        int getDepth();
     private:
         Vec4 position = Vec4(0, 0, 0, 1);
         Vec4 direction = Vec4(0, 0, 0, 0);;
+        int depth = 0;
     };
 
     class PrimaryRay : public Ray {

@@ -1,5 +1,5 @@
 //
-// Created by maart on 11/10/2022.
+// Created by Maarten Van Loo on 11/10/2022.
 //
 
 #include <Render/PhongShader.h>
@@ -31,7 +31,8 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
 
     if (!getFirstHit(primaryRay, first, intersection)){
         //no hit, set background color:
-        sample.add(Color3(0x87, 0xCE, 0xFA));
+        //sample.add(Color3(0x87, 0xCE, 0xFA));
+        sample.add(Color3(0, 0,0));
         return sample;
         //return color;
     }
@@ -44,6 +45,7 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
     sample.add(Color3(obj->getMaterial().ambient));
 
     Vec4 normal = obj->getTransform() * first.normal;
+    normal.set<3>(0);
     normal.normalize();
 
     // diff & spec
@@ -71,7 +73,19 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
         }
     }
 
+    if (primaryRay.getDepth() == options.maxRayBounce) return sample;
+    //reflections
+    if (obj->getMaterial().shininess > options.shininessThreshold){
+        //get reflected ray,
+        Ray reflected;
+        reflected.setPos(first.point + options.eps * normal);
+        Vec4 d = primaryRay.dir() - 2 *(normal.dot(primaryRay.dir()))*normal;
+        reflected.setDir(d);
+        reflected.setDepth(primaryRay.getDepth() + 1);
 
+        //recursive call to shade
+        sample.add(obj->getMaterial().shininess * shade(reflected));
+    }
     return sample;
 }
 

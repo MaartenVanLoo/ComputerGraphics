@@ -1,5 +1,5 @@
 //
-// Created by maart on 7/10/2022.
+// Created by Maarten Van Loo on 7/10/2022.
 //
 
 #include <Light/PointLight.h>

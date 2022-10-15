@@ -74,6 +74,11 @@ void MRay::Image::save(const std::string &filename) {
     cv::imwrite(filename, this->imageBuffer);
 }
 
+Image::Image(Image &im) {
+    this->imageBuffer = im.imageBuffer;
+    this->lastUpdate = 0;
+}
+
 MRay::Screen::Screen(Image &image) {
     this->image = &image;
 }
@@ -181,7 +186,7 @@ void MRay::Screen::loop() {
             case keycodes::f:
                 cv::setWindowProperty("Rendered Image", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
                 break;
-            case keycodes::s:
+            case keycodes::c:
                 renderArea =  cv::getWindowImageRect("Rendered Image");
                 tmp = resizeKeepAspectRatio(this->image->getImageBuffer(), renderArea.size(),cv::Scalar(0,0,0));
                 rect = cv::selectROI("Rendered Image", tmp, true);

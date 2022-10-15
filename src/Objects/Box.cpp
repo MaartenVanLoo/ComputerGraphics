@@ -3,7 +3,7 @@
 
 
 //
-// Created by maart on 30/09/2022.
+// Created by Maarten Van Loo on 30/09/2022.
 //
 using namespace MRay;
 //https://iquilezles.org/articles/intersectors/

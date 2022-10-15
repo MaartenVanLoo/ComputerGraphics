@@ -1,5 +1,5 @@
 //
-// Created by maart on 4/10/2022.
+// Created by Maarten Van Loo on 4/10/2022.
 //
 
 #ifndef I_COMPUTERGRAPHICS_AVX_H

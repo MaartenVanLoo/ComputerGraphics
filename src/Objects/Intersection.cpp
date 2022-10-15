@@ -1,5 +1,5 @@
 //
-// Created by maart on 12/10/2022.
+// Created by Maarten Van Loo on 12/10/2022.
 //
 #include <Objects/Intersection.h>
 

@@ -1,5 +1,5 @@
 //
-// Created by maart on 30/09/2022.
+// Created by Maarten Van Loo on 30/09/2022.
 //
 #include <catch2/catch_all.hpp>
 #include <iostream>

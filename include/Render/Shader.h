@@ -1,5 +1,5 @@
 //
-// Created by maart on 11/10/2022.
+// Created by Maarten Van Loo on 11/10/2022.
 //
 
 #ifndef I_COMPUTERGRAPHICS_SHADER_H
@@ -50,9 +50,9 @@ namespace MRay {
                     for (const auto& h: intersect.hit){
                         if (h.obj == ignore){
                             Vec4 p = h.point - point;
-                            if (p.dot(p) < 1e-6) continue; //this is the original point
+                            if (p.dot(p) < 1e-4) continue; //this is the original point
                         }
-                        if (dist > h.t * h.t)
+                        if (dist > h.t * h.t && !h.entering)
                             return true; //object between point and light
                     }
                 }

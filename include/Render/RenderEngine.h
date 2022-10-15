@@ -22,7 +22,7 @@ namespace MRay {
         void setOptions(const Options &options);
         Shader *getShader() const;
         void setShader(Shader *shader);
-
+        Image* getImage();
 #pragma endregion
 
         void render();

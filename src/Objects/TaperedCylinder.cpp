@@ -1,5 +1,5 @@
 //
-// Created by maart on 12/10/2022.
+// Created by Maarten Van Loo on 12/10/2022.
 //
 
 #include <Objects/TaperedCylinder.h>
@@ -20,14 +20,14 @@ bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &interse
     double c = tr.pos().get<_X>() * tr.pos().get<_X>() + tr.pos().get<_Y>() * tr.pos().get<_Y>() - f * f;
     double discr = b*b-a*c;
 
-    if (discr >= 0) {
+    if (discr >= 0.00001) {
 
         double discRoot = std::sqrt(discr);
         auto hit1 = float((-b - discRoot) / a);
         auto hit2 = float((-b + discRoot) / a);
 
 
-        if (hit1 > 0) {
+        if (hit1 > 0.00001) {
             Vec4 p = tr.at(hit1);
             if (p.get<_Z>() > 0 && p.get<_Z>() < 1) {
                 intersection.hit.emplace_back();
@@ -40,7 +40,7 @@ bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &interse
                 num++;
             }
         }
-        if (hit2 > 0) {
+        if (hit2 > 0.00001) {
             Vec4 p = tr.at(hit2);
             if (p.get<_Z>() > 0 && p.get<_Z>() < 1) {
                 intersection.hit.emplace_back();
@@ -56,10 +56,10 @@ bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &interse
     }
 
     //hits with base planes
-    if (tr.dir().get<_Z>() != 0) { // avoid parallel with base! => no intersect!
+    if (std::abs(tr.dir().get<_Z>()) >= 0.00001) { // avoid parallel with base! => no intersect!
         //hit with z = 0:
         float hit = -tr.pos().get<_Z>() / tr.dir().get<_Z>();
-        if (hit >= 0) {
+        if (hit >= 0.00001) {
             Vec4 p = tr.at(hit);
             if (p.dot(p) < 1) {//note p = {_X,_Y,0,1}, p.dot doesn't use last value!
                 intersection.hit.emplace_back();
@@ -74,7 +74,7 @@ bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &interse
         }
         //hit with z = 1:
         hit = (1-tr.pos().get<_Z>()) / tr.dir().get<_Z>();
-        if (hit >= 0) {
+        if (hit >= 0.00001) {
             Vec4 p = tr.at(hit);
             if (p.dot(p) - 1< this->s * this->s ) {//note p = {_X,_Y,1,1}, p.dot doesn't use last value!, result = X² + Y² + 1 < s², correct for '1' term
                 intersection.hit.emplace_back();

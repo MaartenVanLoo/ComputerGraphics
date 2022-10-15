@@ -1,5 +1,5 @@
 //
-// Created by maart on 30/09/2022.
+// Created by Maarten Van Loo on 30/09/2022.
 //
 
 #include "../include/Ray.h"
@@ -26,7 +26,7 @@ void  MRay::Ray::setPos(float x, float y, float z) {
     //this->position[2] = z;
     //this->position[3] = 1.0;
 }
-void  MRay::Ray::setPos(Vec4 &pos) {
+void  MRay::Ray::setPos(const Vec4 &pos) {
     this->position = pos;
     //this->position[0] = pos[0];
     //this->position[1] = pos[1];
@@ -63,6 +63,22 @@ Ray  MRay::Ray::transform(const Matrix4 &T) const {
     return r;
 }
 
+void Ray::setDir(const Vec4 &dir) {
+    this->direction = dir;
+}
+
+void Ray::setDepth(int d) {
+    this->depth = d;
+}
+
+void Ray::increaseDepth(){
+    this->depth++;
+}
+
+
+int Ray::getDepth() {
+    return this->depth;
+}
 
 
 

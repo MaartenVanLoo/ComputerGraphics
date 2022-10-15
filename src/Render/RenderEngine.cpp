@@ -80,7 +80,7 @@ void RenderEngine::render() {
         for (auto task:renderTasks){
             while (!task->done()){
                 using namespace std::chrono_literals;
-                std::this_thread::sleep_for(100ms);
+                std::this_thread::sleep_for(50ms);
             }
         }
         pool.terminate();
@@ -253,6 +253,10 @@ void RenderEngine::createTasks(std::vector<RenderTask*> &tasks) {
     std::vector<int> spiral = spiralMap(row, col);
     std::reverse(spiral.begin(),spiral.end());
     reorder(tasks,spiral);
+}
+
+Image *RenderEngine::getImage() {
+    return this->image;
 }
 
 

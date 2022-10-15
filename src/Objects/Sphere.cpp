@@ -1,5 +1,5 @@
 //
-// Created by maart on 30/09/2022.
+// Created by Maarten Van Loo on 30/09/2022.
 //
 
 #include <iostream>
@@ -16,15 +16,15 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
     double b = Vec4::dot(oc,tr.dir());
     double c = Vec4::dot(oc,oc)-1;
     double discrim = b*b-a*c;
-    if (discrim < 0.0){
+    if (discrim < -0.00001){
         return false;
     }
-    double discRoot = sqrt(discrim);
+    double discRoot = sqrt(std::fabs(discrim));
     auto hit1 = float((-b-discRoot)/a);
     auto hit2 = float((-b+discRoot)/a);
 
     int num = 0;
-    if (hit1 > 0){
+    if (hit1 > 0.00001){
         intersection.hit.emplace_back();
         intersection.hit[0].t = hit1;
         intersection.hit[0].obj = this;
@@ -33,7 +33,7 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
         intersection.hit[0].entering = true;
         num++;
     }
-    if (hit2 > 0){
+    if (hit2 > 0.00001){
         intersection.hit.emplace_back();
         intersection.hit[num].t = hit2;
         intersection.hit[num].obj = this;

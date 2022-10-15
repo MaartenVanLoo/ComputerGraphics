@@ -1,6 +1,7 @@
 target_sources(MRay
         PUBLIC
         Screen.cpp
+        LiveScreen.cpp
         )
 #[[target_sources(I_ComputerGraphics
         PUBLIC

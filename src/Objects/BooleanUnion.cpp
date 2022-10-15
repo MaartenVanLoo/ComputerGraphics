@@ -1,5 +1,5 @@
 //
-// Created by maart on 13/10/2022.
+// Created by Maarten Van Loo on 13/10/2022.
 //
 
 #include <Objects/BooleanUnion.h>

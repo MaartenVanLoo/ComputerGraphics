@@ -49,6 +49,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
     sample.add(Color3(obj->getMaterial().ambient));
 
     Vec4 normal = obj->getTransform() * first.normal;
+    normal.set<3>(0);
     normal.normalize();
 
     // diff & spec
@@ -83,6 +84,21 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
             sample.add(specColor);
         }
 
+    }
+
+    if (primaryRay.getDepth() == options.maxRayBounce)
+        return sample;
+    //reflections
+    if (obj->getMaterial().shininess > options.shininessThreshold){
+        //get reflected ray,
+        Ray reflected;
+        reflected.setPos(first.point + options.eps * normal);
+        Vec4 d = primaryRay.dir() - 2 *(normal.dot(primaryRay.dir()))*normal;
+        reflected.setDir(d);
+        reflected.setDepth(primaryRay.getDepth() + 1);
+
+        //recursive call to shade
+        sample.add(obj->getMaterial().shininess * shade(reflected));
     }
     return sample;
 }

@@ -19,7 +19,16 @@ namespace MRay {
     enum keycodes {
         esc = 27,
         f = 102,
-        s = 115
+        s = 115,
+        c = 99,
+        z = 122,
+        q = 113,
+        d = 100,
+        e = 101,
+        a = 97,
+        space = 32,
+        _plus = 43,
+        _minus = 45
     };
 
     class Image {
@@ -27,6 +36,8 @@ namespace MRay {
         Image();
 
         Image(Resolution resolution);
+
+        Image(Image &im);
 
         const cv::Mat &getImageBuffer() const;
 

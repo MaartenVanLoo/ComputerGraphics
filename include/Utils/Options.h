@@ -1,5 +1,5 @@
 //
-// Created by maart on 4/10/2022.
+// Created by Maarten Van Loo on 4/10/2022.
 //
 
 #ifndef I_COMPUTERGRAPHICS_OPTIONS_H
@@ -23,6 +23,10 @@ namespace MRay {
         ShaderTypes shaderType = Phong;
         bool enableAliasing = false;
         int oversamplingRate = 1;
+
+        float shininessThreshold = 0.0001;
+        int maxRayBounce = 1;
+        float eps = 1e-4;
     };
 
 

@@ -1,5 +1,5 @@
 //
-// Created by maart on 14/10/2022.
+// Created by Maarten Van Loo on 14/10/2022.
 //
 
 #ifndef I_COMPUTERGRAPHICS_BOOLEANDIFFERENCE_H
