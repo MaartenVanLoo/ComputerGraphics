@@ -25,8 +25,9 @@ Texture *Object::getTexture() {
     return this->texture;
 }
 
-Object::Object() {
-    this->computeBoundingBox();
+BoundingBox& MRay::Object::getBoundingBox(){
+    return this->bb;
 }
+
 
 

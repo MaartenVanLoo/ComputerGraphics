@@ -26,13 +26,13 @@ int main() {
     MRay::Camera camera = MRay::Camera();
     camera.setPosition(MRay::Vec4(-9,0,2,1));
     camera.setSensor(MRay::Sensor(360,240));
-    camera.setResolution(MRay::Resolution(MRay::Screensize::_16K));
+    camera.setResolution(MRay::Resolution(MRay::Screensize::_64K));
     camera.setFocalLength(100);
 
-    //MRay::RenderEngine engine(&scene, &camera, options);
-    //engine.render();
-    MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera);
-    liveScreen.show();
+    MRay::RenderEngine engine(&scene, &camera, options);
+    engine.render();
+    //MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera);
+    //liveScreen.show();
 
     /*sequence render:
     for(int i =0; i < 720; i+=5){

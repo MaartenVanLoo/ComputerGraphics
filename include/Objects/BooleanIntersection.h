@@ -12,6 +12,8 @@ namespace MRay {
 
         bool hitPoint(Ray &ray, Intersection &intersection) override;
 
+        void computeBoundingBox() override;
+
         Vec4 normal(Vec4 &point) const override;
     };
 }

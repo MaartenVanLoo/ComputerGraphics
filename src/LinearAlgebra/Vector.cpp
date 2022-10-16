@@ -268,7 +268,7 @@ MRay::Vec4::Vec4(float x, float y, float z, float w) {
 #endif
 
 }
-MRay::Vec4::Vec4(Vec3 &vec3, float w) {
+MRay::Vec4::Vec4(const Vec3 &vec3, float w) {
 #if SET_DATA
     //double:
     //this->data = _mm256_set_pd(w, vec3.data[2],vec3.data[1],vec3.data[0]); //double

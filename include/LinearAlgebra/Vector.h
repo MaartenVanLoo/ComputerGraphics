@@ -123,7 +123,7 @@ namespace MRay {
     public:
         explicit Vec4(float x = 0.0, float y = 0.0, float z = 0.0, float w = 0.0);
 
-        explicit Vec4(Vec3 &vec3, float w = 0.0);
+        explicit Vec4(const Vec3 &vec3, float w = 0.0);
 
         // Copy conclassor
         Vec4(const Vec4 &p1);

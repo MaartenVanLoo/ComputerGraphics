@@ -10,7 +10,10 @@ using namespace MRay;
 //https://www.shadertoy.com/view/ld23DV
 //https://iquilezles.org/articles/boxfunctions/
 bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
-// convert from world to box space
+    //bounding box test
+    if (!this->bb.hit(ray)) return false;
+
+    // convert from world to box space
     Ray tr = ray.transform(this->invtransform);
 /*
     //Vec4 rd = ray.dir();

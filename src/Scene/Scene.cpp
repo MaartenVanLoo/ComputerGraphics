@@ -36,6 +36,7 @@ std::ostream &MRay::operator<<(std::ostream &os, const Scene &scene) {
 }
 
 void MRay::Scene::addObject(Object *obj) {
+    obj->computeBoundingBox();
     this->objects.push_back(obj);
 }
 void MRay::Scene::addLight(Light* light) {
@@ -216,7 +217,7 @@ void Scene::load(std::string &file) {
     //BooleanIntersection
     obj1 = new Sphere(Vec4(3,-1.8,8,1),1);
     obj1->setMaterial(MaterialsLibrary::red_plastic());
-    //this->addObject(obj);
+    this->addObject(obj);
 
     obj2 = new Sphere(Vec4(3,-2.2,8,1),1);
     obj2->setMaterial(MaterialsLibrary::red_plastic());

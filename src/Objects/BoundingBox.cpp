@@ -6,23 +6,25 @@
 #include <vector>
 
 MRay::BoundingBox::BoundingBox() {
-
+    this->min = Vec4(0,0,0,1.0);
+    this->max = Vec4(0,0,0 ,1.0);
 }
 
 MRay::BoundingBox::BoundingBox(const MRay::Vec3 &min, const MRay::Vec3 &max) {
-
+    this->min = Vec4(min,1.0);
+    this->max = Vec4(max,1.0);
 }
 
 void MRay::BoundingBox::transform(const MRay::Matrix4 &transform) {
     //generate corner points:
-    Vec4 p1 = Vec4(min.get<_X>(),min.get<_Y>(),min.get<_Z>(),0);
-    Vec4 p2 = Vec4(min.get<_X>(),min.get<_Y>(),max.get<_Z>(),0);
-    Vec4 p3 = Vec4(min.get<_X>(),max.get<_Y>(),min.get<_Z>(),0);
-    Vec4 p4 = Vec4(min.get<_X>(),max.get<_Y>(),max.get<_Z>(),0);
-    Vec4 p5 = Vec4(max.get<_X>(),min.get<_Y>(),min.get<_Z>(),0);
-    Vec4 p6 = Vec4(max.get<_X>(),min.get<_Y>(),max.get<_Z>(),0);
-    Vec4 p7 = Vec4(max.get<_X>(),max.get<_Y>(),min.get<_Z>(),0);
-    Vec4 p8 = Vec4(max.get<_X>(),max.get<_Y>(),max.get<_Z>(),0);
+    Vec4 p1 = Vec4(min.get<_X>(),min.get<_Y>(),min.get<_Z>(),1);
+    Vec4 p2 = Vec4(min.get<_X>(),min.get<_Y>(),max.get<_Z>(),1);
+    Vec4 p3 = Vec4(min.get<_X>(),max.get<_Y>(),min.get<_Z>(),1);
+    Vec4 p4 = Vec4(min.get<_X>(),max.get<_Y>(),max.get<_Z>(),1);
+    Vec4 p5 = Vec4(max.get<_X>(),min.get<_Y>(),min.get<_Z>(),1);
+    Vec4 p6 = Vec4(max.get<_X>(),min.get<_Y>(),max.get<_Z>(),1);
+    Vec4 p7 = Vec4(max.get<_X>(),max.get<_Y>(),min.get<_Z>(),1);
+    Vec4 p8 = Vec4(max.get<_X>(),max.get<_Y>(),max.get<_Z>(),1);
 
     //transform
     p1 = transform * p1;
@@ -64,5 +66,10 @@ bool MRay::BoundingBox::hit(const MRay::Ray &ray) {
     Vec4 tmax = Vec4::max(t0,t1);
 
     return tmin.max() <= tmax.min();
+}
+
+void MRay::BoundingBox::intersect(const MRay::BoundingBox &box) {
+    this->min = Vec4::max(this->min,box.min);
+    this->max = Vec4::min(this->max,box.max);
 }
 

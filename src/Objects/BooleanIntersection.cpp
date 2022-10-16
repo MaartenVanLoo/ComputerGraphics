@@ -6,6 +6,9 @@
 #include <algorithm>
 using namespace MRay;
 bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection) {
+    //bounding box test
+    if (!this->bb.hit(ray)) return false;
+
     if (intersection.leftHit == nullptr) intersection.leftHit = new Intersection();
     if (intersection.rightHit == nullptr) intersection.rightHit = new Intersection();
 
@@ -55,3 +58,10 @@ Vec4 BooleanIntersection::normal(Vec4 &point) const {
 }
 
 BooleanIntersection::BooleanIntersection(Object *left, Object *right) : BooleanObject(left, right) {}
+
+void BooleanIntersection::computeBoundingBox() {
+    this->left->computeBoundingBox();
+    this->right->computeBoundingBox();
+    this->bb = this->left->getBoundingBox();
+    this->bb.intersect(this->right->getBoundingBox());
+}

@@ -7,6 +7,9 @@
 
 using namespace MRay;
 bool BooleanUnion::hitPoint(Ray &ray, Intersection &intersection) {
+    //bounding box test
+    if (!this->bb.hit(ray)) return false;
+
     if (intersection.leftHit == nullptr) intersection.leftHit = new Intersection();
     if (intersection.rightHit == nullptr) intersection.rightHit = new Intersection();
 
@@ -59,3 +62,10 @@ Vec4 BooleanUnion::normal(Vec4 &point) const {
 }
 
 BooleanUnion::BooleanUnion(Object *left, Object *right) : BooleanObject(left, right) {}
+
+void BooleanUnion::computeBoundingBox() {
+    this->left->computeBoundingBox();
+    this->right->computeBoundingBox();
+    this->bb = this->left->getBoundingBox();
+    this->bb.add(this->right->getBoundingBox());
+}

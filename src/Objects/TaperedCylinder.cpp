@@ -9,6 +9,9 @@ MRay::TaperedCylinder::TaperedCylinder(float s) :s(s){
 }
 
 bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &intersection) {
+    //bounding box test
+    //if (!this->bb.hit(ray)) return false;
+
     Ray tr = ray.transform(this->invtransform);
     int num = 0;
 
@@ -110,6 +113,7 @@ MRay::Vec4 MRay::TaperedCylinder::normal(Vec4 &point) const  {
 }
 
 void MRay::TaperedCylinder::computeBoundingBox() {
-    this->bb = BoundingBox(Vec3(-0.1,-0.1,-0.1),Vec3(1.1,1.1,1.1)); //additional margin to avoid precision errors
+    float m = float(std::max(s,1.0f)* 1.1);
+    this->bb = BoundingBox(Vec3(-m,-m,-0.1),Vec3(m,m,1.1)); //additional margin to avoid precision errors
     this->bb.transform(this->transform);
 }

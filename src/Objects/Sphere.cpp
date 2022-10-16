@@ -9,6 +9,9 @@ using namespace MRay;
 //https://www.shadertoy.com/view/4d2XWV
 //https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
 bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
+    //bounding box test
+    if (!this->bb.hit(ray)) return false;
+
     Ray tr = ray.transform(this->invtransform);
     Vec4 oc = tr.pos()-Vec4(0,0,0,1);
 

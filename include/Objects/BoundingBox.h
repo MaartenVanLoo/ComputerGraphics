@@ -16,6 +16,8 @@ namespace MRay{
         BoundingBox(const Vec3 &min, const Vec3 &max);
         void transform(const Matrix4  &transform);
         void add(const BoundingBox &box);
+        void intersect(const BoundingBox &box);
+
         bool hit(const Ray &ray);
 
     private:

@@ -7,6 +7,9 @@
 using namespace MRay;
 
 bool BooleanDifference::hitPoint(Ray &ray, Intersection &intersection) {
+    //bounding box test
+    if (!this->bb.hit(ray)) return false;
+
     if (intersection.leftHit == nullptr) intersection.leftHit = new Intersection();
     if (intersection.rightHit == nullptr) intersection.rightHit = new Intersection();
 
@@ -64,3 +67,9 @@ Vec4 BooleanDifference::normal(Vec4 &point) const {
 }
 
 BooleanDifference::BooleanDifference(Object *left, Object *right) : BooleanObject(left, right) {}
+
+void BooleanDifference::computeBoundingBox() {
+    this->left->computeBoundingBox();
+    this->right->computeBoundingBox();
+    this->bb = this->left->getBoundingBox(); //object never larger than the "positive" object
+}

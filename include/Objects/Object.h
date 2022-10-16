@@ -25,16 +25,16 @@ namespace MRay {
 
     class Object : public Transform {
     public:
-        Object();
         virtual ~Object();
 
         virtual bool hitPoint(Ray &ray, Intersection &intersection) = 0;
 
-        virtual void computeBoundingBox() = 0;
+        virtual void computeBoundingBox(){};
         void setMaterial(Material mtrl);
         void setTexture(Texture *texture);
 
         Material &getMaterial();
+        BoundingBox &getBoundingBox();
         Texture *getTexture();
     protected:
         Material mtrl;
