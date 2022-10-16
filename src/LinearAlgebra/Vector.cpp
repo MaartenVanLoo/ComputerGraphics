@@ -405,7 +405,7 @@ float MRay::Vec4::abs(const Vec4 &vec) {
 
 float MRay::Vec4::sum() const{
 #if SSE_AVX_EXTENSIONS
-    return this->get(0)+this->get(1)+this->get(2)+this->get(3);
+    return this->get<0>()+this->get<1>()+this->get<2>()+this->get<3>();
 #else
     return this->data[0] + this->data[1] + this->data[2] + this->data[3];
 #endif
@@ -416,7 +416,7 @@ float MRay::Vec4::sum(const Vec4 &vec) {
 
 float MRay::Vec4::sum3() const {
 #if SSE_AVX_EXTENSIONS
-    return this->get(0)+this->get(1)+this->get(2);
+    return this->get<0>()+this->get<1>()+this->get<2>();
 #else
     return this->data[0] + this->data[1] + this->data[2];
 #endif
@@ -432,7 +432,7 @@ float MRay::Vec4::max() const {
     //_mm_store_ps (this->data, tmp);
     //return std::min(std::min(tmp.data[0],tmp.data[1]),std::min(tmp.data[2],tmp.data[3])); //other option if get doesn't work fine
     //notice, only 1 cycle latency for get in avx, without avx it is equivalent to [] => probably fine?
-    return std::max(std::max(this->get(0),this->get(1)),std::max(this->get(2),this->get(3)));
+    return std::max(std::max(this->get<0>(),this->get<1>()),std::max(this->get<2>(),this->get<3>()));
 #else
     return std::max(std::max(this->data[0],this->data[1]),std::max(this->data[2],this->data[3]));
 #endif
@@ -444,7 +444,7 @@ float MRay::Vec4::max(const Vec4 &vec) {
 float MRay::Vec4::max3() const {
 #if SSE_AVX_EXTENSIONS
     //notice, only 1 cycle latency for get in avx, without avx it is equivalent to [] => probably fine?
-    return std::max(std::max(this->get(0),this->get(1)),this->get(2));
+    return std::max(std::max(this->get<0>(),this->get<1>()),this->get<2>());
 #else
     return std::max(std::max(this->data[0],this->data[1]),this->data[2]);
 #endif
@@ -459,7 +459,7 @@ float MRay::Vec4::min() const {
     //_mm_store_ps (this->data, tmp);
     //return std::min(std::min(tmp.data[0],tmp.data[1]),std::min(tmp.data[2],tmp.data[3])); //other option if get doesn't work fine
     //notice, only 1 cycle latency for get in avx, without avx it is equivalent to [] => probably fine?
-    return std::min(std::min(this->get(0),this->get(1)),std::min(this->get(2),this->get(3)));
+    return std::min(std::min(this->get<0>(),this->get<1>()),std::min(this->get<2>(),this->get<3>()));
 #else
     return std::min(std::min(this->data[0],this->data[1]),std::min(this->data[2],this->data[3]));
 #endif
@@ -470,7 +470,7 @@ float MRay::Vec4::min(const Vec4 &vec) {
 float MRay::Vec4::min3() const {
 #if SSE_AVX_EXTENSIONS
     //notice, only 1 cycle latency for get in avx, without avx it is equivalent to [] => probably fine?
-    return std::min(std::min(this->get(0),this->get(1)),this->get(2));
+    return std::min(std::min(this->get<0>(),this->get<1>()),this->get<2>());
 #else
     return std::min(std::min(this->data[0],this->data[1]),this->data[2]);
 #endif

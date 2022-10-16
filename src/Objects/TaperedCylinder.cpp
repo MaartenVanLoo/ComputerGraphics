@@ -10,7 +10,7 @@ MRay::TaperedCylinder::TaperedCylinder(float s) :s(s){
 
 bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &intersection) {
     //bounding box test
-    //if (!this->bb.hit(ray)) return false;
+    if (!this->bb.hit(ray)) return false;
 
     Ray tr = ray.transform(this->invtransform);
     int num = 0;

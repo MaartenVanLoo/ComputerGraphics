@@ -65,7 +65,7 @@ bool MRay::BoundingBox::hit(const MRay::Ray &ray) {
     Vec4 tmin = Vec4::min(t0,t1);
     Vec4 tmax = Vec4::max(t0,t1);
 
-    return tmin.max() <= tmax.min();
+    return tmin.max3() <= tmax.min3();
 }
 
 void MRay::BoundingBox::intersect(const MRay::BoundingBox &box) {
