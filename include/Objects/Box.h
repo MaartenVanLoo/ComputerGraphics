@@ -19,6 +19,8 @@ namespace MRay {
 
         bool hitPoint(Ray &ray, Intersection &intersection) override;
 
+        void computeBoundingBox() override;
+
         Vec4 boxNormal(int surf);
 
         friend std::ostream &operator<<(std::ostream &os, const Box &box);

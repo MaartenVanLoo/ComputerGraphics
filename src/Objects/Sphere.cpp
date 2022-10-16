@@ -67,6 +67,11 @@ Vec4 MRay::Sphere::normal(const Vec4 &point) const{
     return n;
 }
 
+void Sphere::computeBoundingBox() {
+    this->bb = BoundingBox(Vec3(-1.1,-1.1,-1.1),Vec3(1.1,1.1,1.1)); //additional margin to avoid precision errors
+    this->bb.transform(this->transform);
+}
+
 
 
 

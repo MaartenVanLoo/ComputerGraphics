@@ -130,4 +130,9 @@ MRay::Box::Box(const Vec4 &pos, const Vec4 &size) {
     this->translate(pos.get<0>(),pos.get<1>(),pos.get<2>());
 }
 
+void Box::computeBoundingBox() {
+    this->bb = BoundingBox(Vec3(-1.1,-1.1,-1.1),Vec3(1.1,1.1,1.1)); //additional margin to avoid precision errors
+    this->bb.transform(this->transform);
+}
+
 

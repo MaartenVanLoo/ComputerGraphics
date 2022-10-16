@@ -16,6 +16,7 @@
 #include "Camera/CameraUtils.h"
 #include "Transform/Transform.h"
 #include "Intersection.h"
+#include "BoundingBox.h"
 
 namespace MRay {
     struct Hit;
@@ -24,10 +25,12 @@ namespace MRay {
 
     class Object : public Transform {
     public:
+        Object();
         virtual ~Object();
 
         virtual bool hitPoint(Ray &ray, Intersection &intersection) = 0;
 
+        virtual void computeBoundingBox() = 0;
         void setMaterial(Material mtrl);
         void setTexture(Texture *texture);
 
@@ -36,6 +39,7 @@ namespace MRay {
     protected:
         Material mtrl;
         Texture* texture=nullptr;
+        BoundingBox bb;
     };
 
 }

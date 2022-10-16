@@ -20,8 +20,8 @@ int main() {
     options.enableGui = true;
     options.multicore = true;
     options.quitOnFinish = false;
-    //options.shaderType = MRay::ShaderTypes::Phong;
-    options.shaderType = MRay::ShaderTypes::CookTorrance;
+    options.shaderType = MRay::ShaderTypes::Phong;
+    //options.shaderType = MRay::ShaderTypes::CookTorrance;
 
     MRay::Camera camera = MRay::Camera();
     camera.setPosition(MRay::Vec4(-9,0,2,1));
@@ -29,10 +29,10 @@ int main() {
     camera.setResolution(MRay::Resolution(MRay::Screensize::_16K));
     camera.setFocalLength(100);
 
-    MRay::RenderEngine engine(&scene, &camera, options);
-    engine.render();
-    //MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera);
-    //liveScreen.show();
+    //MRay::RenderEngine engine(&scene, &camera, options);
+    //engine.render();
+    MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera);
+    liveScreen.show();
 
     /*sequence render:
     for(int i =0; i < 720; i+=5){

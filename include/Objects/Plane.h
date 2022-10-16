@@ -25,6 +25,8 @@ namespace MRay {
 
         bool hitPoint(Ray &ray, Intersection &intersection) override;
 
+        void computeBoundingBox() override;
+
     protected:
         Vec4 pos;    // position describes to translation of the plane
         Vec4 norm;   // normal vector fully describes the direction of a plane;

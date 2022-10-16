@@ -108,3 +108,8 @@ MRay::Vec4 MRay::TaperedCylinder::normal(Vec4 &point) const  {
     if (point.get<_Z>() == 1) return Vec4(0, 0, 1, 0);  //top plane
     return Vec4(point.get<_X>(), point.get<_Y>(), -(this->s - 1) * (1 + (this->s - 1) * point.get<_Z>()), 0);                       //wall
 }
+
+void MRay::TaperedCylinder::computeBoundingBox() {
+    this->bb = BoundingBox(Vec3(-0.1,-0.1,-0.1),Vec3(1.1,1.1,1.1)); //additional margin to avoid precision errors
+    this->bb.transform(this->transform);
+}

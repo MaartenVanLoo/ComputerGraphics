@@ -85,8 +85,8 @@ Material MaterialsLibrary::cyan_plastic(){
 /// Based on PVP, polyvinylpyrrolidone
 /// \return
 Material MaterialsLibrary::green_plastic(){
-        return Material(0.0, 0.0, 0.0, 0.1, 0.05, 0.1, 0.05, 0.05, 0.45, .9*128,
-                        1.5245,1.5299,1.5413);
+        //return Material(0.0, 0.0, 0.0, 0.1, 0.05, 0.1, 0.05, 0.05, 0.45, .9*128,
+        //                1.5245,1.5299,1.5413);
         return Material(0.0, 0.0, 0.0, 0.1, 0.35, 0.1, 0.45, 0.55, 0.45, .25*128,
                         1.5245,1.5299,1.5413);
 }

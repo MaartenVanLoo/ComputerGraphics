@@ -32,7 +32,8 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
     if (!getFirstHit(primaryRay, first, intersection)){
         //no hit, set background color:
         //sample.add(Color3(0x87, 0xCE, 0xFA));
-        sample.add(Color3(0, 0,0));
+        sample.add(options.background);
+        //sample.add(Color3(0, 0,0));
         return sample;
         //return color;
     }
@@ -47,6 +48,9 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
     Vec4 normal = obj->getTransform() * first.normal;
     normal.set<3>(0);
     normal.normalize();
+    //reverse normal when exiting the object
+    if (!first.entering)
+        normal = -normal;
 
     // diff & spec
     for (const Light* light: scene->getLights()){

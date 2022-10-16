@@ -16,13 +16,15 @@ bool MRay::Plane::hitPoint(Ray &ray, Intersection &intersection) {
             intersection.hit[0].obj = this;
             intersection.hit[0].point = ray.at(float(tHit));
             intersection.hit[0].normal = denom < 0?this->norm:-this->norm; //if denom > 0 hit on top of plane, otherwise on the bottom //todo: check if correct!
-            intersection.hit[0].entering = denom > 0;
+            intersection.hit[0].entering = denom < 0;
             intersection.hit.emplace_back();
             intersection.hit[1].t = tHit;
             intersection.hit[1].obj = this;
             intersection.hit[1].point = intersection.hit[0].point; //same as entry point
             intersection.hit[1].normal = -intersection.hit[0].normal; // opposite of entering node todo: check if correct!
-            intersection.hit[1].entering = denom < 0; //ray leaves at same place
+            intersection.hit[1].entering = denom > 0; //ray leaves at same place
+
+            if(!intersection.hit[0].entering) std::swap(intersection.hit[0], intersection.hit[1]); //first enter than leave!
             return true;
         }
 
@@ -39,6 +41,11 @@ MRay::Plane::Plane(float px, float py, float pz, float nx, float ny, float nz) {
 
 Vec4 MRay::Plane::normal(Vec4 &point) const  {
     return this->norm;
+}
+
+void Plane::computeBoundingBox() {
+    this->bb = BoundingBox();
+    this->bb.transform(this->transform);
 }
 
 

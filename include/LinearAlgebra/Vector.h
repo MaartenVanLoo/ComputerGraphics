@@ -185,7 +185,7 @@ namespace MRay {
         float max() const;
 
         static float max(const Vec4 &vec);
-
+        static Vec4 max(Vec4 lhs, const Vec4& rhs);
         //max of first 3 values (sometimes needed when only xyz is required
         float max3() const;
 
@@ -195,7 +195,7 @@ namespace MRay {
         float min() const;
 
         static float min(const Vec4 &vec);
-
+        static Vec4 min(Vec4 lhs, const Vec4& rhs);
         //min of first 3 values (sometimes needed when only xyz is required
         float min3() const;
 

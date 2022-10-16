@@ -25,4 +25,8 @@ Texture *Object::getTexture() {
     return this->texture;
 }
 
+Object::Object() {
+    this->computeBoundingBox();
+}
+
 

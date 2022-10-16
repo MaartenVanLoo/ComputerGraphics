@@ -24,6 +24,7 @@ namespace MRay {
         /// \return
         Vec4 normal(const Vec4 &point) const;
 
+        void computeBoundingBox() override;
 
         friend std::ostream &operator<<(std::ostream &os, const Sphere &sphere);
 

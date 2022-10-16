@@ -37,7 +37,8 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
 
     if (!getFirstHit(primaryRay, first, intersection)){
         //no hit, set background color:
-        sample.add(Color3(0x87, 0xCE, 0xFA));
+        sample.add(options.background);
+        //sample.add(Color3(0x87, 0xCE, 0xFA));
         return sample;
     }
 
@@ -73,14 +74,14 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
         float mDotH = h.dot(normal);
         if (mDotH > 0){
             float delta = std::acos(normal.dot(h));
-            float d = this->beckmannDistribution(delta , 0.7f);
+            float d = this->beckmannDistribution(delta , 0.2f);
 
             float hDotS = h.dot(s);
             float mDotV = normal.dot(v);
             float g = float(std::fmin(1.0f,2.0f*std::fmin(mDotH*mDotS/hDotS,mDotH*mDotV/mDotS)));
 
             Vec4 spec = fresnell(obj->getMaterial().fresnell, mDotS) * d * g / mDotV;
-            Color3 specColor = light->color * ks * dw * spec;
+            Color3 specColor = light->color * ks  * spec;
             sample.add(specColor);
         }
 

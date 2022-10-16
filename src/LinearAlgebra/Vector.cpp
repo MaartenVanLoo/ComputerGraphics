@@ -759,10 +759,11 @@ Vec4 Vec4::sqrt(Vec4 &vec) {
     res.data = _mm_sqrt_ps(vec.data);
     return res;
 #else
-    return Vec4(std::sqrt(vec.data[0]),
-                std::sqrt(vec.data[1]),
-                std::sqrt(vec.data[2]),
-                std::sqrt(vec.data[3]);
+    Vec4 res;
+    __m128 vec_ps = _mm_set_ps(vec.data[3], vec.data[2], vec.data[1], vec.data[0]); //float
+     vec_ps = _mm_sqrt_ps(vec_ps);
+    _mm_store_ps (res.data, rhs_ps);
+    return res;
 #endif
 #else
     return Vec4(std::sqrt(vec.data[0]),
@@ -853,8 +854,46 @@ Vec4 Vec4::tan(Vec4 &vec) {
 #endif
 }
 
-
-
+Vec4 Vec4::max(Vec4 lhs, const Vec4 &rhs) {
+#if SSE_AVX_EXTENSIONS
+#if SET_DATA
+    lhs.data = _mm_max_ps(lhs.data,rhs.data);
+    return lhs;
+#else
+    __m128 lhs_ps = _mm_set_ps(lhs.data[3], lhs.data[2], lhs.data[1], lhs.data[0]); //float
+    __m128 rhs_ps = _mm_set_ps(rhs.data[3], rhs.data[2], rhs.data[1], rhs.data[0]); //float
+     vec_ps = _mm_max_ps(lhs_ps, rhs_ps);
+    _mm_store_ps (lhs.data, rhs_ps);
+   return lhs;
+#endif
+#else
+    lhs.data[0] = std::max(rhs.data[0], lhs.data[0]);
+    lhs.data[1] = std::max(rhs.data[1], lhs.data[1]);
+    lhs.data[2] = std::max(rhs.data[2], lhs.data[2]);
+    lhs.data[3] = std::max(rhs.data[3], lhs.data[3]);
+    return lhs;
+#endif
+}
+Vec4 Vec4::min(Vec4 lhs, const Vec4 &rhs) {
+#if SSE_AVX_EXTENSIONS
+#if SET_DATA
+    lhs.data = _mm_min_ps(lhs.data,rhs.data);
+    return lhs;
+#else
+    __m128 lhs_ps = _mm_set_ps(lhs.data[3], lhs.data[2], lhs.data[1], lhs.data[0]); //float
+    __m128 rhs_ps = _mm_set_ps(rhs.data[3], rhs.data[2], rhs.data[1], rhs.data[0]); //float
+     vec_ps = _mm_min_ps(lhs_ps, rhs_ps);
+    _mm_store_ps (lhs.data, rhs_ps);
+    return lhs;
+#endif
+#else
+    lhs.data[0] = std::min(rhs.data[0], lhs.data[0]);
+    lhs.data[1] = std::min(rhs.data[1], lhs.data[1]);
+    lhs.data[2] = std::min(rhs.data[2], lhs.data[2]);
+    lhs.data[3] = std::min(rhs.data[3], lhs.data[3]);
+    return lhs;
+#endif
+}
 
 #pragma endregion
 
