@@ -15,19 +15,21 @@ int main() {
     stopwatch.start();
 
     MRay::Scene scene = MRay::Scene();
-    scene.load((std::string &) "");
+    scene.load("sdl.json");
     MRay::Options options;
     options.enableGui = true;
     options.multicore = true;
     options.quitOnFinish = false;
     options.shaderType = MRay::ShaderTypes::Phong;
     //options.shaderType = MRay::ShaderTypes::CookTorrance;
+    options.renderName = "render";
 
     MRay::Camera camera = MRay::Camera();
     camera.setPosition(MRay::Vec4(-9,0,2,1));
     camera.setSensor(MRay::Sensor(360,240));
-    camera.setResolution(MRay::Resolution(MRay::Screensize::_64K));
+    camera.setResolution(MRay::Resolution(MRay::Screensize::_1440p));
     camera.setFocalLength(100);
+
 
     MRay::RenderEngine engine(&scene, &camera, options);
     engine.render();

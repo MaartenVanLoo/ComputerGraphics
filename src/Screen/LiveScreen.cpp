@@ -45,11 +45,15 @@ MRay::LiveScreen::LiveScreen(Scene *scene, Camera *camera) {
 void MRay::LiveScreen::show() {
     this->options.enableGui = false;
     this->options.multicore = true;
+    this->options.renderName = "";
 
+    this->currentRes = Resolution(Screensize::_720p);
+    this->currentRes.width/=8;
+    this->currentRes.height/=8;
     this->renderFast();
 
-    gui_running = true,
-            this->gui = new std::thread(&MRay::LiveScreen::loop, this);
+    gui_running = true;
+    this->gui = new std::thread(&MRay::LiveScreen::loop, this);
 }
 
 void MRay::LiveScreen::hide(){
@@ -73,10 +77,20 @@ void MRay::LiveScreen::onMouse(int event,int x,int y,int flags,void *param){
         return; //only once every 100 ms;
     }
     cv::Rect renderArea =  cv::getWindowImageRect("Rendered Image");
-    cv::imshow("Rendered Image", resizeKeepAspectRatio(((LiveScreen*)(param))->image->getImageBuffer(), renderArea.size(),cv::Scalar(0,0,0)));
+    cv::Mat rImage = resizeKeepAspectRatio(((LiveScreen*)(param))->image->getImageBuffer(), renderArea.size(),cv::Scalar(0,0,0));
+    std::string word;
+    switch (((LiveScreen*)(param))->mode){
+        case Mode::strafe:
+            word = "Mode: strafe";
+            break;
+        case Mode::roll:
+            word = "Mode: roll";
+    }
+    cv::putText(rImage, word, cv::Point(20, 30), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 1);
+    cv::imshow("Rendered Image", rImage );
     ((LiveScreen*)(param))->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
     cv::waitKey(1);
-    std::cout << "Mouse event " << flags << std::endl;
+    //std::cout << "Mouse event " << flags << std::endl;
 }
 
 void MRay::LiveScreen::onMouseCrop(int event,int x,int y,int flags,void *param){
@@ -99,7 +113,18 @@ void MRay::LiveScreen::onMouseCrop(int event,int x,int y,int flags,void *param){
 void MRay::LiveScreen::showImage(const std::string& winname, const cv::Mat &image){
     if (cv::getWindowProperty("Rendered Image",cv::WND_PROP_VISIBLE) ==0) return; //image not visible
     cv::Rect renderArea =  cv::getWindowImageRect(winname);
-    cv::imshow(winname, resizeKeepAspectRatio(image, renderArea.size(),cv::Scalar(0,0,0)));
+    cv::Mat rImage = resizeKeepAspectRatio(image, renderArea.size(),cv::Scalar(0,0,0));
+    std::string word;
+    switch (this->mode){
+        case Mode::strafe:
+            word = "Mode: strafe";
+            break;
+        case Mode::roll:
+            word = "Mode: roll";
+            break;
+    }
+    cv::putText(rImage, word, cv::Point(20, 30), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(255, 0, 0), 1);
+    cv::imshow(winname, rImage );
 }
 bool MRay::LiveScreen::guiExists(const std::string &winname){
     try{
@@ -115,7 +140,7 @@ void MRay::LiveScreen::loop() {
     cv::Mat tmp;
     Vec4 dir;
     int key;
-    bool pendingRender = false;
+    bool pendingRender = true;
     int pendingFrames = 0;
     int maxPendingFrames = 5 ;
 
@@ -133,27 +158,26 @@ void MRay::LiveScreen::loop() {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
-        //std::cout << cv::getWindowProperty("Rendered Image",cv::WND_PROP_VISIBLE) << std::endl;
-        //std::cout << cv::getWindowProperty("Rendered Image",cv::WND_PROP_ASPECT_RATIO)  << std::endl;
-        if (this->lastUpdate <= this->image->getLastUpdate() +
-                                100) { //only update if pixels have changed (allow a difference of 100 ms to not miss a draw call;
-            showImage("Rendered Image", this->image->getImageBuffer());
-            //cv::Rect renderArea =  cv::getWindowImageRect("Rendered Image");
-            //cv::imshow("Rendered Image", resizeKeepAspectRatio(this->image->getImageBuffer(), renderArea.size(),cv::Scalar(0,0,0)));
-            this->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(
-                    std::chrono::steady_clock::now().time_since_epoch()).count();
-        }
-        key = cv::waitKey(50); //20 fps
-        //std::cout << key << std::endl;
+        key = cv::waitKey(100);
         switch (key) {
             case -1:
                 if (pendingRender){
-                    this->renderFast();
-                    showImage("Rendered Image", this->image->getImageBuffer());
-                    cv::waitKey(1); //force screen update
-                    pendingRender = false;
-                    pendingFrames = 0;
-                    pendingRender = false;
+                    long long now = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+                    if (pendingFrames == 0 && (now - this->lastUpdate) > 1000){ //no pending renders & last render was > 1sec ago, increase resolution
+                        this->renderFast();
+                        this->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+                        if (this->currentRes.width > getWidth(Screensize::_1440p)) pendingRender = false;
+                    }
+                    else if (pendingFrames != 0){
+                        //reset resolution
+                        this->currentRes = Resolution(Screensize::_720p);
+                        this->currentRes.width/=8;
+                        this->currentRes.height/=8;
+                        this->renderFast();
+                        this->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+                        pendingFrames = 0;
+                    }
+
                 }
                 break; //No key pressed
             case keycodes::esc:
@@ -162,18 +186,9 @@ void MRay::LiveScreen::loop() {
             case keycodes::f:
                 cv::setWindowProperty("Rendered Image", cv::WND_PROP_FULLSCREEN, cv::WINDOW_FULLSCREEN);
                 break;
-            case keycodes::z:
-                dir = this->camera->getDirection()*0.1;
-                this->camera->translate(dir.get<_X>(),dir.get<_Y>(),dir.get<_Z>());
-                //this->camera->setFocalLength(this->camera->getFocalLength()*1.1); //TODO: move forwards
-                std::cout << *this->camera << std::endl;
-                pendingRender = true;
-                pendingFrames++;
-                break;
-            case keycodes::s:
-                dir = this->camera->getDirection()*0.1;
-                this->camera->translate(-dir.get<_X>(),-dir.get<_Y>(),-dir.get<_Z>());
-                //this->camera->setFocalLength(this->camera->getFocalLength()/1.1); //TODO: move backwards
+            case keycodes::z: case keycodes::s: case keycodes::d:
+            case keycodes::q: case keycodes::e: case keycodes::a:
+                move(key);
                 std::cout << *this->camera << std::endl;
                 pendingRender = true;
                 pendingFrames++;
@@ -190,34 +205,14 @@ void MRay::LiveScreen::loop() {
                 pendingRender = true;
                 pendingFrames++;
                 break;
-            case keycodes::d:
-                this->camera->rotate(0,0,0.0872665); //rotate cw 5 degrees around z = 0
-                std::cout << *this->camera << std::endl;
-                pendingRender = true;
-                pendingFrames++;
-                break;
-            case keycodes::q:
-                this->camera->rotate(0,0,-0.0872665); //rotate ccw 5 degrees around z = 0
-                std::cout << *this->camera << std::endl;
-                pendingRender = true;
-                pendingFrames++;
-                break;
-            case keycodes::e:
-                this->camera->translate(0,0,0.5); //move up
-                std::cout << *this->camera << std::endl;
-                pendingRender = true;
-                pendingFrames++;
-                break;
-            case keycodes::a:
-                this->camera->translate(0,0,-0.5); //move down
-                std::cout << *this->camera << std::endl;
-                pendingRender = true;
-                pendingFrames++;
+            case keycodes::m:
+                //change mode:
+                this->mode=this->mode == Mode::strafe?Mode::roll:Mode::strafe;
+                showImage("Rendered Image", this->image->getImageBuffer());
                 break;
             case keycodes::space:
                 this->renderSlow();
                 showImage("Rendered Image", this->image->getImageBuffer());
-                cv::waitKey(1); //force screen update
                 pendingFrames = 0;
                 pendingRender = false;
                 break;
@@ -225,12 +220,11 @@ void MRay::LiveScreen::loop() {
                 std::cout << "key pressed:" << key << std::endl;
         }
         if (pendingRender && pendingFrames >= maxPendingFrames){ //force update after x numbers of updates (for smoother movement)
+            this->currentRes = Resolution(Screensize::_720p);
+            this->currentRes.width/=8;
+            this->currentRes.height/=8;
             this->renderFast();
-            showImage("Rendered Image", this->image->getImageBuffer());
-            cv::waitKey(1); //force screen update
-            pendingRender = false;
             pendingFrames = 0;
-            pendingRender = false;
         }
     }
     cv::destroyAllWindows();
@@ -243,27 +237,28 @@ MRay::LiveScreen::~LiveScreen() {
         this->gui->join();
         delete this->gui;
     }
-    if (this->scene != nullptr){
-        delete this->scene;
-    }
-    if (this->image != nullptr){
-        delete this->image;
-    }
+    delete this->scene;
+    delete this->image;
+
 }
 
 void LiveScreen::renderFast() {
-    this->camera->setResolution(Resolution(Screensize::_1080p));
-    RenderEngine engine = RenderEngine(scene,camera,options);
+    if (this->currentRes.width > getWidth(Screensize::_1440p)) return;
+    Resolution res= Resolution(this->currentRes.width, this->currentRes.height);
+    this->camera->setResolution(res);
+    RenderEngine engine = RenderEngine(this->scene,this->camera,this->options);
     engine.render();
-
     delete this->image;
     this->image = new Image(*engine.getImage());
-
+    this->showImage("Rendered Image", this->image->getImageBuffer());
+    this->currentRes.width*=2;
+    this->currentRes.height*=2;
 }
 
 
 void LiveScreen::renderSlow() {
-    this->camera->setResolution(Resolution(Screensize::_4K));
+    this->currentRes = Resolution(Screensize::_4K);
+    this->camera->setResolution(this->currentRes);
     RenderEngine engine = RenderEngine(scene,camera,options);
     engine.render();
 
@@ -271,3 +266,69 @@ void LiveScreen::renderSlow() {
     this->image = new Image(*engine.getImage());
 
 }
+
+void LiveScreen::move(int key) {
+    Vec4 lcs_X = this->camera->getTransform() * Vec4(1,0,0,0);
+    Vec4 lcs_Y = this->camera->getTransform() * Vec4(0,1,0,0);
+    Vec4 lcs_Z = this->camera->getTransform() * Vec4(0,0,1,0);
+    if (this->mode == LiveScreen::Mode::strafe){
+        switch(key){
+            case z: //forward
+                lcs_X *= 0.1;
+                this->camera->translate(lcs_X.get<_X>(),lcs_X.get<_Y>(),lcs_X.get<_Z>());
+                break;
+            case s: //backwards
+                lcs_X = -lcs_X*0.1;
+                this->camera->translate(lcs_X.get<_X>(),lcs_X.get<_Y>(),lcs_X.get<_Z>());
+                break;
+            case q: // left
+                lcs_Y *= 0.1;
+                this->camera->translate(lcs_Y.get<_X>(),lcs_Y.get<_Y>(),lcs_Y.get<_Z>());
+                break;
+            case d: //right
+                lcs_Y = -lcs_Y * 0.1;
+                this->camera->translate(lcs_Y.get<_X>(),lcs_Y.get<_Y>(),lcs_Y.get<_Z>());
+                break;
+            case e: //up
+                lcs_Z *= 0.1;
+                this->camera->translate(lcs_Z.get<_X>(),lcs_Z.get<_Y>(),lcs_Z.get<_Z>());
+                break;
+            case a: //down
+                lcs_Z = -lcs_Z * 0.1;
+                this->camera->translate(lcs_Z.get<_X>(),lcs_Z.get<_Y>(),lcs_Z.get<_Z>());
+                break;
+            default:
+                break;
+       }
+    }
+    else if(this->mode == LiveScreen::Mode::roll){
+        Vec4 pos = this->camera->getTransform().get<3>(); //last col = translation = position
+        this->camera->translate(-pos.get<_X>(),-pos.get<_Y>(),-pos.get<_Z>());//reset position to origin before rotation
+        switch(key){
+            case z: //pitch forward
+                this->camera->rotatef(CV_PI/90, lcs_Y); // -2° rotation
+                break;
+            case s: //pitch backward
+                this->camera->rotatef(-CV_PI/90, lcs_Y); // -2° rotation
+                break;
+            case q: // yaw left
+                this->camera->rotatef(CV_PI/90, lcs_Z); // -2° rotation
+                break;
+            case d: // yaw right
+                this->camera->rotatef(-CV_PI/90, lcs_Z); // -2° rotation
+                break;
+            case e: // roll ccw
+                this->camera->rotatef(CV_PI/90, lcs_X); // -2° rotation
+                break;
+            case a: // roll cw
+                this->camera->rotatef(-CV_PI/90, lcs_X); // -2° rotation
+                break;
+            default:
+                break;
+        }
+        this->camera->translate(pos.get<_X>(),pos.get<_Y>(),pos.get<_Z>());//reset position to original position before rotation
+    }
+
+
+}
+

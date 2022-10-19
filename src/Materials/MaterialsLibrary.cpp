@@ -156,5 +156,31 @@ Material MaterialsLibrary::gray_rubber() {
         return Material(0.02, 0.02, 0.02, 0.3, 0.3, 0.3, 0.4, 0.4, 0.4, .078125*128,
                         1.5245,1.5299,1.5413);
 }
-
-
+const std::unordered_map<std::string,Material> MaterialsLibrary::materials = std::unordered_map<std::string, Material>({
+    {"emerald",MaterialsLibrary::jade()},
+    {"jade",MaterialsLibrary::jade()},
+    {"obsidian",MaterialsLibrary::obsidian()},
+    {"pearl",MaterialsLibrary::pearl()},
+    {"ruby",MaterialsLibrary::ruby()},
+    {"turquoise",MaterialsLibrary::turquoise()},
+    {"brass",MaterialsLibrary::brass()},
+    {"bronze",MaterialsLibrary::bronze()},
+    {"chrome",MaterialsLibrary::chrome()},
+    {"copper",MaterialsLibrary::copper()},
+    {"gold",MaterialsLibrary::gold()},
+    {"silver",MaterialsLibrary::silver()},
+    {"black_plastic",MaterialsLibrary::black_plastic()},
+    {"cyan_plastic",MaterialsLibrary::cyan_plastic()},
+    {"green_plastic",MaterialsLibrary::green_plastic()},
+    {"red_plastic",MaterialsLibrary::red_plastic()},
+    {"white_plastic",MaterialsLibrary::white_plastic()},
+    {"yellow_plastic",MaterialsLibrary::yellow_plastic()},
+    {"gray_plastic",MaterialsLibrary::gray_plastic()},
+    {"black_rubber",MaterialsLibrary::black_rubber()},
+    {"cyan_rubber",MaterialsLibrary::cyan_rubber()},
+    {"green_rubber",MaterialsLibrary::green_rubber()},
+    {"red_rubber",MaterialsLibrary::red_rubber()},
+    {"white_rubber",MaterialsLibrary::white_rubber()},
+    {"yellow_rubber",MaterialsLibrary::yellow_rubber()},
+    {"gray_rubber",MaterialsLibrary::gray_rubber()},
+    });

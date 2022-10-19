@@ -5,25 +5,36 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} C:/Program Files/opencv/build)
 #find opencv
 set ("OpenCV_DIR" "C:/Program Files/opencv/build")
 set(OpenCV_STATIC ON)
-find_package( OpenCV REQUIRED)# PATH C:/Program Files/opencv/build/ NO_DEFAULT_PATH )
+find_package( OpenCV REQUIRED)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 link_directories(${CMAKE_BINARY_DIR}/lib)
 
 set(CMAKE_CXX_STANDARD 17)
 
 #resource files
-set (APP_ICON_RESOURCE_WINDOWS "resources.rc" include/Textures/Checkerboard.h include/Textures/Texture.h src/Render/RenderEngine.cpp)
+set (APP_ICON_RESOURCE_WINDOWS "resources.rc")
+
+
+
+add_library(jsoncpp STATIC)
+set_target_properties(jsoncpp PROPERTIES CXX_STANDARD 17)
+target_include_directories(jsoncpp PUBLIC ${CMAKE_SOURCE_DIR}/include)
 
 add_library(MRay STATIC)
 set_target_properties(MRay PROPERTIES CXX_STANDARD 17)
 target_include_directories(MRay PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(MRay PRIVATE jsoncpp)
 add_subdirectory(src)
+
 
 
 add_executable(I_ComputerGraphics main.cpp ${APP_ICON_RESOURCE_WINDOWS})
 target_include_directories(I_ComputerGraphics PUBLIC ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(I_ComputerGraphics PRIVATE ${OpenCV_LIBS})
 target_link_libraries(I_ComputerGraphics PRIVATE MRay)
+set_target_properties(I_ComputerGraphics PROPERTIES CXX_STANDARD 17)
+
+
 set_target_properties(I_ComputerGraphics PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/$<CONFIG>)
 

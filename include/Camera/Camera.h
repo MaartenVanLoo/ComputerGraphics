@@ -6,7 +6,7 @@
 #define I_COMPUTERGRAPHICS_CAMERA_H
 
 
-#include <ostream>
+#include <iostream>
 #include <Transform/Transform.h>
 #include <LinearAlgebra/Vector.h>
 #include <Ray.h>

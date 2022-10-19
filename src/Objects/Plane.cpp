@@ -42,6 +42,10 @@ MRay::Plane::Plane(float px, float py, float pz, float nx, float ny, float nz) {
     this->pos = Vec4(px, py, pz, 1);
     this->norm = Vec4(nx, ny, nz, 0);
 }
+Plane::Plane() {
+    this->pos = Vec4(0, 0, 0, 1);
+    this->norm = Vec4(0, 0, 1, 0);
+}
 
 Vec4 MRay::Plane::normal(Vec4 &point) const  {
     return this->norm;
@@ -51,6 +55,7 @@ void Plane::computeBoundingBox() {
     this->bb = BoundingBox();
     this->bb.transform(this->transform);
 }
+
 
 
 

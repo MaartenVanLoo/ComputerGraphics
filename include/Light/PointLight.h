@@ -11,6 +11,7 @@ namespace MRay {
 
     class PointLight : public Light {
     public:
+        PointLight(float px, float py, float pz);
         PointLight(const Vec4 &position);
 
         friend std::ostream &operator<<(std::ostream &os, const PointLight &light);

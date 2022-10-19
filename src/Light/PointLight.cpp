@@ -17,10 +17,15 @@ Vec4 MRay::PointLight::getVec(const Vec4 &point) const {
     return this->position - point;
 }
 
+PointLight::PointLight(float px, float py, float pz) {
+    this->position = Vec4(px,py,pz,1);
+}
 MRay::PointLight::PointLight(const Vec4 &position) : position(position) {}
 
 std::ostream &MRay::operator<<(std::ostream &os, const PointLight &light) {
     os << " position: " << light.position;
     return os;
 }
+
+
 

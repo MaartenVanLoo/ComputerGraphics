@@ -5,6 +5,7 @@
 #ifndef I_COMPUTERGRAPHICS_MATERIALSLIBRARY_H
 #define I_COMPUTERGRAPHICS_MATERIALSLIBRARY_H
 #include "Material.h"
+#include <unordered_map>
 namespace MRay {
     class MaterialsLibrary {
     public:
@@ -38,6 +39,7 @@ namespace MRay {
 
         static Material gray_rubber();
         static Material gray_plastic();
+        static const std::unordered_map<std::string,Material> materials;
     };
 }
 #endif //I_COMPUTERGRAPHICS_MATERIALSLIBRARY_H

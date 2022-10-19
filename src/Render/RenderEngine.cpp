@@ -90,12 +90,13 @@ void RenderEngine::render() {
                 std::this_thread::sleep_for(50ms);
             }
             int i = task - renderTasks.begin();
-            if (progress < i*100/renderTasks.size()){
-                progress = i*100/renderTasks.size();
+            if (progress < i*100.0/renderTasks.size()){
+                progress = int(i*100.0/renderTasks.size());
                 RenderEngine::updateCli(progress);
             }
         }
         pool.terminate();
+        for (auto t: renderTasks) delete t; //cleanup tasks
     }
     else {
         for (int y = 0; y < this->camera->getResolution().height; y++) {
@@ -123,7 +124,7 @@ void RenderEngine::render() {
     stopwatch.reset();
     stopwatch.start();
     this->image->update();
-    this->image->save(options.renderName + ".png");
+    if (!options.renderName.empty()) this->image->save(options.renderName + ".png");
     //this->image->save(options.renderName+ ".bmp");
     stopwatch.stop();
     std::cout << "File saved in :" << stopwatch.elapsedms() << " ms\n";
@@ -280,6 +281,12 @@ Image *RenderEngine::getImage() {
 void RenderEngine::updateCli(int progress) {
     std::cout << "\r" << "Progress: " << std::setw(3) << progress << " %";
     std::cout.flush();
+}
+
+RenderEngine::~RenderEngine() {
+    delete this->image;
+    delete this->shader;
+    delete this->screen;
 }
 
 

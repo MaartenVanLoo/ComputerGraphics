@@ -5,7 +5,7 @@
 #ifndef I_COMPUTERGRAPHICS_RAY_H
 #define I_COMPUTERGRAPHICS_RAY_H
 
-#include <ostream>
+#include <iostream>
 #include "LinearAlgebra/Vector.h"
 #include "LinearAlgebra/Matrix.h"
 
@@ -38,7 +38,7 @@ namespace MRay {
 
         void setDepth(int d);
         void increaseDepth();
-        int getDepth();
+        int getDepth() const;
     private:
         Vec4 position = Vec4(0, 0, 0, 1);
         Vec4 direction = Vec4(0, 0, 0, 0);;

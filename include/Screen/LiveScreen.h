@@ -20,6 +20,10 @@
 namespace MRay {
 
     class LiveScreen {
+        enum Mode{
+            strafe,
+            roll
+        };
     public:
         LiveScreen() = default;
 
@@ -33,10 +37,10 @@ namespace MRay {
 
         virtual ~LiveScreen();
 
-        void renderFast();
-        void renderSlow();
+
         void showImage(const std::string& winname, const cv::Mat &image);
         bool guiExists(const std::string &winname);
+        void move(int key);
         static cv::Mat resizeKeepAspectRatio(const cv::Mat &input, const cv::Size &dstSize, const cv::Scalar &bgcolor);
 
     private:
@@ -45,14 +49,18 @@ namespace MRay {
         Camera *camera = nullptr;
         Options options = Options();
 
+        Mode mode = Mode::strafe;
+        Resolution currentRes = Resolution(Screensize::_720p);
+
         Image *image = nullptr;
-        Image *bufferimage;
         std::thread *gui = nullptr;
         std::atomic<bool> gui_running = false;
         long long lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::steady_clock::now().time_since_epoch()).count();
 
         void loop();
+        void renderFast();
+        void renderSlow();
 
         cv::Mat detailImage;
 

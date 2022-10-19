@@ -20,6 +20,7 @@
 #include <Textures/Texture.h>
 #include <fstream>
 #include <iostream>
+#include <json/json.h>
 
 #define workerjobs 12 //minimum number of jobs for a worker
 #define artificaldelay false
@@ -35,6 +36,7 @@ namespace MRay {
         virtual ~Scene();
 
         void addObject(Object *obj);
+        void clearObjects();
 
         void addLight(Light *light);
 
@@ -46,10 +48,14 @@ namespace MRay {
 
         friend std::ostream &operator<<(std::ostream &os, const Scene &scene);
 
-        void load(std::string &file);
+        void load(const std::string& file);
     private:
         std::vector<Light *> lights;
         std::vector<Object *> objects;
+
+        std::unordered_map<std::string, Material> parseMaterials(Json::Value& objects);
+        std::unordered_map<std::string, Object*> parseObjects(Json::Value& objects,std::unordered_map<std::string, Material> &materials);
+        std::unordered_map<std::string, Light*> parseLights(Json::Value& objects);
 
         friend RenderTask;
     };

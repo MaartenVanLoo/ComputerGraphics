@@ -62,6 +62,12 @@ void MRay::Transform::shear(float shXy, float shXz, float shYx, float shYz, floa
     this->invtransform = this->invtransform * Tz;
 }
 
+void Transform::rotatef(float angle, Vec4 &axis) {
+    Matrix4 Rx = MRay::AffineTransform::rotatef(angle,axis);
+    this->transform = Rx * this->transform;
+    MRay::AffineTransform::rotatef(Rx,-angle,axis);
+    this->invtransform = this->transform* Rx;
+}
 const Matrix4 &Transform::getTransform() const {
     return transform;
 }
@@ -69,6 +75,13 @@ const Matrix4 &Transform::getTransform() const {
 const Matrix4 &Transform::getInvtransform() const {
     return invtransform;
 }
+
+void Transform::resetTransform() {
+    this->transform = Matrix4::identity();
+    this->invtransform = Matrix4::identity();
+}
+
+
 
 #pragma endregion
 

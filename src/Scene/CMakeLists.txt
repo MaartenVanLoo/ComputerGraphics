@@ -1,6 +1,7 @@
 target_sources(MRay
         PUBLIC
         Scene.cpp
+        SDLParser.cpp
         )
 #[[target_sources(I_ComputerGraphics
         PUBLIC

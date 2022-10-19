@@ -18,7 +18,7 @@ add_subdirectory(Screen)
 add_subdirectory(Textures)
 add_subdirectory(Transform)
 add_subdirectory(Utils)
-
+add_subdirectory(lib_json)
 set_target_properties(MRay
         PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib/$<CONFIG>

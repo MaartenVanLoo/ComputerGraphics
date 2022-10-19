@@ -2,7 +2,7 @@
 // Created by Maarten Van Loo on 30/09/2022.
 //
 
-#include <iostream>
+
 #include <random>
 #include <Camera/Camera.h>
 using namespace MRay;

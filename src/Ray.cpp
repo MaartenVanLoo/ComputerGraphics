@@ -14,10 +14,7 @@ const Vec4 & MRay::Ray::dir() const{
 }
 
 
-std::ostream &MRay::operator<<(std::ostream &os, const Ray &ray) {
-    os << "Ray: {" << "position: " << ray.position << " direction: " << ray.direction << "}";
-    return os;
-}
+
 
 void  MRay::Ray::setPos(float x, float y, float z) {
     this->position = Vec4(x,y,z,1);
@@ -76,11 +73,14 @@ void Ray::increaseDepth(){
 }
 
 
-int Ray::getDepth() {
+int Ray::getDepth() const {
     return this->depth;
 }
 
-
+std::ostream &MRay::operator<<(std::ostream &os, const Ray &ray) {
+    os << "position: " << ray.position << " direction: " << ray.direction;
+    return os;
+}
 
 
 

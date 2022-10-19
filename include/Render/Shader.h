@@ -14,6 +14,8 @@ namespace MRay {
     public:
         Shader(Scene *scene, Camera* camera, Options& options) : scene(scene), camera(camera), options(options) {}
 
+        virtual ~Shader() {}
+
         virtual Color3 shade(int x, int y, Intersection &intersection) = 0;
         virtual Color3 shade(Ray &primaryRay, Intersection &intersection) = 0;
         virtual Color3 shade(int x, int y) = 0;
@@ -63,8 +65,8 @@ namespace MRay {
 
 
     protected:
-        Scene *scene;
-        Camera* camera;
+        Scene *scene;       //reference to, not owner
+        Camera* camera;     //reference to, not owner
         Options options;
     };
 }

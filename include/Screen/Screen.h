@@ -26,6 +26,7 @@ namespace MRay {
         d = 100,
         e = 101,
         a = 97,
+        m = 109,
         space = 32,
         _plus = 43,
         _minus = 45
@@ -40,7 +41,7 @@ namespace MRay {
         Image(Image &im);
 
         const cv::Mat &getImageBuffer() const;
-
+        void setImageBuffer(const cv::Mat &mat);
         void setPixel(int x, int y, Color3 rgb);
 
         Color3 getPixel(int x, int y);
@@ -50,6 +51,7 @@ namespace MRay {
         void update();
 
         void save(const std::string &filename);
+
 
     private:
         cv::Mat imageBuffer;

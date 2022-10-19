@@ -13,6 +13,8 @@ namespace MRay {
     public:
         RenderEngine(Scene *scene, Camera *camera, Options &options);
 
+        virtual ~RenderEngine();
+
 #pragma region Getters & Setters
         Scene *getScene() const;
         void setScene(Scene *scene);

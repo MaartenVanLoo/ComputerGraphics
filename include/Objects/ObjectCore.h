@@ -10,5 +10,9 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "TaperedCylinder.h"
+#include "BooleanObject.h"
+#include "BooleanUnion.h"
+#include "BooleanIntersection.h"
+#include "BooleanDifference.h"
 
 #endif //I_COMPUTERGRAPHICS_OBJECTCORE_H

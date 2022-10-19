@@ -69,7 +69,9 @@ void MRay::Image::update() {
 const cv::Mat &MRay::Image::getImageBuffer() const {
     return this->imageBuffer;
 }
-
+void Image::setImageBuffer(const cv::Mat &mat) {
+    this->imageBuffer = mat;
+}
 void MRay::Image::save(const std::string &filename) {
     cv::imwrite(filename, this->imageBuffer);
 }
@@ -78,6 +80,9 @@ Image::Image(Image &im) {
     this->imageBuffer = im.imageBuffer;
     this->lastUpdate = 0;
 }
+
+
+
 
 MRay::Screen::Screen(Image &image) {
     this->image = &image;

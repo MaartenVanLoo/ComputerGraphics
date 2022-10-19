@@ -17,6 +17,7 @@ namespace MRay {
  */
     class Plane : public Object {
     public:
+        Plane();
         Plane(const Vec4 &pos, const Vec4 &normal);
 
         Plane(float px, float py, float pz, float nx, float ny, float nz);
