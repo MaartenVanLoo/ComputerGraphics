@@ -1,0 +1,112 @@
+{
+  "config":{
+
+  },
+  "materials":{
+
+  },
+  "objects":{
+    "001.plane1":{
+			"type":"plane",
+			"material":"gray_rubber",
+			"texture":"checkboard"
+		},
+
+    "002.booster1_c7":{
+      "type":"TaperedCylinder",
+      "s":0.6,
+      "transformation":{
+          "rotate":[-1.57079632679,0,0],
+          "scale":[0.7, 0.7, 2],
+          "translate":[0, 3.0, 0]
+      },
+      "material":"green_plastic"
+    },
+    "003.booster1_c6":{
+      "type":"TaperedCylinder",
+      "s":1,
+      "transformation":{
+        "rotate":[1.57079632679,0,0],
+        "scale":[0.8, 0.8, 2],
+        "translate":[0,3.1,0]
+      },
+      "material":"red_plastic"
+    },
+    "004.booster1_c5":{
+      "type":"TaperedCylinder",
+      "s":1,
+      "transformation":{
+        "rotate":[1.57079632679,0,0],
+        "scale":[0.8, 0.8, 2],
+        "translate":[0, -3.85, 0]
+      },
+      "material":"yellow_plastic"
+    },
+    "005.booster1_c4":{
+      "type":"TaperedCylinder",
+      "s":1,
+      "transformation":{
+        "rotate":[1.57079632679, 0, 0],
+        "scale":[0.65, 0.65, 2],
+        "translate":[0, 1.5, 0]
+      },
+      "material":"cyan_plastic"
+    },
+    "006.booster1_c3":{
+      "type":"TaperedCylinder",
+      "s":0.666666666,
+      "transformation":{
+        "rotate":[-1.57079632679,0,0],
+        "scale":[0.9, 0.9, 4],
+        "translate":[0, -4.15, 0]
+      },
+      "material":"copper"
+    },
+    "007.booster1_U1":{
+      "type":"booleanUnion_",
+      "left":"002.booster1_c7",
+			"right":"003.booster1_c6"
+    },    
+    "008.booster1_U2":{
+      "type":"booleanUnion_",
+      "left":"005.booster1_c4",
+			"right":"006.booster1_c3"
+    },
+    "009.booster1_U3":{
+      "type":"booleanUnion_",
+      "left":"007.booster1_U1",
+			"right":"008.booster1_U2"
+    },
+    "010.booster1_U4":{
+      "type":"booleanUnion_",
+      "left":"009.booster1_U3",
+			"right":"004.booster1_c5",
+      "transformation":{
+        "translate":[0, -4.65, 2]
+      }
+    },
+    "011.booster1_c0":{
+      "type":"TaperedCylinder_",
+      "s":1,
+      "transformation":{
+        "rotate":[1.57079632679, 0, 0],
+        "scale":[0.675, 0.675, 1.35]
+      },
+      "material":"brass"
+    }
+  },
+  "lights":{
+    "l1":{
+			"type":"pointlight",
+			"position":[0,0,30]
+		},
+    "l2":{
+			"type":"pointlight",
+			"position":[0,-10,30]
+		},
+    "l3":{
+			"type":"pointlight",
+			"position":[0,10,30]
+		}
+  }
+}

@@ -1,0 +1,30 @@
+{
+	"config":{
+
+	},
+	"materials":{
+
+	},
+	"objects":{
+		
+		"sphere1":{
+			"type":"sphere",
+			"transformation":{
+				"translate":[0,-2,2]
+			},
+			"material":"red_plastic"
+		}
+	},
+	"lights":{
+		"l1":{
+			"type":"pointlight",
+			"position":[-10,0,30]
+		},		
+		"l2":{
+			"type":"pointlight",
+			"position":[10,0,20]
+		}
+	}
+		
+	
+}
