@@ -39,7 +39,7 @@ namespace MRay {
         }
 
         template<int row, int col>
-        float set(float value) {
+        void set(float value) {
             assert(col <= 3 & col >= 0);
             this->data[col].set<row>(value);
         }
@@ -76,6 +76,7 @@ namespace MRay {
         //special matrices:
         static Matrix4 identity();
 
+        Matrix4 getTransposed() const;
 
         friend std::ostream &operator<<(std::ostream &os, const Matrix4 &matrix4);
 

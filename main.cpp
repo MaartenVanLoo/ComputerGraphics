@@ -15,17 +15,22 @@ int main() {
     stopwatch.start();
 
     MRay::Scene scene = MRay::Scene();
-    scene.load("sdl.json");
+    scene.hardReset();
+    scene.load("spacecraft.json");
+    //scene.load("sdl.json");
+
     MRay::Options options;
     options.enableGui = true;
-    options.multicore = true;
+    options.multicore = false;
     options.quitOnFinish = false;
     options.shaderType = MRay::ShaderTypes::Phong;
     //options.shaderType = MRay::ShaderTypes::CookTorrance;
     options.renderName = "render";
 
     MRay::Camera camera = MRay::Camera();
-    camera.setPosition(MRay::Vec4(-9,0,2,1));
+    //camera.setPosition(MRay::Vec4(-9,0,2,1));
+    camera.rotate(0,0,CV_PI/4);
+    camera.translate(-0.62,-6.1886,0.3281);
     camera.setSensor(MRay::Sensor(360,240));
     camera.setResolution(MRay::Resolution(MRay::Screensize::_1440p));
     camera.setFocalLength(100);

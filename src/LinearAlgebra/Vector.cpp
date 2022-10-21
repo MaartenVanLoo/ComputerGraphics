@@ -297,7 +297,7 @@ MRay::Vec4::Vec4(const Vec4 &p1) {
 
 }
 
-float MRay::Vec4::get(const int index) const{
+double MRay::Vec4::get(const int index) const{
     assert(index <= 3 & index >= 0);
 #if SET_DATA
     // double:
@@ -315,7 +315,7 @@ float MRay::Vec4::get(const int index) const{
 
 
 #pragma region Vector operations
-float MRay::Vec4::dot(const Vec4 &rhs) const {
+double MRay::Vec4::dot(const Vec4 &rhs) const {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     __m128 temp = _mm_dp_ps(this->data,rhs.data,0x71); //store result in lowest bits, use only the first 3 values (lowest 96 bits);
@@ -340,7 +340,7 @@ float MRay::Vec4::dot(const Vec4 &rhs) const {
 
 
 }
-float MRay::Vec4::dot(const Vec4 &lhs, const Vec4 &rhs) {
+double MRay::Vec4::dot(const Vec4 &lhs, const Vec4 &rhs) {
     return lhs.dot(rhs);
 }
 
@@ -382,16 +382,16 @@ Vec4 MRay::Vec4::cross(const Vec4 &lhs, const Vec4 &rhs) {
     return lhs.cross(rhs);
 }
 
-float MRay::Vec4::angle(const Vec4 &rhs) const {
+double MRay::Vec4::angle(const Vec4 &rhs) const {
     return this->dot(rhs)/(this->abs()*abs(rhs));;
 }
-float MRay::Vec4::angle(const Vec4 &v1, const Vec4 &v2) {
+double MRay::Vec4::angle(const Vec4 &v1, const Vec4 &v2) {
     return v1.angle(v2);
 }
 #pragma endregion
 
 #pragma region math
-float MRay::Vec4::abs() const {
+double MRay::Vec4::abs() const {
     /*return std::sqrt(this->data[0] * this->data[0] +
                      this->data[1] * this->data[1] +
                      this->data[2] * this->data[2] +
@@ -399,22 +399,22 @@ float MRay::Vec4::abs() const {
     return std::sqrt(this->dot(*this));
 }
 
-float MRay::Vec4::abs(const Vec4 &vec) {
+double MRay::Vec4::abs(const Vec4 &vec) {
     return vec.abs();
 }
 
-float MRay::Vec4::sum() const{
+double MRay::Vec4::sum() const{
 #if SSE_AVX_EXTENSIONS
     return this->get<0>()+this->get<1>()+this->get<2>()+this->get<3>();
 #else
     return this->data[0] + this->data[1] + this->data[2] + this->data[3];
 #endif
 }
-float MRay::Vec4::sum(const Vec4 &vec) {
+double MRay::Vec4::sum(const Vec4 &vec) {
     return vec.sum();
 }
 
-float MRay::Vec4::sum3() const {
+double MRay::Vec4::sum3() const {
 #if SSE_AVX_EXTENSIONS
     return this->get<0>()+this->get<1>()+this->get<2>();
 #else
@@ -422,11 +422,11 @@ float MRay::Vec4::sum3() const {
 #endif
 }
 
-float MRay::Vec4::sum3(const Vec4 &vec) {
+double MRay::Vec4::sum3(const Vec4 &vec) {
     return vec.sum3();
 }
 
-float MRay::Vec4::max() const {
+double MRay::Vec4::max() const {
 #if SSE_AVX_EXTENSIONS
     //float tmp[4]
     //_mm_store_ps (this->data, tmp);
@@ -437,11 +437,11 @@ float MRay::Vec4::max() const {
     return std::max(std::max(this->data[0],this->data[1]),std::max(this->data[2],this->data[3]));
 #endif
 }
-float MRay::Vec4::max(const Vec4 &vec) {
+double MRay::Vec4::max(const Vec4 &vec) {
     return vec.max();
 }
 
-float MRay::Vec4::max3() const {
+double MRay::Vec4::max3() const {
 #if SSE_AVX_EXTENSIONS
     //notice, only 1 cycle latency for get in avx, without avx it is equivalent to [] => probably fine?
     return std::max(std::max(this->get<0>(),this->get<1>()),this->get<2>());
@@ -449,11 +449,11 @@ float MRay::Vec4::max3() const {
     return std::max(std::max(this->data[0],this->data[1]),this->data[2]);
 #endif
 }
-float MRay::Vec4::max3(const Vec4 &vec) {
+double MRay::Vec4::max3(const Vec4 &vec) {
     return vec.max3();
 }
 
-float MRay::Vec4::min() const {
+double MRay::Vec4::min() const {
 #if SSE_AVX_EXTENSIONS
     //float tmp[4]
     //_mm_store_ps (this->data, tmp);
@@ -464,10 +464,10 @@ float MRay::Vec4::min() const {
     return std::min(std::min(this->data[0],this->data[1]),std::min(this->data[2],this->data[3]));
 #endif
 }
-float MRay::Vec4::min(const Vec4 &vec) {
+double MRay::Vec4::min(const Vec4 &vec) {
     return vec.min();
 }
-float MRay::Vec4::min3() const {
+double MRay::Vec4::min3() const {
 #if SSE_AVX_EXTENSIONS
     //notice, only 1 cycle latency for get in avx, without avx it is equivalent to [] => probably fine?
     return std::min(std::min(this->get<0>(),this->get<1>()),this->get<2>());
@@ -475,7 +475,7 @@ float MRay::Vec4::min3() const {
     return std::min(std::min(this->data[0],this->data[1]),this->data[2]);
 #endif
 }
-float MRay::Vec4::min3(const Vec4 &vec) {
+double MRay::Vec4::min3(const Vec4 &vec) {
     return vec.min3();
 }
 #pragma endregion
@@ -769,7 +769,7 @@ Vec4 Vec4::sqrt(Vec4 &vec) {
     return Vec4(std::sqrt(vec.data[0]),
                 std::sqrt(vec.data[1]),
                 std::sqrt(vec.data[2]),
-                std::sqrt(vec.data[3]);
+                std::sqrt(vec.data[3]));
 #endif
 }
 
@@ -789,7 +789,7 @@ Vec4 Vec4::sin(Vec4 &vec) {
     return Vec4(std::sin(vec.data[0]),
                 std::sin(vec.data[1]),
                 std::sin(vec.data[2]),
-                std::sin(vec.data[3]);
+                std::sin(vec.data[3]));
 #endif
 }
 
@@ -809,7 +809,7 @@ Vec4 Vec4::cos(Vec4 &vec) {
     return Vec4(std::cos(vec.data[0]),
                 std::cos(vec.data[1]),
                 std::cos(vec.data[2]),
-                std::cos(vec.data[3]);
+                std::cos(vec.data[3]));
 #endif
 }
 
@@ -830,7 +830,7 @@ Vec4 Vec4::acos(Vec4 &vec) {
     return Vec4(std::acos(vec.data[0]),
                 std::acos(vec.data[1]),
                 std::acos(vec.data[2]),
-                std::acos(vec.data[3]);
+                std::acos(vec.data[3]));
 #endif
 }
 
@@ -850,7 +850,7 @@ Vec4 Vec4::tan(Vec4 &vec) {
     return Vec4(std::tan(vec.data[0]),
                 std::tan(vec.data[1]),
                 std::tan(vec.data[2]),
-                std::tan(vec.data[3]);
+                std::tan(vec.data[3]));
 #endif
 }
 

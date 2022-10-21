@@ -45,8 +45,7 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
     sample.add(obj->getMaterial().emissive);
     sample.add(Color3(obj->getMaterial().ambient));
 
-    Vec4 normal = obj->getTransform() * first.normal;
-    normal.set<3>(0);
+    Vec4 normal = first.normal;
     normal.normalize();
     //reverse normal when exiting the object
     if (!first.entering)
@@ -82,7 +81,7 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
     if (obj->getMaterial().shininess > options.shininessThreshold){
         //get reflected ray,
         Ray reflected;
-        reflected.setPos(first.point + options.eps * normal);
+        reflected.setPos(first.point);// + options.eps * normal);
         Vec4 d = primaryRay.dir() - 2 *(normal.dot(primaryRay.dir()))*normal;
         reflected.setDir(d);
         reflected.setDepth(primaryRay.getDepth() + 1);

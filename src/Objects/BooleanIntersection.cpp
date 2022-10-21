@@ -9,6 +9,8 @@ bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection) {
     //bounding box test
     if (!this->bb.hit(ray)) return false;
 
+    Ray tr = ray.transform(this->invtransform);
+
     if (intersection.leftHit == nullptr) intersection.leftHit = new Intersection();
     if (intersection.rightHit == nullptr) intersection.rightHit = new Intersection();
 
@@ -16,9 +18,9 @@ bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection) {
     intersection.leftHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
     intersection.rightHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
 
-    this->left->hitPoint(ray,*intersection.leftHit);
+    this->left->hitPoint(tr,*intersection.leftHit);
     if (intersection.leftHit->empty()) return false; //No hitpoints with this object => not possible to hit the "intersection" of A & B, no need to compute "right hit"
-    this->right->hitPoint(ray, *intersection.rightHit);
+    this->right->hitPoint(tr, *intersection.rightHit);
     if (intersection.rightHit->empty()) return false; //No hitpoints with this object => not possible to hit the "intersection" of A & B, return false;
     //if (intersection.leftHit->empty() || intersection.rightHit->empty())return false; //no hitpoints found when either one of the objects is empty
 
@@ -49,6 +51,12 @@ bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection) {
             hit_itt++;
         }
     }
+
+    //Todo: do i need to transpose normals & hitpoints?
+    for (auto& h: intersection.hit){
+        h.normal = this->getTransform() * h.normal;
+        h.point = this->getTransform() * h.point;
+    }
     return !intersection.hit.empty();
 }
 
@@ -64,4 +72,5 @@ void BooleanIntersection::computeBoundingBox() {
     this->right->computeBoundingBox();
     this->bb = this->left->getBoundingBox();
     this->bb.intersect(this->right->getBoundingBox());
+    this->bb.transform(this->transform);
 }

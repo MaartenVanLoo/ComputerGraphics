@@ -327,8 +327,9 @@ void LiveScreen::move(int key) {
                 break;
         }
         this->camera->translate(pos.get<_X>(),pos.get<_Y>(),pos.get<_Z>());//reset position to original position before rotation
-    }
 
+    }
+    std::cout << this->camera->getTransform() << "\n";
 
 }
 

@@ -101,8 +101,15 @@ void RenderEngine::render() {
     else {
         for (int y = 0; y < this->camera->getResolution().height; y++) {
             for (int x = 0; x < this->camera->getResolution().width; x++) {
+
+                if (x == 2560/2 && y == 1440/2){
+                    std::cout << "Break point" << std::endl;
+                }
                 Color3 rgb = this->shader->shade(x,y);
                 this->image->setPixel(x, y, rgb);
+                if (x == 2560/2 && y == 1440/2){
+                    std::cout << "ThisPixel" << rgb << std::endl;
+                }
             }
             if (progress < y*100/this->camera->getResolution().height){
                 progress = y*100/this->camera->getResolution().height;

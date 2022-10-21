@@ -10,6 +10,8 @@ bool BooleanUnion::hitPoint(Ray &ray, Intersection &intersection) {
     //bounding box test
     if (!this->bb.hit(ray)) return false;
 
+    Ray tr = ray.transform(this->invtransform);
+
     if (intersection.leftHit == nullptr) intersection.leftHit = new Intersection();
     if (intersection.rightHit == nullptr) intersection.rightHit = new Intersection();
 
@@ -17,8 +19,8 @@ bool BooleanUnion::hitPoint(Ray &ray, Intersection &intersection) {
     intersection.leftHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
     intersection.rightHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
 
-    this->left->hitPoint(ray,*intersection.leftHit);
-    this->right->hitPoint(ray, *intersection.rightHit);
+    this->left->hitPoint(tr,*intersection.leftHit);
+    this->right->hitPoint(tr, *intersection.rightHit);
 
     //sort out the intersection of the union of the points
     if (intersection.leftHit->empty() && intersection.rightHit->empty()) return false; //no hitpoints found
@@ -29,8 +31,13 @@ bool BooleanUnion::hitPoint(Ray &ray, Intersection &intersection) {
     intersection.sort();
 
     //if 1 of the objects is not intersected the total intersection will be the intersection of the other object
-    if (intersection.leftHit->empty() ||
-        intersection.rightHit->empty()) return !intersection.hit.empty();
+    if (intersection.leftHit->empty() || intersection.rightHit->empty()) {
+        for (auto& h: intersection.hit){
+            h.normal = this->getTransform() * h.normal;
+            h.point = this->getTransform() * h.point;
+        }
+        return !intersection.hit.empty();
+    }
 
 
     // find out which intersections have to be kept and which are "inside" the object
@@ -54,6 +61,12 @@ bool BooleanUnion::hitPoint(Ray &ray, Intersection &intersection) {
             hit_itt++;
         }
     }
+
+    //Todo: do i need to transpose normals & hitpoints?
+    for (auto& h: intersection.hit){
+        h.normal = this->getTransform() * h.normal;
+        h.point = this->getTransform() * h.point;
+    }
     return !intersection.hit.empty();
 }
 
@@ -68,4 +81,5 @@ void BooleanUnion::computeBoundingBox() {
     this->right->computeBoundingBox();
     this->bb = this->left->getBoundingBox();
     this->bb.add(this->right->getBoundingBox());
+    this->bb.transform(this->transform);
 }

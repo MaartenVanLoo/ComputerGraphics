@@ -62,6 +62,7 @@ Ray  MRay::Ray::transform(const Matrix4 &T) const {
 
 void Ray::setDir(const Vec4 &dir) {
     this->direction = dir;
+    normalizeDir();
 }
 
 void Ray::setDepth(int d) {

@@ -16,7 +16,7 @@ TEST_CASE("tSphere_HitPoints"){
     Vec4 p1, p2;
     SECTION("unitSphere"){
         sphere = Sphere(Vec4(0,0,0,1), 1);
-
+        sphere.computeBoundingBox();
         //no hit
         intersect.clear();
         ray = Ray(Vec4(4,0,0,1), Vec4(-4,3,4,0));
@@ -28,6 +28,7 @@ TEST_CASE("tSphere_HitPoints"){
         #endif
 
         //single hit
+
         intersect.clear();
         ray = Ray(Vec4(4,0,1,1), Vec4(-4,0,0,0));
         target1 = Vec4(0,0,1,1);
@@ -103,7 +104,7 @@ TEST_CASE("tSphere_HitPoints"){
 
     SECTION("Large sphere"){
         sphere = Sphere(Vec4(0,0,0,1),5);
-
+        sphere.computeBoundingBox();
         //no hit
         intersect.clear();
         ray = Ray(Vec4(-7,8,2,1),Vec4(6,2,4,0));
@@ -190,6 +191,7 @@ TEST_CASE("tSphere_HitPoints"){
 
     SECTION("Translated sphere"){
         sphere = Sphere(Vec4(2,3,4,1),1);
+        sphere.computeBoundingBox();
 
         //no hit
         intersect.clear();
@@ -273,6 +275,7 @@ TEST_CASE("tSphere_HitPoints"){
 
     SECTION("Arbitrary sphere"){
         sphere = Sphere(Vec4(-2,-1,5,1),2.5);
+        sphere.computeBoundingBox();
 
         //no hit
         intersect.clear();

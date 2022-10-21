@@ -33,6 +33,10 @@ namespace MRay {
         void setMaterial(Material mtrl);
         void setTexture(Texture *texture);
 
+        /// Transform normal from LCS to GCS
+        /// \param normal Normal vector
+        Vec4 transformNormal(Vec4 normal) const;
+
         Material &getMaterial();
         BoundingBox &getBoundingBox();
         Texture *getTexture();

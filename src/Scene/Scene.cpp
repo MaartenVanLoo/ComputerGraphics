@@ -66,9 +66,6 @@ void Scene::load(const std::string& file) {
     SDLParser parser = SDLParser();
     parser.parse(file);
 
-    this->clearObjects();
-    this->clearLights();
-
     this->objects = parser.getObjects();
     this->lights = parser.getLights();
     stopwatch.stop();
@@ -76,10 +73,15 @@ void Scene::load(const std::string& file) {
 
 }
 
+void Scene::hardReset(){
+    this->clearLights();
+    this->clearObjects();
+}
 void Scene::clearObjects() {
     for (auto&obj: this->objects){
         delete obj;
     }
+    this->objects.clear();
 }
 
 

@@ -42,6 +42,8 @@ namespace MRay {
 
         void clearLights();
 
+        void hardReset();
+
         [[nodiscard]] const std::vector<Object *> &getObjects() const;
 
         [[nodiscard]] const std::vector<Light *> &getLights() const;

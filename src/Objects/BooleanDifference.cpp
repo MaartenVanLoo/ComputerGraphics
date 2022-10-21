@@ -10,6 +10,8 @@ bool BooleanDifference::hitPoint(Ray &ray, Intersection &intersection) {
     //bounding box test
     if (!this->bb.hit(ray)) return false;
 
+    Ray tr = ray.transform(this->invtransform);
+
     if (intersection.leftHit == nullptr) intersection.leftHit = new Intersection();
     if (intersection.rightHit == nullptr) intersection.rightHit = new Intersection();
 
@@ -17,9 +19,9 @@ bool BooleanDifference::hitPoint(Ray &ray, Intersection &intersection) {
     intersection.leftHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
     intersection.rightHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
 
-    this->left->hitPoint(ray,*intersection.leftHit);
+    this->left->hitPoint(tr,*intersection.leftHit);
     if (intersection.leftHit->empty()) return false; //no intersections with 'positive' object = no intersection with boolean obj;, no need to check "right"
-    this->right->hitPoint(ray, *intersection.rightHit);
+    this->right->hitPoint(tr, *intersection.rightHit);
 
 
     if (intersection.rightHit->empty()){
@@ -58,6 +60,12 @@ bool BooleanDifference::hitPoint(Ray &ray, Intersection &intersection) {
             hit_itt++;
         }
     }
+
+    //Todo: do i need to transpose normals & hitpoints?
+    for (auto& h: intersection.hit){
+        h.normal = this->getTransform() * h.normal;
+        h.point = this->getTransform() * h.point;
+    }
     return !intersection.hit.empty();
 }
 
@@ -72,4 +80,5 @@ void BooleanDifference::computeBoundingBox() {
     this->left->computeBoundingBox();
     this->right->computeBoundingBox();
     this->bb = this->left->getBoundingBox(); //object never larger than the "positive" object
+    this->bb.transform(this->transform);
 }

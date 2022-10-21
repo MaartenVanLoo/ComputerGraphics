@@ -66,7 +66,10 @@ void MRay::SDLParser::parse(const std::string& sdlFile) {
 
 void MRay::SDLParser::objectParser(Json::Value objects) {
     auto objIds = objects.getMemberNames();
+    std::cout << "Parsing " << objIds.size() << " objects\n";
+
     for (auto objId = objIds.begin(); objId != objIds.end(); objId++){
+        std::cout << "Parsing:" << *objId << " " << objId-objIds.begin() << "/" << objIds.size() << "\n";
         Json::Value obj = objects[*objId];
         if (obj["type"].isNull()){
             std::cout << "Object at index " << objId-objIds.begin() << "has no type specified\n";
@@ -74,6 +77,7 @@ void MRay::SDLParser::objectParser(Json::Value objects) {
         std::string type = obj["type"].asString();
         Object* object = objectCreator(type, obj);
         if (object != nullptr) this->loadedObjects[*objId] = object;
+        if (object != nullptr) std::cout << *objId << " accepted\n";
     }
 }
 
@@ -156,8 +160,10 @@ Object* MRay::SDLParser::objectCreator(std::string &type, Json::Value config) {
         }
 
         object = new BooleanDifference(loadedObjects[left],loadedObjects[right]);
+        object = transformObject(object, config["transformation"]);
         loadedObjects.erase(left);
         loadedObjects.erase(right);
+
     }
     else if (type == "booleanintersection"){
         if (config["left"].isNull() && config["left"].isString()){
@@ -182,6 +188,7 @@ Object* MRay::SDLParser::objectCreator(std::string &type, Json::Value config) {
         }
 
         object = new BooleanIntersection(loadedObjects[left],loadedObjects[right]);
+        object = transformObject(object, config["transformation"]);
         loadedObjects.erase(left);
         loadedObjects.erase(right);
     }
@@ -208,6 +215,7 @@ Object* MRay::SDLParser::objectCreator(std::string &type, Json::Value config) {
         }
 
         object = new BooleanUnion(loadedObjects[left],loadedObjects[right]);
+        object = transformObject(object, config["transformation"]);
         loadedObjects.erase(left);
         loadedObjects.erase(right);
     }

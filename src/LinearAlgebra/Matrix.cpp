@@ -92,5 +92,27 @@ Matrix4 MRay::Matrix4::identity() {
     return mat4;
 }
 
+Matrix4 Matrix4::getTransposed()const{
+    Matrix4 transposed;
+    transposed.set<0,0>(this->data[0].get<0>());
+    transposed.set<0,1>(this->data[0].get<1>());
+    transposed.set<0,2>(this->data[0].get<2>());
+    transposed.set<0,3>(this->data[0].get<3>());
+    transposed.set<1,0>(this->data[1].get<0>());
+    transposed.set<1,1>(this->data[1].get<1>());
+    transposed.set<1,2>(this->data[1].get<2>());
+    transposed.set<1,3>(this->data[1].get<3>());
+    transposed.set<2,0>(this->data[2].get<0>());
+    transposed.set<2,1>(this->data[2].get<1>());
+    transposed.set<2,2>(this->data[2].get<2>());
+    transposed.set<2,3>(this->data[2].get<3>());
+    transposed.set<3,0>(this->data[3].get<0>());
+    transposed.set<3,1>(this->data[3].get<1>());
+    transposed.set<3,2>(this->data[3].get<2>());
+    transposed.set<3,3>(this->data[3].get<3>());
+    return transposed;
+
+}
+
 
 

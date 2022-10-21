@@ -1,0 +1,63 @@
+{
+  "config":{
+
+  },
+  "materials":{
+
+  },
+  "objects":{
+    "booster1_c7":{
+      "type":"TaperedCylinder",
+      "s":0.6,
+      "transformation":{
+          "rotate":[1.57079632679,0,0],
+          "scale":[1.4,2,1.4],
+          "translate":[0,0,4.65]
+      },
+      "material":"green_plastic"
+    },
+    "booster1_c3":{
+      "type":"TaperedCylinder",
+      "s":1,
+      "transformation":{
+        "rotate":[1.57079632679,0,0],
+        "scale":[1.6,2,1.6],
+        "translate":[0,0,2.7]
+      },
+      "material":"green_plastic"
+    },
+    "booster1_c5":{
+      "type":"TaperedCylinder",
+      "s":1,
+      "transformation":{
+        "rotate":[1.57079632679,0,0],
+        "scale":[1.6,2,1.6],
+        "translate":[0,0,4.65]
+      },
+      "material":"green_plastic"
+    },
+    "booster1_c4":{
+      "type":"TaperedCylinder",
+      "s":1,
+      "transformation":{
+        "rotate":[1.57079632679,0,0],
+        "scale":[1.3,2,1.3],
+        "translate":[0,0,0.85]
+      },
+      "material":"green_plastic"
+    },
+    "booster1_c2":{
+      "type":"TaperedCylinder",
+      "s":0.666666666,
+      "transformation":{
+        "rotate":[1.57079632679,0,0],
+        "scale":[1.8,4,1.8],
+        "translate":[0,0,-2.15]
+      },
+      "material":"green_plastic"
+    }
+  },
+  "lights":{
+
+  }
+}

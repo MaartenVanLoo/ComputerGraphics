@@ -29,5 +29,11 @@ BoundingBox& MRay::Object::getBoundingBox(){
     return this->bb;
 }
 
+Vec4 Object::transformNormal(Vec4 normal) const{
+    normal = this->invtransform.getTransposed() * normal;
+    normal.set<3>(0);
+    return normal;
+}
+
 
 

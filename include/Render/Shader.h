@@ -28,7 +28,7 @@ namespace MRay {
                 intersect.clear();
                 if (obj->hitPoint(ray, intersect)) {
                     Hit hit = intersect.hit[0];
-                    if (best.t > hit.t && hit.t >= 0) {
+                    if (best.t > hit.t && hit.t >= 0.0001) {
                         best = hit;
                         flag = true;
                     }
@@ -52,9 +52,10 @@ namespace MRay {
                     for (const auto& h: intersect.hit){
                         if (h.obj == ignore){
                             Vec4 p = h.point - point;
-                            if (p.dot(p) < 1e-4) continue; //this is the original point
+                            if (p.dot(p) < 1e-4)
+                                continue; //this is the original point
                         }
-                        if (dist > h.t * h.t && !h.entering)
+                        if (dist > h.t * h.t && h.t > 0.001 && !h.entering)
                             return true; //object between point and light
                     }
                 }

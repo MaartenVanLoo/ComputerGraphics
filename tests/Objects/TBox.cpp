@@ -16,6 +16,7 @@ TEST_CASE("tBox_HitPoints"){
 
     SECTION("Axis aligned unit cube"){
         box = Box(Vec4(0,0,0,1),Vec4(1,1,1,0));
+        box.computeBoundingBox();
         Ray ray1 = Ray(Vec4(-2,-2,0.5,1),Vec4(0,2,0,0)); //no intersect
         Ray ray2 = Ray(Vec4(-2,-2,0.5,1),Vec4(2,0,0,0)); //no intersect
         Ray ray3 = Ray(Vec4(2,2,0.5,1),Vec4(0,2,0,0));   //no intersect

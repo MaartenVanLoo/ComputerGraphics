@@ -98,7 +98,7 @@ bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
         intersection.hit[0].t = tIn;
         intersection.hit[0].obj = this;
         intersection.hit[0].point = ray.at(float(tIn));
-        intersection.hit[0].normal = boxNormal(inSurf);
+        intersection.hit[0].normal = this->getTransform() *  boxNormal(inSurf);
         intersection.hit[0].entering = true;
         num++;
     }
@@ -107,7 +107,7 @@ bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
         intersection.hit[num].t = tOut;
         intersection.hit[num].obj = this;
         intersection.hit[num].point = ray.at(float(tOut));
-        intersection.hit[num].normal = boxNormal(outSurf);
+        intersection.hit[num].normal = this->getTransform() * boxNormal(outSurf);
         intersection.hit[num].entering = false;
         num++;
     }

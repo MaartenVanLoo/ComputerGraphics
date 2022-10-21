@@ -19,29 +19,29 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
     double b = Vec4::dot(oc,tr.dir());
     double c = Vec4::dot(oc,oc)-1;
     double discrim = b*b-a*c;
-    if (discrim < -0.00001){
+    if (discrim < -0.0001){
         return false;
     }
     double discRoot = sqrt(std::fabs(discrim));
-    auto hit1 = float((-b-discRoot)/a);
-    auto hit2 = float((-b+discRoot)/a);
+    auto hit1 = double((-b-discRoot)/a);
+    auto hit2 = double((-b+discRoot)/a);
 
     int num = 0;
-    if (hit1 > 0.00001){
+    if (hit1 > 0.0001){
         intersection.hit.emplace_back();
         intersection.hit[0].t = hit1;
         intersection.hit[0].obj = this;
         intersection.hit[0].point = this->transform * tr.at(hit1);
-        intersection.hit[0].normal = normal(tr.at(hit1));
+        intersection.hit[0].normal = this->getTransform() * normal(tr.at(hit1));
         intersection.hit[0].entering = true;
         num++;
     }
-    if (hit2 > 0.00001){
+    if (hit2 > 0.0001){
         intersection.hit.emplace_back();
         intersection.hit[num].t = hit2;
         intersection.hit[num].obj = this;
         intersection.hit[num].point = this->transform * tr.at(hit2);
-        intersection.hit[num].normal = normal(tr.at(hit2));
+        intersection.hit[num].normal = this->getTransform() * normal(tr.at(hit2));
         intersection.hit[num].entering = false;
 
         num++;
