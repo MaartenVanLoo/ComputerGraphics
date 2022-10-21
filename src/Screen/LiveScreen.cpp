@@ -36,9 +36,10 @@ cv::Mat MRay::LiveScreen::resizeKeepAspectRatio(const cv::Mat &input, const cv::
 }
 
 
-MRay::LiveScreen::LiveScreen(Scene *scene, Camera *camera) {
+MRay::LiveScreen::LiveScreen(Scene *scene, Camera *camera, Options& options) {
     this->scene = scene;
     this->camera = camera;
+    this->options = options;
 }
 
 
@@ -194,13 +195,13 @@ void MRay::LiveScreen::loop() {
                 pendingFrames++;
                 break;
             case keycodes::_plus:
-                this->camera->setFocalLength(this->camera->getFocalLength()*1.1); //zoom in
+                this->camera->setFocalLength(this->camera->getFocalLength()*1.1f); //zoom in
                 std::cout << *this->camera << std::endl;
                 pendingRender = true;
                 pendingFrames++;
                 break;
             case keycodes::_minus:
-                this->camera->setFocalLength(this->camera->getFocalLength()/1.1); //zoom out
+                this->camera->setFocalLength(this->camera->getFocalLength()/1.1f); //zoom out
                 std::cout << *this->camera << std::endl;
                 pendingRender = true;
                 pendingFrames++;
@@ -274,27 +275,27 @@ void LiveScreen::move(int key) {
     if (this->mode == LiveScreen::Mode::strafe){
         switch(key){
             case z: //forward
-                lcs_X *= 0.1;
+                lcs_X *= 0.1f;
                 this->camera->translate(lcs_X.get<_X>(),lcs_X.get<_Y>(),lcs_X.get<_Z>());
                 break;
             case s: //backwards
-                lcs_X = -lcs_X*0.1;
+                lcs_X = -lcs_X*0.1f;
                 this->camera->translate(lcs_X.get<_X>(),lcs_X.get<_Y>(),lcs_X.get<_Z>());
                 break;
             case q: // left
-                lcs_Y *= 0.1;
+                lcs_Y *= 0.1f;
                 this->camera->translate(lcs_Y.get<_X>(),lcs_Y.get<_Y>(),lcs_Y.get<_Z>());
                 break;
             case d: //right
-                lcs_Y = -lcs_Y * 0.1;
+                lcs_Y = -lcs_Y * 0.1f;
                 this->camera->translate(lcs_Y.get<_X>(),lcs_Y.get<_Y>(),lcs_Y.get<_Z>());
                 break;
             case e: //up
-                lcs_Z *= 0.1;
+                lcs_Z *= 0.1f;
                 this->camera->translate(lcs_Z.get<_X>(),lcs_Z.get<_Y>(),lcs_Z.get<_Z>());
                 break;
             case a: //down
-                lcs_Z = -lcs_Z * 0.1;
+                lcs_Z = -lcs_Z * 0.1f;
                 this->camera->translate(lcs_Z.get<_X>(),lcs_Z.get<_Y>(),lcs_Z.get<_Z>());
                 break;
             default:
@@ -306,22 +307,22 @@ void LiveScreen::move(int key) {
         this->camera->translate(-pos.get<_X>(),-pos.get<_Y>(),-pos.get<_Z>());//reset position to origin before rotation
         switch(key){
             case z: //pitch forward
-                this->camera->rotatef(CV_PI/90, lcs_Y); // -2° rotation
+                this->camera->rotatef(float(CV_PI/90), lcs_Y); // -2° rotation
                 break;
             case s: //pitch backward
-                this->camera->rotatef(-CV_PI/90, lcs_Y); // -2° rotation
+                this->camera->rotatef(float(-CV_PI/90), lcs_Y); // -2° rotation
                 break;
             case q: // yaw left
-                this->camera->rotatef(CV_PI/90, lcs_Z); // -2° rotation
+                this->camera->rotatef(float(CV_PI/90), lcs_Z); // -2° rotation
                 break;
             case d: // yaw right
-                this->camera->rotatef(-CV_PI/90, lcs_Z); // -2° rotation
+                this->camera->rotatef(float(-CV_PI/90), lcs_Z); // -2° rotation
                 break;
             case e: // roll ccw
-                this->camera->rotatef(CV_PI/90, lcs_X); // -2° rotation
+                this->camera->rotatef(float(CV_PI/90), lcs_X); // -2° rotation
                 break;
             case a: // roll cw
-                this->camera->rotatef(-CV_PI/90, lcs_X); // -2° rotation
+                this->camera->rotatef(float(-CV_PI/90), lcs_X); // -2° rotation
                 break;
             default:
                 break;

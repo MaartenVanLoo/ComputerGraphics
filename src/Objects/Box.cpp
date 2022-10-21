@@ -98,7 +98,7 @@ bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
         intersection.hit[0].t = tIn;
         intersection.hit[0].obj = this;
         intersection.hit[0].point = ray.at(float(tIn));
-        intersection.hit[0].normal = this->getTransform() *  boxNormal(inSurf);
+        intersection.hit[0].normal = boxNormal(inSurf);
         intersection.hit[0].entering = true;
         num++;
     }
@@ -107,7 +107,7 @@ bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
         intersection.hit[num].t = tOut;
         intersection.hit[num].obj = this;
         intersection.hit[num].point = ray.at(float(tOut));
-        intersection.hit[num].normal = this->getTransform() * boxNormal(outSurf);
+        intersection.hit[num].normal = boxNormal(outSurf);
         intersection.hit[num].entering = false;
         num++;
     }
@@ -120,6 +120,7 @@ Vec4 MRay::Box::boxNormal(int surf) {
     if (m == 0) v = Vec4(0, float(n),0,0);
     else if (m == 1) v = Vec4(float(n),0,0,0);
     else v = Vec4(0,0,float(n),0);
+    v = transformNormal(v);
     return v;
 }
 
@@ -134,7 +135,7 @@ MRay::Box::Box(const Vec4 &pos, const Vec4 &size) {
 }
 
 void Box::computeBoundingBox() {
-    this->bb = BoundingBox(Vec3(-1.1,-1.1,-1.1),Vec3(1.1,1.1,1.1)); //additional margin to avoid precision errors
+    this->bb = BoundingBox(Vec3(-1.05f,-1.05f,-1.05f),Vec3(1.05f,1.05f,1.05f)); //additional margin to avoid precision errors
     this->bb.transform(this->transform);
 }
 

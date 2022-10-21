@@ -4,7 +4,6 @@
 
 #include <catch2/catch_all.hpp>
 #include <iostream>
-#include <Utils/Stopwatch.h>
 #include <LinearAlgebra/Matrix.h>
 
 #define benchmark false

@@ -44,6 +44,17 @@ const Options &RenderEngine::getOptions() const {
 
 void RenderEngine::setOptions(const Options &options) {
     RenderEngine::options = options;
+    delete this->shader; //cleanup
+    switch (options.shaderType){
+        case ShaderTypes::Phong:
+            this->shader = new  PhongShader(this->scene, this->camera, this->options);
+            break;
+        case ShaderTypes::CookTorrance:
+            this->shader = new CookTorranceShader(this->scene, this->camera, this->options);
+            break;
+        default:
+            break;
+    }
 }
 
 Shader *RenderEngine::getShader() const {
@@ -89,8 +100,8 @@ void RenderEngine::render() {
                 using namespace std::chrono_literals;
                 std::this_thread::sleep_for(50ms);
             }
-            int i = task - renderTasks.begin();
-            if (progress < i*100.0/renderTasks.size()){
+            int i = int(task - renderTasks.begin());
+            if (progress < int(i*100.0/renderTasks.size())){
                 progress = int(i*100.0/renderTasks.size());
                 RenderEngine::updateCli(progress);
             }
@@ -101,7 +112,6 @@ void RenderEngine::render() {
     else {
         for (int y = 0; y < this->camera->getResolution().height; y++) {
             for (int x = 0; x < this->camera->getResolution().width; x++) {
-
                 if (x == 2560/2 && y == 1440/2){
                     std::cout << "Break point" << std::endl;
                 }

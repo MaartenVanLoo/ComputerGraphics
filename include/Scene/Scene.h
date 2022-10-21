@@ -55,10 +55,6 @@ namespace MRay {
         std::vector<Light *> lights;
         std::vector<Object *> objects;
 
-        std::unordered_map<std::string, Material> parseMaterials(Json::Value& objects);
-        std::unordered_map<std::string, Object*> parseObjects(Json::Value& objects,std::unordered_map<std::string, Material> &materials);
-        std::unordered_map<std::string, Light*> parseLights(Json::Value& objects);
-
         friend RenderTask;
     };
 

@@ -10,8 +10,7 @@ Vec3 MRay::Checkboard::compute(float x, float y, float z,float scale) {
     int v = std::abs((int(y/scale)) % 2);
     int c = u ^ v;
     if ((x < 0) ^ (y < 0)) c ^= 1;
-    v = (int(x/scale)+int(y/scale)+int(z/scale))%2;//;float(std::abs((int(x+y+z))%2));
-    return Vec3(c,c,c);
+    return Vec3(float(c),float(c),float(c));
 }
 
 Checkboard::Checkboard(float sx, float sy, float sz) : sx(sx), sy(sy), sz(sz) {}

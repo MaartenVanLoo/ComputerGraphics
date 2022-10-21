@@ -82,7 +82,7 @@ namespace MRay {
 
         Vec3 cross(const Vec3 &rhs) const;
 
-        Vec3 cross(const Vec3 &lhs, const Vec3 &rhs);
+        static Vec3 cross(const Vec3 &lhs, const Vec3 &rhs);
 
         //operators
         bool operator==(const Vec3 &rhs) const;
@@ -129,7 +129,7 @@ namespace MRay {
         Vec4(const Vec4 &p1);
 
         //get index
-        double get(int index) const;
+        float get(int index) const;
 
         template<int index>
         void set(float value) {
@@ -144,7 +144,7 @@ namespace MRay {
 
         //Todo: check if this is faster?:
         template<int index>
-        double get() const noexcept {
+        float get() const noexcept {
             assert(index <= 3 & index >= 0);
 #if SET_DATA
             return _mm_cvtss_f32(_mm_shuffle_ps(this->data, this->data, _MM_SHUFFLE(0, 0, 0, index)));
@@ -153,9 +153,9 @@ namespace MRay {
 #endif
         }
 
-        double dot(const Vec4 &rhs) const;
+        float dot(const Vec4 &rhs) const;
 
-        static double dot(const Vec4 &lhs, const Vec4 &rhs);
+        static float dot(const Vec4 &lhs, const Vec4 &rhs);
 
         //compute the cross product as if ti was a Vec3 (only first 3 elements will be used)
         Vec4 cross(const Vec4 &rhs) const;
@@ -163,43 +163,43 @@ namespace MRay {
         static Vec4 cross(const Vec4 &lhs, const Vec4 &rhs);
 
         //cosine of angle between 2 vectors
-        double angle(const Vec4 &rhs) const;
+        float angle(const Vec4 &rhs) const;
 
-        static double angle(const Vec4 &v1, const Vec4 &v2);
+        static float angle(const Vec4 &v1, const Vec4 &v2);
 
-        double abs() const;
+        float abs() const;
 
-        static double abs(const Vec4 &vec);
+        static float abs(const Vec4 &vec);
 
         //sum of all values
-        double sum() const;
+        float sum() const;
 
-        static double sum(const Vec4 &vec);
+        static float sum(const Vec4 &vec);
 
         //sum of first 3 values (sometimes needed when only xyz is required
-        double sum3() const;
+        float sum3() const;
 
-        static double sum3(const Vec4 &vec);
+        static float sum3(const Vec4 &vec);
 
         //max of all values
-        double max() const;
+        float max() const;
 
-        static double max(const Vec4 &vec);
+        static float max(const Vec4 &vec);
         static Vec4 max(Vec4 lhs, const Vec4& rhs);
         //max of first 3 values (sometimes needed when only xyz is required
-        double max3() const;
+        float max3() const;
 
-        static double max3(const Vec4 &vec);
+        static float max3(const Vec4 &vec);
 
         //min of all values
-        double min() const;
+        float min() const;
 
-        static double min(const Vec4 &vec);
+        static float min(const Vec4 &vec);
         static Vec4 min(Vec4 lhs, const Vec4& rhs);
         //min of first 3 values (sometimes needed when only xyz is required
-        double min3() const;
+        float min3() const;
 
-        static double min3(const Vec4 &vec);
+        static float min3(const Vec4 &vec);
 
         //square root elementwise
         static Vec4 sqrt(Vec4 &vec);
@@ -256,7 +256,7 @@ namespace MRay {
 #if SET_DATA
         __m128 data;
 #else
-        double data[4] {0.0,0.0,0.0,0.0};
+        float data[4] {0.0,0.0,0.0,0.0};
 #endif
         friend Matrix4;
         friend Vec2;

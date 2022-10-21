@@ -297,7 +297,7 @@ MRay::Vec4::Vec4(const Vec4 &p1) {
 
 }
 
-double MRay::Vec4::get(const int index) const{
+float MRay::Vec4::get(const int index) const{
     assert(index <= 3 & index >= 0);
 #if SET_DATA
     // double:
@@ -315,7 +315,7 @@ double MRay::Vec4::get(const int index) const{
 
 
 #pragma region Vector operations
-double MRay::Vec4::dot(const Vec4 &rhs) const {
+float MRay::Vec4::dot(const Vec4 &rhs) const {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
     __m128 temp = _mm_dp_ps(this->data,rhs.data,0x71); //store result in lowest bits, use only the first 3 values (lowest 96 bits);
@@ -340,7 +340,7 @@ double MRay::Vec4::dot(const Vec4 &rhs) const {
 
 
 }
-double MRay::Vec4::dot(const Vec4 &lhs, const Vec4 &rhs) {
+float MRay::Vec4::dot(const Vec4 &lhs, const Vec4 &rhs) {
     return lhs.dot(rhs);
 }
 
@@ -382,16 +382,16 @@ Vec4 MRay::Vec4::cross(const Vec4 &lhs, const Vec4 &rhs) {
     return lhs.cross(rhs);
 }
 
-double MRay::Vec4::angle(const Vec4 &rhs) const {
-    return this->dot(rhs)/(this->abs()*abs(rhs));;
+float MRay::Vec4::angle(const Vec4 &rhs) const {
+    return this->dot(rhs)/(this->abs()*abs(rhs));
 }
-double MRay::Vec4::angle(const Vec4 &v1, const Vec4 &v2) {
+float MRay::Vec4::angle(const Vec4 &v1, const Vec4 &v2) {
     return v1.angle(v2);
 }
 #pragma endregion
 
 #pragma region math
-double MRay::Vec4::abs() const {
+float MRay::Vec4::abs() const {
     /*return std::sqrt(this->data[0] * this->data[0] +
                      this->data[1] * this->data[1] +
                      this->data[2] * this->data[2] +
@@ -399,22 +399,22 @@ double MRay::Vec4::abs() const {
     return std::sqrt(this->dot(*this));
 }
 
-double MRay::Vec4::abs(const Vec4 &vec) {
+float MRay::Vec4::abs(const Vec4 &vec) {
     return vec.abs();
 }
 
-double MRay::Vec4::sum() const{
+float MRay::Vec4::sum() const{
 #if SSE_AVX_EXTENSIONS
     return this->get<0>()+this->get<1>()+this->get<2>()+this->get<3>();
 #else
     return this->data[0] + this->data[1] + this->data[2] + this->data[3];
 #endif
 }
-double MRay::Vec4::sum(const Vec4 &vec) {
+float MRay::Vec4::sum(const Vec4 &vec) {
     return vec.sum();
 }
 
-double MRay::Vec4::sum3() const {
+float MRay::Vec4::sum3() const {
 #if SSE_AVX_EXTENSIONS
     return this->get<0>()+this->get<1>()+this->get<2>();
 #else
@@ -422,11 +422,11 @@ double MRay::Vec4::sum3() const {
 #endif
 }
 
-double MRay::Vec4::sum3(const Vec4 &vec) {
+float MRay::Vec4::sum3(const Vec4 &vec) {
     return vec.sum3();
 }
 
-double MRay::Vec4::max() const {
+float MRay::Vec4::max() const {
 #if SSE_AVX_EXTENSIONS
     //float tmp[4]
     //_mm_store_ps (this->data, tmp);
@@ -437,11 +437,11 @@ double MRay::Vec4::max() const {
     return std::max(std::max(this->data[0],this->data[1]),std::max(this->data[2],this->data[3]));
 #endif
 }
-double MRay::Vec4::max(const Vec4 &vec) {
+float MRay::Vec4::max(const Vec4 &vec) {
     return vec.max();
 }
 
-double MRay::Vec4::max3() const {
+float MRay::Vec4::max3() const {
 #if SSE_AVX_EXTENSIONS
     //notice, only 1 cycle latency for get in avx, without avx it is equivalent to [] => probably fine?
     return std::max(std::max(this->get<0>(),this->get<1>()),this->get<2>());
@@ -449,11 +449,11 @@ double MRay::Vec4::max3() const {
     return std::max(std::max(this->data[0],this->data[1]),this->data[2]);
 #endif
 }
-double MRay::Vec4::max3(const Vec4 &vec) {
+float MRay::Vec4::max3(const Vec4 &vec) {
     return vec.max3();
 }
 
-double MRay::Vec4::min() const {
+float MRay::Vec4::min() const {
 #if SSE_AVX_EXTENSIONS
     //float tmp[4]
     //_mm_store_ps (this->data, tmp);
@@ -464,10 +464,10 @@ double MRay::Vec4::min() const {
     return std::min(std::min(this->data[0],this->data[1]),std::min(this->data[2],this->data[3]));
 #endif
 }
-double MRay::Vec4::min(const Vec4 &vec) {
+float MRay::Vec4::min(const Vec4 &vec) {
     return vec.min();
 }
-double MRay::Vec4::min3() const {
+float MRay::Vec4::min3() const {
 #if SSE_AVX_EXTENSIONS
     //notice, only 1 cycle latency for get in avx, without avx it is equivalent to [] => probably fine?
     return std::min(std::min(this->get<0>(),this->get<1>()),this->get<2>());
@@ -475,7 +475,7 @@ double MRay::Vec4::min3() const {
     return std::min(std::min(this->data[0],this->data[1]),this->data[2]);
 #endif
 }
-double MRay::Vec4::min3(const Vec4 &vec) {
+float MRay::Vec4::min3(const Vec4 &vec) {
     return vec.min3();
 }
 #pragma endregion

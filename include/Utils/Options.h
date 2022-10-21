@@ -10,6 +10,17 @@ namespace MRay {
         Phong,
         CookTorrance
     };
+    template<ShaderTypes T>
+    std::string toString(){
+        switch(T){
+            case ShaderTypes::Phong:
+                return "Phong";
+            case ShaderTypes::CookTorrance:
+                return "CookTorrance";
+            default:
+                return "";
+        }
+    }
 
     struct Options {
         bool enableGui = false;
@@ -25,7 +36,7 @@ namespace MRay {
         int oversamplingRate = 1;
 
         double shininessThreshold = 0.0001;
-        int maxRayBounce = 5;
+        int maxRayBounce = 3;
         double eps = 1e-4;
     };
 

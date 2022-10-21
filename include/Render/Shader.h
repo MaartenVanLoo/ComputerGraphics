@@ -45,7 +45,6 @@ namespace MRay {
             float dist = light->getDist(point); //square of the distance!
 
             //look for intersections:
-            Hit best;
             intersect.clear();
             for (auto obj: scene->getObjects()){
                 if (obj->hitPoint(ray, intersect)){

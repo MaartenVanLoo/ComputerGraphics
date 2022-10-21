@@ -27,7 +27,7 @@ namespace MRay {
     public:
         LiveScreen() = default;
 
-        LiveScreen(Scene *scene, Camera *camera);
+        LiveScreen(Scene *scene, Camera *camera, Options& options);
 
         void show();
 

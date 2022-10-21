@@ -14,7 +14,7 @@ namespace MRay {
 
         void computeBoundingBox() override;
 
-        Vec4 normal(Vec4 &point) const override;
+        Vec4 normal(Vec4 &point) const;
     };
 }
 #endif //I_COMPUTERGRAPHICS_BOOLEANUNION_H

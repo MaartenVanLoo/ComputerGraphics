@@ -23,8 +23,8 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
         return false;
     }
     double discRoot = sqrt(std::fabs(discrim));
-    auto hit1 = double((-b-discRoot)/a);
-    auto hit2 = double((-b+discRoot)/a);
+    auto hit1 = float((-b-discRoot)/a);
+    auto hit2 = float((-b+discRoot)/a);
 
     int num = 0;
     if (hit1 > 0.0001){
@@ -32,7 +32,7 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
         intersection.hit[0].t = hit1;
         intersection.hit[0].obj = this;
         intersection.hit[0].point = this->transform * tr.at(hit1);
-        intersection.hit[0].normal = this->getTransform() * normal(tr.at(hit1));
+        intersection.hit[0].normal = normal(tr.at(hit1));
         intersection.hit[0].entering = true;
         num++;
     }
@@ -41,7 +41,7 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
         intersection.hit[num].t = hit2;
         intersection.hit[num].obj = this;
         intersection.hit[num].point = this->transform * tr.at(hit2);
-        intersection.hit[num].normal = this->getTransform() * normal(tr.at(hit2));
+        intersection.hit[num].normal = normal(tr.at(hit2));
         intersection.hit[num].entering = false;
 
         num++;
@@ -65,13 +65,14 @@ MRay::Sphere::Sphere(const Vec4 &position, float radius){
 }
 
 Vec4 MRay::Sphere::normal(const Vec4 &point) const{
-    Vec4 n = point;
-    n.set<3>(0); //set last value to zero, indicate 'vector' instead of point;
-    return n;
+    Vec4 norm = point;
+    norm.set<3>(0); //set last value to zero, indicate 'vector' instead of point;
+    norm = transformNormal(norm);
+    return norm;
 }
 
 void Sphere::computeBoundingBox() {
-    this->bb = BoundingBox(Vec3(-1.1,-1.1,-1.1),Vec3(1.1,1.1,1.1)); //additional margin to avoid precision errors
+    this->bb = BoundingBox(Vec3(-1.1f,-1.1f,-1.1f),Vec3(1.1f,1.1f,1.1f)); //additional margin to avoid precision errors
     this->bb.transform(this->transform);
 }
 

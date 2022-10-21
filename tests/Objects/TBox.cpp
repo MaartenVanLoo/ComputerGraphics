@@ -8,8 +8,6 @@
 using namespace MRay;
 TEST_CASE("tBox_HitPoints"){
     Box box = Box();
-    Ray ray;
-    bool hit;
     Intersection intersect;
     Vec4 target1, target2;
     Vec4 p1, p2;
@@ -53,11 +51,6 @@ TEST_CASE("tBox_HitPoints"){
 
     }
     //TODO: continue checking
-    SECTION(""){
 
-    }
-    SECTION(""){
-
-    }
 
 };

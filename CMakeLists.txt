@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17)
+cmake_minimum_required(VERSION 3.20)
 project(I_ComputerGraphics)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} C:/Program Files/opencv/build)
 

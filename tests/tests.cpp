@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include "../include/RenderEngineCore.h"
 #include <catch2/catch_all.hpp>
 
 
@@ -23,6 +22,5 @@ int main(int argc, char ** argv)
         std::string s;
         std::getline(std::cin,s);
     }
-    system("pause");
     return result;
 }

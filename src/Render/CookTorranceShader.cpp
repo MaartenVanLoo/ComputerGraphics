@@ -46,12 +46,15 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
     Object* obj = first.obj;
 
     //TODO: check these
-    sample.add(obj->getMaterial().emissive);
+    //sample.add(obj->getMaterial().emissive);
     sample.add(Color3(obj->getMaterial().ambient));
 
-    Vec4 normal = obj->getTransform() * first.normal;
-    normal.set<3>(0);
+    Vec4 normal = first.normal;
     normal.normalize();
+
+    //reverse normal when exiting the object
+    if (!first.entering)
+        normal = -normal;
 
     // diff & spec
     for (const Light* light: scene->getLights()){
@@ -73,14 +76,14 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
         h.normalize();
         float mDotH = h.dot(normal);
         if (mDotH > 0){
-            float delta = std::acos(normal.dot(h));
-            float d = this->beckmannDistribution(delta , 0.2f);
+            double delta = std::acos(normal.dot(h));
+            double d = this->beckmannDistribution(delta , 0.2f);
 
             float hDotS = h.dot(s);
-            float mDotV = normal.dot(v);
-            float g = float(std::fmin(1.0f,2.0f*std::fmin(mDotH*mDotS/hDotS,mDotH*mDotV/mDotS)));
+            double mDotV = normal.dot(v);
+            double g = std::fmin(1.0f,2.0f*std::fmin(mDotH*mDotS/hDotS,mDotH*mDotV/mDotS));
 
-            Vec4 spec = fresnell(obj->getMaterial().fresnell, mDotS) * d * g / mDotV;
+            Vec4 spec = fresnell(obj->getMaterial().fresnell, mDotS) * float(d * g / mDotV);
             Color3 specColor = light->color * ks  * spec;
             sample.add(specColor);
         }
@@ -93,7 +96,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
     if (obj->getMaterial().shininess > options.shininessThreshold){
         //get reflected ray,
         Ray reflected;
-        reflected.setPos(first.point + options.eps * normal);
+        reflected.setPos(first.point);
         Vec4 d = primaryRay.dir() - 2 *(normal.dot(primaryRay.dir()))*normal;
         reflected.setDir(d);
         reflected.setDepth(primaryRay.getDepth() + 1);
@@ -159,11 +162,11 @@ Vec4 CookTorranceShader::fresnell(Vec4 &refraction) {
     Vec4 nplus = (refraction + 1);
     return nmin*nmin/(nplus*nplus);
 }
-float CookTorranceShader::beckmannDistribution(float angle, float m) {
-    float exponent= std::tan(angle)/m;
-    float cosa = std::cos(angle);
-    float num = std::exp(-exponent*exponent);
-    float denom = 4 * m * m * cosa*cosa*cosa*cosa;
+double CookTorranceShader::beckmannDistribution(double angle, double m) {
+    double exponent= std::tan(angle)/m;
+    double cosa = std::cos(angle);
+    double num = std::exp(-exponent*exponent);
+    double denom = 4 * m * m * cosa*cosa*cosa*cosa;
     return num/denom;
 }
 

@@ -26,8 +26,8 @@ bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &interse
     if (discr >= 0.0001) {
 
         double discRoot = std::sqrt(discr);
-        auto hit1 = double((-b - discRoot) / a);
-        auto hit2 = double((-b + discRoot) / a);
+        auto hit1 = float((-b - discRoot) / a);
+        auto hit2 = float((-b + discRoot) / a);
 
 
         if (hit1 > 0.0001) {
@@ -64,12 +64,12 @@ bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &interse
         //hit with z = 0:
         double hit = -tr.pos().get<_Z>() / tr.dir().get<_Z>();
         if (hit >= 0.0001) {
-            Vec4 p = tr.at(hit);
+            Vec4 p = tr.at(float(hit));
             if (p.dot(p) < 1) {//note p = {_X,_Y,0,1}, p.dot doesn't use last value!
                 intersection.hit.emplace_back();
                 intersection.hit[num].t = hit;
                 intersection.hit[num].obj = this;
-                intersection.hit[num].point = ray.at(hit);
+                intersection.hit[num].point = ray.at(float(hit));
                 intersection.hit[num].normal = this->transformNormal(Vec4(0, 0, -1, 0));
                 //intersection.hit[num].normal = this->getTransform() * Vec4(0, 0, -1, 0);
                 intersection.hit[num].entering = tr.dir().dot(intersection.hit[num].normal) > 0; //if normal & dir in same direction, dot product is positive and ray is leaving
@@ -80,12 +80,12 @@ bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &interse
         //hit with z = 1:
         hit = (1-tr.pos().get<_Z>()) / tr.dir().get<_Z>();
         if (hit >= 0.0001) {
-            Vec4 p = tr.at(hit);
+            Vec4 p = tr.at(float(hit));
             if (p.dot(p) - 1< this->s * this->s ) {//note p = {_X,_Y,1,1}, p.dot doesn't use last value!, result = X² + Y² + 1 < s², correct for '1' term
                 intersection.hit.emplace_back();
                 intersection.hit[num].t = hit;
                 intersection.hit[num].obj = this;
-                intersection.hit[num].point = ray.at(hit);
+                intersection.hit[num].point = ray.at(float(hit));
                 //intersection.hit[num].normal = this->getTransform() * Vec4(0, 0, 1, 0);
                 intersection.hit[num].normal = this->transformNormal(Vec4(0, 0, 1, 0));
                 intersection.hit[num].entering = tr.dir().dot(intersection.hit[num].normal) > 0; //if normal & dir in same direction, dot product is positive and ray is leaving
@@ -119,6 +119,6 @@ MRay::Vec4 MRay::TaperedCylinder::normal(Vec4 &point) const  {
 
 void MRay::TaperedCylinder::computeBoundingBox() {
     float m = float(std::max(s,1.0f)* 1.1);
-    this->bb = BoundingBox(Vec3(-m,-m,-0.1),Vec3(m,m,1.1)); //additional margin to avoid precision errors
+    this->bb = BoundingBox(Vec3(-m,-m,-0.1f),Vec3(m,m,1.1f)); //additional margin to avoid precision errors
     this->bb.transform(this->transform);
 }

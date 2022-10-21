@@ -16,8 +16,10 @@ int main() {
 
     MRay::Scene scene = MRay::Scene();
     scene.hardReset();
-    scene.load("spacecraft.json");
+    //scene.load("spacecraft.json");
     //scene.load("sdl.json");
+    //scene.load("sdl_all.json");
+    scene.load("materialTest.json");
 
     MRay::Options options;
     options.enableGui = true;
@@ -29,17 +31,17 @@ int main() {
 
     MRay::Camera camera = MRay::Camera();
     //camera.setPosition(MRay::Vec4(-9,0,2,1));
-    camera.rotate(0,0,CV_PI/4);
-    camera.translate(-0.62,-6.1886,0.3281);
+    camera.rotate(0.0f,float(CV_PI/4.0),0.0f);
+    camera.translate(-2.62f,-0,5.3281f);
     camera.setSensor(MRay::Sensor(360,240));
     camera.setResolution(MRay::Resolution(MRay::Screensize::_1440p));
     camera.setFocalLength(100);
 
 
-    MRay::RenderEngine engine(&scene, &camera, options);
-    engine.render();
-    //MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera);
-    //liveScreen.show();
+    //MRay::RenderEngine engine(&scene, &camera, options);
+    //engine.render();
+    MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera, options);
+    liveScreen.show();
 
     /*sequence render:
     for(int i =0; i < 720; i+=5){

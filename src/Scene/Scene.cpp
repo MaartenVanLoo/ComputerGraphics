@@ -5,16 +5,7 @@
 #include <Materials/MaterialsLibrary.h>
 #include <Scene/Scene.h>
 #include <Objects/Plane.h>
-#include <Render/PhongShader.h>
-#include <Objects/Sphere.h>
-#include <Objects/Box.h>
-#include <Textures/Checkerboard.h>
-#include <Objects/TaperedCylinder.h>
 #include <fstream>
-#include <Objects/BooleanUnion.h>
-#include <Objects/BooleanIntersection.h>
-#include <Objects/BooleanDifference.h>
-#include <json/json.h>
 #include <json/value.h>
 #include <Scene/SDLParser.h>
 

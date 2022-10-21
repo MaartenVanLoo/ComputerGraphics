@@ -29,7 +29,7 @@ namespace MRay {
         float fresnell(float refraction);
         Vec4 fresnell(Vec4 &refraction);
 
-        float beckmannDistribution(float angle, float m);
+        double beckmannDistribution(double angle, double m);
     };
 }
 #endif //I_COMPUTERGRAPHICS_COOKTORRANCESHADER_H
