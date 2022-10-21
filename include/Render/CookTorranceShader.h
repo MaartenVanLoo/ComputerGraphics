@@ -23,11 +23,11 @@ namespace MRay {
     private:
         //F(angle, refraction)
         float fresnell(float refraction, Vec4 &m, Vec4 &s);
-        Vec4 fresnell(Vec4 &refraction, Vec4 &m, Vec4 &s);
-        Vec4 fresnell(Vec4 &refraction, float mDotS);
+        Vec4 fresnell(const Vec4 &refraction, Vec4 &m, Vec4 &s);
+        Vec4 fresnell(const Vec4 &refraction, float mDotS);
         //F(0, refraction)
         float fresnell(float refraction);
-        Vec4 fresnell(Vec4 &refraction);
+        Vec4 fresnell(const Vec4 &refraction);
 
         double beckmannDistribution(double angle, double m);
     };

@@ -47,7 +47,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
 
     //TODO: check these
     //sample.add(obj->getMaterial().emissive);
-    sample.add(Color3(obj->getMaterial().ambient));
+    sample.add(Color3(obj->getMaterial().getAmbient<CookTorrance>()));
 
     Vec4 normal = first.normal;
     normal.normalize();
@@ -65,7 +65,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
         float mDotS = s.dot(normal); // lambert term;
         if (mDotS > 0.0){
             Vec4 tmp = mDotS * kd * fresnell(obj->getMaterial().fresnell);
-            Color3 diffuse = mDotS * kd * fresnell(obj->getMaterial().fresnell) * light->color; //note: precompute fresnell values ??
+            Color3 diffuse = mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()) * light->color; //note: precompute fresnell values ??
             if (obj->getTexture() != nullptr){
                 diffuse *= first.obj->getTexture()->compute(first.point.get<0>(),first.point.get<1>(),first.point.get<2>(),10);
             }
@@ -83,7 +83,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
             double mDotV = normal.dot(v);
             double g = std::fmin(1.0f,2.0f*std::fmin(mDotH*mDotS/hDotS,mDotH*mDotV/mDotS));
 
-            Vec4 spec = fresnell(obj->getMaterial().fresnell, mDotS) * float(d * g / mDotV);
+            Vec4 spec = fresnell(obj->getMaterial().getFresnell<CookTorrance>(), mDotS) * float(d * g / mDotV);
             Color3 specColor = light->color * ks  * spec;
             sample.add(specColor);
         }
@@ -93,7 +93,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
     if (primaryRay.getDepth() == options.maxRayBounce)
         return sample;
     //reflections
-    if (obj->getMaterial().shininess > options.shininessThreshold){
+    if (obj->getMaterial().getShininess<CookTorrance>() > options.shininessThreshold){
         //get reflected ray,
         Ray reflected;
         reflected.setPos(first.point);
@@ -102,7 +102,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
         reflected.setDepth(primaryRay.getDepth() + 1);
 
         //recursive call to shade
-        sample.add(obj->getMaterial().shininess * shade(reflected));
+        sample.add(obj->getMaterial().getShininess<CookTorrance>() * shade(reflected));
     }
     return sample;
 }
@@ -122,7 +122,7 @@ float CookTorranceShader::fresnell(float refraction, Vec4 &m, Vec4 &s) {
     return fac1 * fac2;
 }
 
-Vec4 CookTorranceShader::fresnell(Vec4 &refraction, Vec4 &m, Vec4 &s) {
+Vec4 CookTorranceShader::fresnell(const Vec4 &refraction, Vec4 &m, Vec4 &s) {
     float c = m.dot(s);
     Vec4 g = refraction + c * c - 1;
     Vec4::sqrt(g);
@@ -137,7 +137,7 @@ Vec4 CookTorranceShader::fresnell(Vec4 &refraction, Vec4 &m, Vec4 &s) {
 
     return fac1 * fac2;
 }
-Vec4 CookTorranceShader::fresnell(Vec4 &refraction, float mDotS) {
+Vec4 CookTorranceShader::fresnell(const Vec4 &refraction, float mDotS) {
     float c = mDotS;
     Vec4 g = refraction + c * c - 1;
     Vec4::sqrt(g);
@@ -157,7 +157,7 @@ float CookTorranceShader::fresnell(float refraction) {
     float nplus = (refraction + 1);
     return nmin*nmin/(nplus*nplus);
 }
-Vec4 CookTorranceShader::fresnell(Vec4 &refraction) {
+Vec4 CookTorranceShader::fresnell(const Vec4 &refraction) {
     Vec4 nmin = (refraction - 1);
     Vec4 nplus = (refraction + 1);
     return nmin*nmin/(nplus*nplus);

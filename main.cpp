@@ -16,14 +16,14 @@ int main() {
 
     MRay::Scene scene = MRay::Scene();
     scene.hardReset();
-    //scene.load("spacecraft.json");
-    //scene.load("sdl.json");
-    //scene.load("sdl_all.json");
-    scene.load("materialTest.json");
+    //scene.load("../../SDL/spacecraft.json");
+    //scene.load("../../SDL/sdl.json");
+    //scene.load("../../SDL/sdl_all.json");
+    scene.load("../../SDL/materialTest.json");
 
     MRay::Options options;
     options.enableGui = true;
-    options.multicore = false;
+    options.multicore = true;
     options.quitOnFinish = false;
     options.shaderType = MRay::ShaderTypes::Phong;
     //options.shaderType = MRay::ShaderTypes::CookTorrance;
@@ -32,16 +32,16 @@ int main() {
     MRay::Camera camera = MRay::Camera();
     //camera.setPosition(MRay::Vec4(-9,0,2,1));
     camera.rotate(0.0f,float(CV_PI/4.0),0.0f);
-    camera.translate(-2.62f,-0,5.3281f);
+    camera.translate(-18,0,20);
     camera.setSensor(MRay::Sensor(360,240));
-    camera.setResolution(MRay::Resolution(MRay::Screensize::_1440p));
+    camera.setResolution(MRay::Resolution(MRay::Screensize::_1080p));
     camera.setFocalLength(100);
 
 
-    //MRay::RenderEngine engine(&scene, &camera, options);
-    //engine.render();
-    MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera, options);
-    liveScreen.show();
+    MRay::RenderEngine engine(&scene, &camera, options);
+    engine.render();
+    //MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera, options);
+    //liveScreen.show();
 
     /*sequence render:
     for(int i =0; i < 720; i+=5){

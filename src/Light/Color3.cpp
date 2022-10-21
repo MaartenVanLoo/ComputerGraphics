@@ -100,16 +100,22 @@ void MRay::Color3::clear() {
     this->blue = 0;
 }
 
-Color3::Color3(Vec3 v) {
+Color3::Color3(const Vec3 &v) {
     this->red = v.get<0>();
     this->green = v.get<1>();
     this->blue = v.get<2>();
 }
-
+Color3::Color3(const Vec4 &v) {
+    this->red = v.get<0>();
+    this->green = v.get<1>();
+    this->blue = v.get<2>();
+}
 std::ostream &MRay::operator<<(std::ostream &os, const Color3 &color3) {
     os << "[red: " << int(color3.red) << " green: " << int(color3.green) << " blue: " << int(color3.blue) << "]";
     return os;
 }
+
+
 
 
 #pragma endregion

@@ -41,6 +41,7 @@ namespace MRay {
                  double specR, double specG, double specB,
                  double shininess,
                  double nR, double nG, double nB);
+        Material(PhongMaterial &phong, CookTorrenceMaterial &cook);
 
         //phong model
         Vec3 ambient;
@@ -86,6 +87,7 @@ namespace MRay {
                     throw std::invalid_argument("No material known for this shader type " + toString<T>() + ".");
             }
         }
+
         template<ShaderTypes T>
         float getSpecularExponent(){
             switch (T){
@@ -105,6 +107,18 @@ namespace MRay {
                     return cookTorrenceMaterial.shininess;
             }
         }
+
+        template<ShaderTypes T>
+        Vec4 getFresnell(){
+            switch (T){
+                case ShaderTypes::Phong:
+                    throw std::invalid_argument("No material known for this shader type " + toString<T>() + ".");
+                case ShaderTypes::CookTorrance:
+                    return cookTorrenceMaterial.fresnell;
+            }
+        }
+
+
 
     private:
         PhongMaterial phongMaterial;

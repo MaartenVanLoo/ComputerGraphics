@@ -32,3 +32,5 @@ Material::Material(double ambR, double ambG, double ambB, double diffR, double d
     this->shininess = float(shininess/128);
 }
 
+Material::Material(PhongMaterial &phong, CookTorrenceMaterial &cook): phongMaterial(phong), cookTorrenceMaterial((cook)){}
+

@@ -36,7 +36,7 @@ namespace MRay {
         int oversamplingRate = 1;
 
         double shininessThreshold = 0.0001;
-        int maxRayBounce = 3;
+        int maxRayBounce = 5;
         double eps = 1e-4;
     };
 

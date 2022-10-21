@@ -253,7 +253,7 @@
 			},
 			"material":"bronze"
 		},
-		"09sphere":{
+		"09.sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-12,0]

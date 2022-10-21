@@ -14,9 +14,11 @@ namespace MRay {
         Color3();
 
         Color3(int red, int green, int blue);
-        Color3(Vec3 v);
+        Color3(const Vec3 &v);
+        Color3(const Vec4 &v);
 
         void add(const Color3 &color);
+
 
         void clear();
 

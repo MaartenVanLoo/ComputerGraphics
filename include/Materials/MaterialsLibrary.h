@@ -39,6 +39,9 @@ namespace MRay {
 
         static Material gray_rubber();
         static Material gray_plastic();
+
+        static Material perfect_mirror();
+
         static const std::unordered_map<std::string,Material> materials;
     };
 }

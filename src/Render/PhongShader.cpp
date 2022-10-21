@@ -42,8 +42,8 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
     Object* obj = first.obj;
 
     //TODO: check these
-    sample.add(obj->getMaterial().emissive);
-    sample.add(Color3(obj->getMaterial().ambient));
+    //sample.add(obj->getMaterial().emissive);
+    sample.add(Color3(obj->getMaterial().getAmbient<Phong>()));
 
     Vec4 normal = first.normal;
     normal.normalize();
@@ -59,7 +59,7 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
         s.normalize();
         float mDotS = s.dot(normal); // lambert term;
         if (mDotS > 0.0){
-            Color3 diffuse = mDotS * obj->getMaterial().diffuse * light->color;
+            Color3 diffuse = mDotS * obj->getMaterial().getDiffuse<Phong>() * light->color;
             if (obj->getTexture() != nullptr){
                 diffuse *= first.obj->getTexture()->compute(first.point.get<0>(),first.point.get<1>(),first.point.get<2>(),10);
             }
@@ -70,15 +70,15 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
         h.normalize();
         float mDotH = h.dot(normal);
         if (mDotH > 0){
-            float phong = std::pow(mDotH, obj->getMaterial().specularExponent);
-            Color3 specColor = phong* obj->getMaterial().specular * light->color;
+            float phong = std::pow(mDotH, obj->getMaterial().getSpecularExponent<Phong>());
+            Color3 specColor = phong* obj->getMaterial().getSpecular<Phong>() * light->color;
             sample.add(specColor);
         }
     }
 
     if (primaryRay.getDepth() == options.maxRayBounce) return sample;
     //reflections
-    if (obj->getMaterial().shininess > options.shininessThreshold){
+    if (obj->getMaterial().getShininess<Phong>() > options.shininessThreshold){
         //get reflected ray,
         Ray reflected;
         reflected.setPos(first.point);// + options.eps * normal);
@@ -87,7 +87,7 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
         reflected.setDepth(primaryRay.getDepth() + 1);
 
         //recursive call to shade
-        sample.add(obj->getMaterial().shininess * shade(reflected));
+        sample.add(obj->getMaterial().getShininess<Phong>() * shade(reflected));
     }
     return sample;
 }
