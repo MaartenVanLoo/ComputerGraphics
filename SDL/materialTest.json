@@ -379,8 +379,216 @@
 				"translate":[-5,39,0]
 			},
 			"material":"gray_plastic"
+		},
+
+		"01.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-36,0]
+			},
+			"material":"emerald"
+		},
+		"02.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-33,0]
+			},
+			"material":"jade"
+		},
+		"03.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-30,0]
+			},
+			"material":"obsidian"
+		},
+		"04.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-27,0]
+			},
+			"material":"pearl"
+		},
+		"05.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-24,0]
+			},
+			"material":"ruby"
+		},
+		"06.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-21,0]
+			},
+			"material":"turquoise"
+		},
+		"07.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-18,0]
+			},
+			"material":"brass"
+		},
+		"08.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-15,0]
+			},
+			"material":"bronze"
+		},
+		"09TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-12,0]
+			},
+			"material":"chrome"
+		},
+		"10.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-9,0]
+			},
+			"material":"copper"
+		},
+		"11.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-6,0]
+			},
+			"material":"gold"
+		},
+		"12.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,-3,0]
+			},
+			"material":"silver"
+		},
+		"13.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,0,0]
+			},
+			"material":"black_plastic"
+		},
+		"14.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,3,0]
+			},
+			"material":"cyan_plastic"
+		},
+		"15.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,6,0]
+			},
+			"material":"green_plastic"
+		},
+		"16.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,9,0]
+			},
+			"material":"red_plastic"
+		},
+		"17.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,12,0]
+			},
+			"material":"white_plastic"
+		},
+		"18.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,15,0]
+			},
+			"material":"yellow_plastic"
+		},
+		"19.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,18,0]
+			},
+			"material":"black_rubber"
+		},
+		"20.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,21,0]
+			},
+			"material":"cyan_rubber"
+		},
+		"21.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,24,0]
+			},
+			"material":"green_rubber"
+		},
+		"22.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,27,0]
+			},
+			"material":"red_rubber"
+		},
+		"23.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,30,0]
+			},
+			"material":"white_rubber"
+		},
+		"24.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,33,0]
+			},
+			"material":"yellow_rubber"
+		},
+		"25.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,36,0]
+			},
+			"material":"gray_rubber"
+		},
+		"26.TaperedCylinder":{
+			"type":"TaperedCylinder",
+			"s": 0.5,
+			"transformation":{
+				"translate":[5,39,0]
+			},
+			"material":"gray_plastic"
 		}
-		
 	},
 	"lights":{
 		"l1":{

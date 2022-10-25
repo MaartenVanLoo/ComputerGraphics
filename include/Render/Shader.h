@@ -27,10 +27,11 @@ namespace MRay {
                 if (obj == ignore) continue;
                 intersect.clear();
                 if (obj->hitPoint(ray, intersect)) {
-                    Hit hit = intersect.hit[0];
-                    if (best.t > hit.t && hit.t >= 0.0001) {
-                        best = hit;
-                        flag = true;
+                    for (auto& hit :intersect.hit) {
+                        if (best.t > hit.t && hit.t >= 0.0001) {
+                            best = hit;
+                            flag = true;
+                        }
                     }
                 }
             }

@@ -66,6 +66,12 @@ void MRay::Color3::add(const Color3 &color) {
         this->accBlue += color.blue;
         this->n++;
     }else{
+        if (int(color.red) + this->red < 0)
+            std::cout << int(color.red) + this->red << "\n";
+        if (int(color.green) + this->green < 0)
+            std::cout << int(color.green) + this->green << "\n";
+        if (int(color.blue) + this->blue < 0)
+            std::cout << int(color.blue) + this->blue << "\n";
         this->red   = std::min(int(color.red   )+ this->red  ,255);
         this->green = std::min(int(color.green )+ this->green,255);
         this->blue  = std::min(int(color.blue  )+ this->blue ,255);

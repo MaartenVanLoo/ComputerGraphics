@@ -1,0 +1,9 @@
+{
+  "shader":"cook_torrance",
+  "gui":true,
+  "multicore": true,
+  "filename": "render",
+  "background":["0x87","0xCE","0xFA"],
+
+  "maxRayBounce":2
+}

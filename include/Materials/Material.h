@@ -15,15 +15,16 @@ namespace MRay {
         Vec4 ambient = Vec4();
         Vec4 diffuse= Vec4();
         Vec4 specular= Vec4();
-        float specularExponent = 0;
-        float shininess = 0;
+        double specularExponent = 0;
+        double shininess = 0;
     };
 
     struct CookTorrenceMaterial{
         Vec4 ambient = Vec4();
         Vec4 diffuse = Vec4();
         Vec4 fresnell = Vec4();
-        float shininess = 0;
+        double shininess = 0;
+        double roughness = 0.5; //> 0 (beckmann divides by m² !, m = 0 = division by zero)
     };
 
     class Material {
@@ -65,6 +66,8 @@ namespace MRay {
                     return phongMaterial.ambient;
                 case ShaderTypes::CookTorrance:
                     return cookTorrenceMaterial.ambient;
+                default:
+                    throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
             }
         }
 
@@ -75,6 +78,8 @@ namespace MRay {
                     return phongMaterial.diffuse;
                 case ShaderTypes::CookTorrance:
                     return cookTorrenceMaterial.diffuse;
+                default:
+                    throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
             }
         }
 
@@ -84,27 +89,31 @@ namespace MRay {
                 case ShaderTypes::Phong:
                     return phongMaterial.specular;
                 case ShaderTypes::CookTorrance:
-                    throw std::invalid_argument("No material known for this shader type " + toString<T>() + ".");
+                default:
+                    throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
             }
         }
 
         template<ShaderTypes T>
-        float getSpecularExponent(){
+        double getSpecularExponent(){
             switch (T){
                 case ShaderTypes::Phong:
                     return phongMaterial.specularExponent;
                 case ShaderTypes::CookTorrance:
-                    throw std::invalid_argument("No material known for this shader type " + toString<T>() + ".");
+                default:
+                    throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
             }
         }
 
         template<ShaderTypes T>
-        float getShininess(){
+        double getShininess(){
             switch (T) {
                 case ShaderTypes::Phong:
                     return phongMaterial.shininess;
                 case ShaderTypes::CookTorrance:
                     return cookTorrenceMaterial.shininess;
+                default:
+                    throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
             }
         }
 
@@ -112,13 +121,23 @@ namespace MRay {
         Vec4 getFresnell(){
             switch (T){
                 case ShaderTypes::Phong:
-                    throw std::invalid_argument("No material known for this shader type " + toString<T>() + ".");
+                default:
+                    throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
                 case ShaderTypes::CookTorrance:
                     return cookTorrenceMaterial.fresnell;
             }
         }
 
-
+        template<ShaderTypes T>
+        double getRoughness(){
+            switch (T){
+                case ShaderTypes::Phong:
+                default:
+                    throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
+                case ShaderTypes::CookTorrance:
+                    return cookTorrenceMaterial.roughness;
+            }
+        }
 
     private:
         PhongMaterial phongMaterial;

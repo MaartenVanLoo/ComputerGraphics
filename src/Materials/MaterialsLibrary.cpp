@@ -533,7 +533,7 @@ Material MaterialsLibrary::perfect_mirror(){
     cookTorrenceMaterial.ambient = Vec4(0,0,0);
     cookTorrenceMaterial.diffuse = Vec4(0,0,0);
     cookTorrenceMaterial.fresnell = Vec4(1,1,1);
-    cookTorrenceMaterial.shininess = 1;
+    cookTorrenceMaterial.shininess = 0.9;
     return Material(phongMaterial, cookTorrenceMaterial);
 }
 const std::unordered_map<std::string,Material> MaterialsLibrary::materials = std::unordered_map<std::string, Material>({

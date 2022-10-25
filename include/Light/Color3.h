@@ -41,9 +41,12 @@ namespace MRay {
 
         friend std::ostream &operator<<(std::ostream &os, const Color3 &color3);
 
-        uint8_t red = 0;
-        uint8_t green = 0;
-        uint8_t blue = 0;
+        //uint8_t red = 0;
+        //uint8_t green = 0;
+        //uint8_t blue = 0;
+        int red = 0;
+        int green = 0;
+        int blue = 0;
     private:
 
         //transaction variables

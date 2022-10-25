@@ -66,6 +66,9 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
         if (mDotS > 0.0){
             Vec4 tmp = mDotS * kd * fresnell(obj->getMaterial().fresnell);
             Color3 diffuse = mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()) * light->color; //note: precompute fresnell values ??
+            assert(mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()).get<0>() >= 0); //underflow
+            assert(mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()).get<1>() >= 0); //underflow
+            assert(mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()).get<2>() >= 0); //underflow
             if (obj->getTexture() != nullptr){
                 diffuse *= first.obj->getTexture()->compute(first.point.get<0>(),first.point.get<1>(),first.point.get<2>(),10);
             }
@@ -75,16 +78,23 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
         Vec4 h  = v + s;
         h.normalize();
         float mDotH = h.dot(normal);
-        if (mDotH > 0){
+        if (mDotH > 0 && mDotS > 0){
             double delta = std::acos(normal.dot(h));
-            double d = this->beckmannDistribution(delta , 0.2f);
+            double beck = this->beckmannDistribution(delta , obj->getMaterial().getRoughness<CookTorrance>());
 
             float hDotS = h.dot(s);
             double mDotV = normal.dot(v);
             double g = std::fmin(1.0f,2.0f*std::fmin(mDotH*mDotS/hDotS,mDotH*mDotV/mDotS));
 
-            Vec4 spec = fresnell(obj->getMaterial().getFresnell<CookTorrance>(), mDotS) * float(d * g / mDotV);
+            Vec4 spec = fresnell(obj->getMaterial().getFresnell<CookTorrance>(), mDotS) * float(beck * g / mDotV);
             Color3 specColor = light->color * ks  * spec;
+
+            assert(ks  * spec.get<0>() >= 0);
+            //assert(ks  * spec.get<0>() <= 255);
+            assert(ks  * spec.get<1>() >= 0);
+            //assert(ks  * spec.get<1>() <= 255);
+            assert(ks  * spec.get<2>() >= 0);
+            //assert(ks  * spec.get<2>() <= 255);
             sample.add(specColor);
         }
 

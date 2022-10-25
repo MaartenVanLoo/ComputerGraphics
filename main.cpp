@@ -23,10 +23,10 @@ int main() {
 
     MRay::Options options;
     options.enableGui = true;
-    options.multicore = true;
+    options.multicore = false;
     options.quitOnFinish = false;
-    options.shaderType = MRay::ShaderTypes::Phong;
-    //options.shaderType = MRay::ShaderTypes::CookTorrance;
+    //options.shaderType = MRay::ShaderTypes::Phong;
+    options.shaderType = MRay::ShaderTypes::CookTorrance;
     options.renderName = "render";
 
     MRay::Camera camera = MRay::Camera();
