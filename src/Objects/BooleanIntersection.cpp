@@ -5,7 +5,7 @@
 #include <Objects/BooleanIntersection.h>
 #include <algorithm>
 using namespace MRay;
-bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection) {
+bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection, const Options &options) {
     //bounding box test
     if (!this->bb.hit(ray)) return false;
 
@@ -18,9 +18,9 @@ bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection) {
     intersection.leftHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
     intersection.rightHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
 
-    this->left->hitPoint(tr,*intersection.leftHit);
+    this->left->hitPoint(tr,*intersection.leftHit, options);
     if (intersection.leftHit->empty()) return false; //No hitpoints with this object => not possible to hit the "intersection" of A & B, no need to compute "right hit"
-    this->right->hitPoint(tr, *intersection.rightHit);
+    this->right->hitPoint(tr, *intersection.rightHit, options);
     if (intersection.rightHit->empty()) return false; //No hitpoints with this object => not possible to hit the "intersection" of A & B, return false;
     //if (intersection.leftHit->empty() || intersection.rightHit->empty())return false; //no hitpoints found when either one of the objects is empty
 

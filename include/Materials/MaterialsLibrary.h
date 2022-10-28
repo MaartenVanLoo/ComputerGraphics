@@ -41,7 +41,8 @@ namespace MRay {
         static Material gray_plastic();
 
         static Material perfect_mirror();
-
+        static Material glass();
+        static Material lightSourceGlass();
         static const std::unordered_map<std::string,Material> materials;
     };
 }

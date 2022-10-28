@@ -17,7 +17,7 @@ namespace MRay {
 
         Sphere(const Vec4 &position, float radius);
 
-        bool hitPoint(Ray &ray, Intersection &intersection) override;
+        bool hitPoint(Ray &ray, Intersection &intersection, const Options& options) override;
 
         /// Compute the normal vector in a point on the circle.
         /// Doesn't check if the point is actually on the circle!

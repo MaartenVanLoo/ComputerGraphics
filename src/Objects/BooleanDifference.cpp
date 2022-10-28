@@ -6,7 +6,7 @@
 #include <algorithm>
 using namespace MRay;
 
-bool BooleanDifference::hitPoint(Ray &ray, Intersection &intersection) {
+bool BooleanDifference::hitPoint(Ray &ray, Intersection &intersection, const Options &options) {
     //bounding box test
     if (!this->bb.hit(ray)) return false;
 
@@ -19,9 +19,9 @@ bool BooleanDifference::hitPoint(Ray &ray, Intersection &intersection) {
     intersection.leftHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
     intersection.rightHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
 
-    this->left->hitPoint(tr,*intersection.leftHit);
+    this->left->hitPoint(tr,*intersection.leftHit, options);
     if (intersection.leftHit->empty()) return false; //no intersections with 'positive' object = no intersection with boolean obj;, no need to check "right"
-    this->right->hitPoint(tr, *intersection.rightHit);
+    this->right->hitPoint(tr, *intersection.rightHit, options);
 
 
     if (intersection.rightHit->empty()){

@@ -15,7 +15,6 @@ CookTorranceShader::CookTorranceShader(Scene *scene, Camera *camera, Options &op
 Color3 CookTorranceShader::shade(int x, int y) {
     Ray primaryRay = this->camera->getPrimaryRay(x,y);
     Color3 test = this->shade(primaryRay);
-    //std::cout << test << "\n";
     return test;
 }
 Color3 CookTorranceShader::shade(int x, int y, Intersection &intersection) {
@@ -28,9 +27,12 @@ Color3 CookTorranceShader::shade(Ray &primaryRay) {
 }
 
 Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
+    if (primaryRay.getDepth() > maxBounces) maxBounces = primaryRay.getDepth();
     const float dw = 0.0001f;
-    const float kd = 0.9f;
-    const float ks = 1.0f-kd;
+    const double ka = 1;
+    const double kd = 0.80;
+    const double ks = 1.0-kd;
+    assert (ks >= 0);
     Color3 sample =  Color3();
 
     Hit first = Hit();
@@ -47,31 +49,38 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
 
     //TODO: check these
     //sample.add(obj->getMaterial().emissive);
-    sample.add(Color3(obj->getMaterial().getAmbient<CookTorrance>()));
+    Color3 ambient = ka * obj->getMaterial().getAmbient<CookTorrance>();
+    if (obj->getTexture() != nullptr) {
+        ambient *= first.obj->getTexture()->compute(first.point.get<0>(), first.point.get<1>(), first.point.get<2>(),10);
+    }
+    sample.add(ambient);
 
     Vec4 normal = first.normal;
     normal.normalize();
 
     //reverse normal when exiting the object
-    if (!first.entering)
+    //when exiting && current ray object = nullptr => camera ray must be inside an object
+    if (!first.entering) {
         normal = -normal;
-
+        if (primaryRay.getObject() == nullptr) primaryRay.setObject(first.obj);
+    }
     // diff & spec
     for (const Light* light: scene->getLights()){
-        if (isInShadow(first.point,obj, light, intersection)) continue;
+        double shadowFactor = this->shadowFactor<CookTorrance>(first.point, obj, light, intersection);
+        if (shadowFactor == 0.0) continue;
         //diffuse
         Vec4 s = light->getVec(first.point);
         s.normalize();
         float mDotS = s.dot(normal); // lambert term;
         if (mDotS > 0.0){
             Vec4 tmp = mDotS * kd * fresnell(obj->getMaterial().fresnell);
-            Color3 diffuse = mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()) * light->color; //note: precompute fresnell values ??
+            Color3 diffuse = (shadowFactor * mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>())) * light->color; //note: precompute fresnell values ??
+            if (obj->getTexture() != nullptr) {
+                diffuse *= first.obj->getTexture()->compute(first.point.get<0>(), first.point.get<1>(), first.point.get<2>(),10);
+            }
             assert(mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()).get<0>() >= 0); //underflow
             assert(mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()).get<1>() >= 0); //underflow
             assert(mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()).get<2>() >= 0); //underflow
-            if (obj->getTexture() != nullptr){
-                diffuse *= first.obj->getTexture()->compute(first.point.get<0>(),first.point.get<1>(),first.point.get<2>(),10);
-            }
             sample.add(diffuse);
         }
         //specular
@@ -87,7 +96,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
             double g = std::fmin(1.0f,2.0f*std::fmin(mDotH*mDotS/hDotS,mDotH*mDotV/mDotS));
 
             Vec4 spec = fresnell(obj->getMaterial().getFresnell<CookTorrance>(), mDotS) * float(beck * g / mDotV);
-            Color3 specColor = light->color * ks  * spec;
+            Color3 specColor = light->color * (ks  * spec*shadowFactor);
 
             assert(ks  * spec.get<0>() >= 0);
             //assert(ks  * spec.get<0>() <= 255);
@@ -102,17 +111,60 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
 
     if (primaryRay.getDepth() == options.maxRayBounce)
         return sample;
+
+
+    //refraction
+    bool internalReflection = false;
+    if (obj->getMaterial().getTransparancy<CookTorrance>() > options.transparencyThreshold){
+        double cosa = normal.angle(-primaryRay.dir());
+        double cosa2 = cosa*cosa;
+        double sina2 = 1-cosa2;
+
+        double n1 = primaryRay.getObject() == nullptr?1:primaryRay.getObject()->getMaterial().getRelativeSpeed<CookTorrance>();
+        double n2 = first.entering?obj->getMaterial().getRelativeSpeed<CookTorrance>():1;
+        double cr = n1/n2;
+        double snell2 = 1-cr*cr*sina2; //snell2 = cos(theta2)^2
+
+        //check for total internal reflection:
+        //total internal reflection when sin(theta_2) < 0 => snell < 0
+
+        double critAngle = std::acos(n2/n1);
+        double angle = std::acos(cosa);
+        if (angle > critAngle && n2/n1 < 1){
+            internalReflection = true;
+        }else if(first.thinMaterial) {
+            Ray transmitted;
+            transmitted.setPos(first.point - this->options.eps * normal);
+            transmitted.setDir(primaryRay.dir());
+            transmitted.setDepth(primaryRay.getDepth() + 1);
+            sample.add(obj->getMaterial().getTransparancy<CookTorrance>() * shade(transmitted));
+        }
+        else {
+            double snell = sqrt(snell2);
+            Ray transmitted;
+            transmitted.setPos(first.point - this->options.eps * normal);
+            transmitted.setDir(float(cr) * primaryRay.dir() + float(cr * cosa - snell) * normal);
+            transmitted.setDepth(primaryRay.getDepth() + 1);
+            transmitted.setObject(first.obj);
+            sample.add(obj->getMaterial().getTransparancy<CookTorrance>() * shade(transmitted));
+        }
+
+    }
+
     //reflections
-    if (obj->getMaterial().getShininess<CookTorrance>() > options.shininessThreshold){
+    if (obj->getMaterial().getShininess<CookTorrance>() > options.shininessThreshold || internalReflection){
         //get reflected ray,
         Ray reflected;
-        reflected.setPos(first.point);
+        reflected.setPos(first.point + this->options.eps * normal);
         Vec4 d = primaryRay.dir() - 2 *(normal.dot(primaryRay.dir()))*normal;
         reflected.setDir(d);
         reflected.setDepth(primaryRay.getDepth() + 1);
 
         //recursive call to shade
-        sample.add(obj->getMaterial().getShininess<CookTorrance>() * shade(reflected));
+        if (internalReflection)
+            sample.add(obj->getMaterial().getTransparancy<CookTorrance>() * shade(reflected));
+        else
+            sample.add(obj->getMaterial().getShininess<CookTorrance>() * shade(reflected));
     }
     return sample;
 }

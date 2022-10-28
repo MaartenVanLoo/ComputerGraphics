@@ -8,7 +8,7 @@ using namespace MRay;
 //https://iquilezles.org/articles/intersectors/
 //https://www.shadertoy.com/view/4d2XWV
 //https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
-bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
+bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection, const Options& options) {
     //bounding box test
     if (!this->bb.hit(ray)) return false;
 
@@ -45,6 +45,10 @@ bool MRay::Sphere::hitPoint(Ray &ray, Intersection& intersection) {
         intersection.hit[num].entering = false;
 
         num++;
+    }
+    if (num == 2  && std::abs(hit1-hit2) < options.eps){
+        intersection.hit[0].thinMaterial = true;
+        intersection.hit[1].thinMaterial = true;
     }
     //std::cout << "t1: " << hit1 << "\tt2:" << hit2 << "\n";
     return num > 0;

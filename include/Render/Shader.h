@@ -24,11 +24,11 @@ namespace MRay {
         bool getFirstHit(Ray &ray, Hit &best, Intersection &intersect, const Object *ignore = nullptr) const {
             bool flag = false;
             for (auto obj: scene->getObjects()) {
-                if (obj == ignore) continue;
+                //if (obj == ignore) continue;
                 intersect.clear();
-                if (obj->hitPoint(ray, intersect)) {
+                if (obj->hitPoint(ray, intersect, this->options)) {
                     for (auto& hit :intersect.hit) {
-                        if (best.t > hit.t && hit.t >= 0.0001) {
+                        if (best.t > hit.t && hit.t >= 0.0001){// || hit.obj != ignore)) {
                             best = hit;
                             flag = true;
                         }
@@ -38,7 +38,10 @@ namespace MRay {
             return flag;
         }
 
-        bool isInShadow(const Vec4 &point, const Object *ignore, const Light *light, Intersection &intersect) const {
+        template<ShaderTypes T>
+        double shadowFactor(const Vec4 &point, const Object *ignore, const Light *light, Intersection &intersect) const {
+            double factor = 1.0;
+
             //ray to light source
             Ray ray = light->getRay(point);
 
@@ -48,7 +51,7 @@ namespace MRay {
             //look for intersections:
             intersect.clear();
             for (auto obj: scene->getObjects()){
-                if (obj->hitPoint(ray, intersect)){
+                if (obj->hitPoint(ray, intersect, this->options)){
                     for (const auto& h: intersect.hit){
                         if (h.obj == ignore){
                             Vec4 p = h.point - point;
@@ -56,19 +59,25 @@ namespace MRay {
                                 continue; //this is the original point
                         }
                         if (dist > h.t * h.t && h.t > 0.001 && !h.entering)
-                            return true; //object between point and light
+                            factor *= h.obj->getMaterial().getTransparancy<T>();
+                            if (factor == 0.0) return factor; //object between point and light
                     }
                 }
             }
             //no object found between point and light => not in shadow
-            return false;
+            return factor;
         }
 
+        int getMaxBounces() const {
+            return maxBounces;
+        }
 
     protected:
         Scene *scene;       //reference to, not owner
         Camera* camera;     //reference to, not owner
         Options options;
+
+        int maxBounces = -1;
     };
 }
 #endif //I_COMPUTERGRAPHICS_SHADER_H

@@ -31,23 +31,32 @@ namespace MRay {
         //multiplication
         Color3 &operator*=(const Vec3 &rhs);                    // elementwise multiplication
         Color3 &operator*=(const Vec4 &rhs);                    // elementwise multiplication
-        Color3 &operator*=(float rhs);                          // elementwise multiplication
+        Color3 &operator*=(double rhs);                          // elementwise multiplication
         friend Color3 operator*(Color3 lhs, const Vec3 &rhs);   //elementwise multiplication
         friend Color3 operator*(const Vec3 &lhs, Color3 rhs);   //elementwise multiplication
         friend Color3 operator*(Color3 lhs, const Vec4 &rhs);   //elementwise multiplication
         friend Color3 operator*(const Vec4 &lhs, Color3 rhs);   //elementwise multiplication
-        friend Color3 operator*(Color3 lhs, float rhs);         //elementwise subtraction
-        friend Color3 operator*(float lhs, Color3 rhs);         //elementwise subtraction
+        friend Color3 operator*(Color3 lhs, double rhs);         //elementwise subtraction
+        friend Color3 operator*(double lhs, Color3 rhs);         //elementwise subtraction
 
         friend std::ostream &operator<<(std::ostream &os, const Color3 &color3);
 
-        //uint8_t red = 0;
-        //uint8_t green = 0;
-        //uint8_t blue = 0;
+        int getRed() const;
+
+        int getGreen() const;
+
+        int getBlue() const;
+
+        void setRed(int red);
+
+        void setGreen(int green);
+
+        void setBlue(int blue);
+
+    private:
         int red = 0;
         int green = 0;
         int blue = 0;
-    private:
 
         //transaction variables
         bool transactionOpen = false;

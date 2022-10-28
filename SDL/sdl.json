@@ -6,19 +6,26 @@
 
 	},
 	"objects":{
-		
+		"box": {
+			"type": "box",
+			"transformation": {
+				"scale": [20,20,20]
+			},
+			"material": "red_plastic"
+		},
 		"sphere1":{
 			"type":"sphere",
 			"transformation":{
-				"translate":[0,-2,2]
+				"translate":[0,-2,2],
+				"scale": [0.1,0.1,0.1]
 			},
-			"material":"red_plastic"
+			"material":"lightSourceGlass"
 		}
 	},
 	"lights":{
 		"l1":{
 			"type":"pointlight",
-			"position":[-10,0,30]
+			"position":[0,-2,2]
 		},		
 		"l2":{
 			"type":"pointlight",

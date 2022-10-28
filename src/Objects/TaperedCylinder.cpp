@@ -8,7 +8,7 @@ MRay::TaperedCylinder::TaperedCylinder(float s) :s(s){
 
 }
 
-bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &intersection) {
+bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &intersection, const Options &options) {
     //bounding box test
     if (!this->bb.hit(ray)) return false;
 
@@ -105,6 +105,12 @@ bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &interse
     }
     if (num == 1){
         intersection.hit[0].entering = false; //only way to have a single intersection is a ray that starts inside the object
+    }
+    if (num == 2){
+        if( std::abs( intersection.hit[0].t- intersection.hit[1].t) < options.eps){
+            intersection.hit[0].thinMaterial = true;
+            intersection.hit[1].thinMaterial = true;
+        }
     }
     return (num > 0);
 }

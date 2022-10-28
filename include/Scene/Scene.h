@@ -41,6 +41,7 @@ namespace MRay {
         void addLight(Light *light);
 
         void clearLights();
+        void lightCheck();
 
         void hardReset();
 

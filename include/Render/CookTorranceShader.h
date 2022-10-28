@@ -30,6 +30,8 @@ namespace MRay {
         Vec4 fresnell(const Vec4 &refraction);
 
         double beckmannDistribution(double angle, double m);
+
+
     };
 }
 #endif //I_COMPUTERGRAPHICS_COOKTORRANCESHADER_H

@@ -17,7 +17,7 @@ namespace MRay {
 
         Box(const Vec4 &pos, const Vec4 &size);
 
-        bool hitPoint(Ray &ray, Intersection &intersection) override;
+        bool hitPoint(Ray &ray, Intersection &intersection, const Options& options) override;
 
         void computeBoundingBox() override;
 

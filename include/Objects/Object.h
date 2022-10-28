@@ -5,7 +5,7 @@
 #ifndef I_COMPUTERGRAPHICS_OBJECT_H
 #define I_COMPUTERGRAPHICS_OBJECT_H
 
-#include "../Ray.h"
+
 #include "LinearAlgebra/Vector.h"
 #include <cmath>
 #include <algorithm>
@@ -21,13 +21,14 @@
 namespace MRay {
     struct Hit;
     struct Intersection;
+    class Ray;
     class Object;
 
     class Object : public Transform {
     public:
         virtual ~Object();
 
-        virtual bool hitPoint(Ray &ray, Intersection &intersection) = 0;
+        virtual bool hitPoint(Ray &ray, Intersection &intersection, const Options& options) = 0;
 
         virtual void computeBoundingBox(){};
         void setMaterial(Material mtrl);

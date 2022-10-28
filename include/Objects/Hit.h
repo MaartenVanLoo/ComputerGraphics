@@ -14,6 +14,7 @@ namespace MRay {
         Vec4 normal; //LCS normal;
         int surface;
         bool entering = false;
+        bool thinMaterial = false;
 
         bool operator<(const Hit &rhs) const {
             return t < rhs.t;

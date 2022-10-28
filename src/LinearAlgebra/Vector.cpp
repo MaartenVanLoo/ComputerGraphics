@@ -184,7 +184,7 @@ Vec3& MRay::Vec3::operator-=(const Vec3& rhs) {
     this->data[2]-=rhs.data[2];
     return *this;
 }
-Vec3 &MRay::Vec3::operator*=(const float rhs) {
+Vec3 &MRay::Vec3::operator*=(const double rhs) {
     this->data[0]*=rhs;
     this->data[1]*=rhs;
     this->data[2]*=rhs;
@@ -196,7 +196,7 @@ Vec3 &MRay::Vec3::operator*=(const Vec3& rhs) {
     this->data[2]*=rhs.data[2];
     return *this;
 }
-Vec3 &MRay::Vec3::operator/=(const float rhs) {
+Vec3 &MRay::Vec3::operator/=(const double rhs) {
     this->data[0]/=rhs;
     this->data[1]/=rhs;
     this->data[2]/=rhs;
@@ -661,11 +661,11 @@ Vec4 MRay::operator+(Vec4 lhs, const Vec4 &rhs) {
     lhs += rhs;
     return lhs;
 }
-Vec4 MRay::operator+(Vec4 lhs, const float rhs) {
+Vec4 MRay::operator+(Vec4 lhs, const double &rhs) {
     lhs += Vec4(rhs,rhs,rhs,rhs);
     return lhs;
 }
-Vec4 MRay::operator+(const float lhs, Vec4 rhs) {
+Vec4 MRay::operator+(const double &lhs, Vec4 rhs) {
     rhs += Vec4(lhs,lhs,lhs,lhs);
     return rhs;
 }
@@ -673,19 +673,19 @@ Vec4 MRay::operator-(Vec4 lhs, const Vec4 &rhs) {
     lhs-=rhs;
     return lhs;
 }
-Vec4 MRay::operator-(Vec4 lhs, const float rhs) {
+Vec4 MRay::operator-(Vec4 lhs, const double &rhs) {
     lhs -= Vec4(rhs,rhs,rhs,rhs);
     return lhs;
 }
-Vec4 MRay::operator-(const float lhs, Vec4 rhs) {
+Vec4 MRay::operator-(const double &lhs, Vec4 rhs) {
     rhs -= Vec4(lhs,lhs,lhs,lhs);
     return rhs;
 }
-Vec4 MRay::operator*(const float &lhs, Vec4 rhs) {
+Vec4 MRay::operator*(const double &lhs, Vec4 rhs) {
     rhs*=lhs;
     return rhs;
 }
-Vec4 MRay::operator*(Vec4 lhs, const float &rhs) {
+Vec4 MRay::operator*(Vec4 lhs, const double &rhs) {
     lhs*=rhs;
     return lhs;
 }
@@ -693,14 +693,14 @@ Vec4 MRay::operator*(Vec4 lhs, const Vec4 &rhs) {
     lhs*=rhs;
     return lhs;
 }
-Vec4 MRay::operator/(Vec4 lhs, const float &rhs) {
+Vec4 MRay::operator/(Vec4 lhs, const double &rhs) {
     lhs/=rhs;
     return lhs;
 }
-Vec4 MRay::operator/(const float &lhs, MRay::Vec4 rhs ) {
+Vec4 MRay::operator/(const double &lhs, MRay::Vec4 rhs ) {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
-    __m128 lhs_ps = _mm_set_ps(lhs, lhs, lhs, lhs); //float
+    __m128 lhs_ps = _mm_set_ps(float(lhs), float(lhs), float(lhs), float(lhs)); //float
     rhs.data = _mm_div_ps(lhs_ps, rhs.data);
 #else
     // __m256d lhs_pd = _mm256_set_pd (lhs, lhs, lhs, lhs); //double

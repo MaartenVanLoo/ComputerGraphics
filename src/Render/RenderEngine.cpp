@@ -83,6 +83,9 @@ void RenderEngine::render() {
     Stopwatch stopwatch = Stopwatch();
     stopwatch.start();
 
+    //do light checks, sum of lights < 255,255,255!
+    this->scene->lightCheck();
+
     //main render loop
     if (options.multicore){
         std::vector<RenderTask*> renderTasks;
@@ -112,13 +115,13 @@ void RenderEngine::render() {
     else {
         for (int y = 0; y < this->camera->getResolution().height; y++) {
             for (int x = 0; x < this->camera->getResolution().width; x++) {
-                if (x == 859 && y == 4){
+                if (x == 1705 && y == 442 ){
                     std::cout << "Break point" << std::endl;
                 }
                 Color3 rgb = this->shader->shade(x,y);
                 this->image->setPixel(x, y, rgb);
-                if (x == 2560/2 && y == 1440/2){
-                    std::cout << "ThisPixel" << rgb << std::endl;
+                if (x >= 1694 && x <= 1694+26 && y >= 423 && y <= 423+21){
+                    std::cout << "{" << x << "," << "y" << y << "}" << rgb << "\n";
                 }
             }
             if (progress < y*100/this->camera->getResolution().height){
@@ -130,6 +133,7 @@ void RenderEngine::render() {
             std::this_thread::sleep_for(5ms);
 #endif
         }
+        std::cout << "Max Bounces :" << this->shader->getMaxBounces();
     }
     RenderEngine::updateCli(100);
     std::cout << std::endl;

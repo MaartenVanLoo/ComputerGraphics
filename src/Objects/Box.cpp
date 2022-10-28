@@ -9,7 +9,7 @@ using namespace MRay;
 //https://iquilezles.org/articles/intersectors/
 //https://www.shadertoy.com/view/ld23DV
 //https://iquilezles.org/articles/boxfunctions/
-bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
+bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection, const Options& options) {
     //bounding box test
     if (!this->bb.hit(ray)) return false;
 
@@ -110,6 +110,12 @@ bool MRay::Box::hitPoint(Ray &ray,Intersection &intersection) {
         intersection.hit[num].normal = boxNormal(outSurf);
         intersection.hit[num].entering = false;
         num++;
+    }
+    if (num == 2){
+        if( std::abs( intersection.hit[0].t- intersection.hit[1].t) < options.eps){
+            intersection.hit[0].thinMaterial = true;
+            intersection.hit[1].thinMaterial = true;
+        }
     }
     return (num > 0);
 }

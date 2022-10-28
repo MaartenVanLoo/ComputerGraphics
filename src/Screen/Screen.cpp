@@ -45,9 +45,9 @@ MRay::Image::Image(Resolution resolution) {
 
 void MRay::Image::setPixel(int x, int y, Color3 rgb) {
     cv::Vec3b & color = this->imageBuffer.at<cv::Vec3b>(y,x);
-    color[0] = static_cast<unsigned char>(rgb.blue);
-    color[1] = static_cast<unsigned char>(rgb.green);
-    color[2] = static_cast<unsigned char>(rgb.red);
+    color[0] = static_cast<unsigned char>(rgb.getBlue());
+    color[1] = static_cast<unsigned char>(rgb.getGreen());
+    color[2] = static_cast<unsigned char>(rgb.getRed());
 
     this->lastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
 }

@@ -6,7 +6,7 @@
 #include <algorithm>
 
 using namespace MRay;
-bool BooleanUnion::hitPoint(Ray &ray, Intersection &intersection) {
+bool BooleanUnion::hitPoint(Ray &ray, Intersection &intersection, const Options &options) {
     //bounding box test
     if (!this->bb.hit(ray)) return false;
 
@@ -19,8 +19,8 @@ bool BooleanUnion::hitPoint(Ray &ray, Intersection &intersection) {
     intersection.leftHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
     intersection.rightHit->clear();  // Do I need this? this is not done in every hitpoint, make sure i don't make errors by clearing here
 
-    this->left->hitPoint(tr,*intersection.leftHit);
-    this->right->hitPoint(tr, *intersection.rightHit);
+    this->left->hitPoint(tr,*intersection.leftHit, options);
+    this->right->hitPoint(tr, *intersection.rightHit, options);
 
     //sort out the intersection of the union of the points
     if (intersection.leftHit->empty() && intersection.rightHit->empty()) return false; //no hitpoints found

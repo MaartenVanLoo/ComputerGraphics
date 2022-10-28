@@ -75,6 +75,32 @@ void Scene::clearObjects() {
     this->objects.clear();
 }
 
+void Scene::lightCheck() {
+    double r = 0;
+    double g = 0;
+    double b = 0;
+    for (auto l: lights){
+        r+=l->color.getRed();
+        g+=l->color.getGreen();
+        b+=l->color.getBlue();
+    }
+    double intensity = std::max(std::max(r,g),b);
+
+    if (intensity > 255){
+        //print warnings:
+        if (r > 255) std::cout << "[WARNING]\tTotal red intensity is to high: " << r <<"\n";
+        if (g > 255) std::cout << "[WARNING]\tTotal green intensity is to high: " << r <<"\n";
+        if (b > 255) std::cout << "[WARNING]\tTotal blue intensity is to high: " << r <<"\n";
+        double factor = intensity/255;
+        for (auto l : lights){
+            l->color.setRed(l->color.getRed()/factor);
+            l->color.setGreen(l->color.getGreen()/factor);
+            l->color.setBlue(l->color.getBlue()/factor);
+        }
+    }
+
+}
+
 
 
 

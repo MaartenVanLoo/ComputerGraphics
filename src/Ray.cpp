@@ -3,6 +3,7 @@
 //
 
 #include "../include/Ray.h"
+#include <Objects/Object.h>
 using namespace MRay;
 const Vec4 & MRay::Ray::pos() const{
     return this->position;
@@ -82,6 +83,15 @@ std::ostream &MRay::operator<<(std::ostream &os, const Ray &ray) {
     os << "position: " << ray.position << " direction: " << ray.direction;
     return os;
 }
+
+Object *Ray::getObject() const{
+    return this->obj;
+}
+
+void Ray::setObject(Object *obj) {
+    this->obj = obj;
+}
+
 
 
 

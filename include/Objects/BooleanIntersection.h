@@ -10,7 +10,7 @@ namespace MRay {
     public:
         BooleanIntersection(Object *left, Object *right);
 
-        bool hitPoint(Ray &ray, Intersection &intersection) override;
+        bool hitPoint(Ray &ray, Intersection &intersection, const Options &options) override;
 
         void computeBoundingBox() override;
 

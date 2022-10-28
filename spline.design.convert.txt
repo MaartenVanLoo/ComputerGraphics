@@ -1,0 +1,8 @@
+tapered cylinder:
+	in Spline: eerst scaling than rotation
+	MRay     : eerst rotation than scaling
+		=> effect: x y and z scaling will change due to the order
+	
+	in Spline: defined with diamter = 1
+	MRay	 : definde with radisu = 1
+		=> effect: x and y scaling must be divided by 2 for MRay

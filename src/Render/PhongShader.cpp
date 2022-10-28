@@ -53,7 +53,8 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
 
     // diff & spec
     for (const Light* light: scene->getLights()){
-        if (isInShadow(first.point,obj, light, intersection)) continue;
+        double shadowFactor = this->shadowFactor<Phong>(first.point,obj, light, intersection);
+        if (shadowFactor == 0.0) continue;
         //diffuse
         Vec4 s = light->getVec(first.point);
         s.normalize();
@@ -70,7 +71,7 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
         h.normalize();
         float mDotH = h.dot(normal);
         if (mDotH > 0){
-            float phong = std::pow(mDotH, obj->getMaterial().getSpecularExponent<Phong>());
+            double phong = std::pow(mDotH, obj->getMaterial().getSpecularExponent<Phong>());
             Color3 specColor = phong* obj->getMaterial().getSpecular<Phong>() * light->color;
             sample.add(specColor);
         }

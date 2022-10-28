@@ -4,7 +4,7 @@
 
 #include <Objects/Plane.h>
 using namespace MRay;
-bool MRay::Plane::hitPoint(Ray &ray, Intersection &intersection) {
+bool MRay::Plane::hitPoint(Ray &ray, Intersection &intersection, const Options &options) {
     //bounding box test
     //if (!this->bb.hit(ray)) return false;
 

@@ -9,8 +9,9 @@
 #include "LinearAlgebra/Vector.h"
 #include "LinearAlgebra/Matrix.h"
 
-namespace MRay {
 
+namespace MRay {
+    class Object;
     class Ray {
     public:
         Ray() {};
@@ -39,10 +40,14 @@ namespace MRay {
         void setDepth(int d);
         void increaseDepth();
         int getDepth() const;
+
+        Object* getObject() const;
+        void setObject(Object* obj);
     private:
         Vec4 position = Vec4(0, 0, 0, 1);
         Vec4 direction = Vec4(0, 0, 0, 0);;
         int depth = 0;
+        Object* obj = nullptr;
     };
 
     class PrimaryRay : public Ray {

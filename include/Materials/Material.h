@@ -17,6 +17,8 @@ namespace MRay {
         Vec4 specular= Vec4();
         double specularExponent = 0;
         double shininess = 0;
+        double transparency = 0.0;
+        double relativeSpeed = 1;
     };
 
     struct CookTorrenceMaterial{
@@ -25,6 +27,7 @@ namespace MRay {
         Vec4 fresnell = Vec4();
         double shininess = 0;
         double roughness = 0.5; //> 0 (beckmann divides by m² !, m = 0 = division by zero)
+        double transparency = 0.0;
     };
 
     class Material {
@@ -116,6 +119,17 @@ namespace MRay {
                     throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
             }
         }
+        template<ShaderTypes T>
+        double getTransparancy(){
+            switch (T) {
+                case ShaderTypes::Phong:
+                    return phongMaterial.transparency;
+                case ShaderTypes::CookTorrance:
+                    return cookTorrenceMaterial.transparency;
+                default:
+                    throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
+            }
+        }
 
         template<ShaderTypes T>
         Vec4 getFresnell(){
@@ -136,6 +150,18 @@ namespace MRay {
                     throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
                 case ShaderTypes::CookTorrance:
                     return cookTorrenceMaterial.roughness;
+            }
+        }
+
+        template<ShaderTypes T>
+        double getRelativeSpeed(){
+            switch (T){
+                case ShaderTypes::Phong:
+                    return phongMaterial.relativeSpeed;
+                case ShaderTypes::CookTorrance:
+                    return (this->getFresnell<T>().get<0>() + this->getFresnell<T>().get<1>() + this->getFresnell<T>().get<2>())/3;
+                default:
+                    throw std::invalid_argument("Not a material property for this shader type " + toString<T>() + ".");
             }
         }
 

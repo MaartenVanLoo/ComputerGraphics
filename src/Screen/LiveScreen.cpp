@@ -265,7 +265,6 @@ void LiveScreen::renderSlow() {
 
     delete this->image;
     this->image = new Image(*engine.getImage());
-
 }
 
 void LiveScreen::move(int key) {

@@ -1,0 +1,60 @@
+{
+  "config":{
+
+  },
+  "materials":{
+
+  },
+  "objects":{
+    "ground":{
+      "type":"plane",
+      "material":"gray_rubber",
+      "texture":"checkboard"
+    },
+    "glassplane":{
+      "type":"box",
+      "transformation":{
+        "translate":[0,10,4],
+        "scale":[0.0001,5,2],
+        "rotate":[0,0,0]
+      },
+      "material":"glass"
+    },
+    "straw":{
+      "type":"taperedCylinder",
+      "s": 1,
+      "transformation":{
+        "translate":[10,10,0],
+        "scale": [0.1,0.1,20]
+      },
+      "material":"red_plastic"
+    },
+    "l1":{
+      "type":"sphere",
+      "transformation":{
+        "translate": [10,0,10],
+        "scale": [0.05,0.05,0.05]
+      },
+      "material": "lightSourceGlass"
+    },
+
+    "l2":{
+      "type":"sphere",
+      "transformation":{
+        "translate": [10,15,10],
+        "scale": [0.10,0.10,0.10]
+      },
+      "material": "lightSourceGlass"
+    }
+  },
+  "lights":{
+    "l1":{
+      "type":"pointlight",
+      "position":[10,0,10]
+    },
+    "l2":{
+      "type":"pointlight",
+      "position":[10,15,10]
+    }
+  }
+}
