@@ -75,7 +75,7 @@ namespace MRay {
         //checked with matlab makehgtform function
         static void translate(Matrix4 &T, float dx, float dy, float dz);
 
-        static Matrix4 translate(float dx, float dy, float ds);
+        static Matrix4 translate(float dx, float dy, float dz);
 
         static void scale(Matrix4 &T, float s);
 

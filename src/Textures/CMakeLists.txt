@@ -1,6 +1,8 @@
 target_sources(MRay
         PUBLIC
+        Perlin.cpp
         Checkerboard.cpp
+        WoodTexture.cpp
         )
 #[[target_sources(I_ComputerGraphics
         PUBLIC

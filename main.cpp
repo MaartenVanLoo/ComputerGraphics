@@ -2,6 +2,8 @@
 #include <Utils/Stopwatch.h>
 
 #include "include/RenderEngineCore.h"
+#include "Textures/Perlin.h"
+#include "Textures/WoodTexture.h"
 #include <cmath>
 #include <sstream>
 #include <Materials/Material.h>
@@ -11,6 +13,29 @@
 #include <Render/RenderEngine.h>
 #include <Screen/LiveScreen.h>
 int main() {
+
+    //try to make wood
+    //MRay::WoodTexture wood = MRay::WoodTexture();
+    //wood.preview(-1,1,-1,1);
+
+    MRay::PerlinPlot plotter;
+    MRay::Perlin3D perlin3D_1 = MRay::Perlin3D();
+    perlin3D_1.setRoughness(20);
+    //perlin3D_1.setDetails(100);
+    //perlin3D_1.setStretch(1);
+    perlin3D_1.setScale(MRay::Vec3(3,3,3));
+    plotter.plot(perlin3D_1, 0.01, 0.01, 0.1, 0);
+
+
+    MRay::Perlin3D perlin3D_2 = MRay::Perlin3D();
+    perlin3D_2.setProfile(new MRay::Wave(22.87 * .6));
+    perlin3D_2.setRoughness(66);
+    perlin3D_2.setStretch(20);
+    perlin3D_2.setScale(MRay::Vec3(1,1,1));
+    //plotter.plot(perlin3D_2, 0.01, 0.01, 0.01, 0);
+
+    plotter.plot(perlin3D_1,perlin3D_2,0.01,0.01,0.01,0);
+    return 0;
 
     Stopwatch stopwatch = Stopwatch();
     stopwatch.start();

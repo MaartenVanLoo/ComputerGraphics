@@ -18,7 +18,7 @@ namespace MRay {
         Color3(const Vec4 &v);
 
         void add(const Color3 &color);
-
+        Vec3 getVector();
 
         void clear();
 

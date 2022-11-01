@@ -5,6 +5,9 @@
 #ifndef I_COMPUTERGRAPHICS_TEXTURE_H
 #define I_COMPUTERGRAPHICS_TEXTURE_H
 #include <LinearAlgebra//Vector.h>
+
+//wood?
+//https://skybase.wordpress.com/2012/01/26/how-to-creating-super-simple-procedural-wood-textures-in-filter-forge/
 namespace MRay {
     class Texture {
     public:

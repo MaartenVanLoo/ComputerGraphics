@@ -158,6 +158,10 @@ void Color3::setBlue(int blue) {
     Color3::blue = blue;
 }
 
+Vec3 Color3::getVector() {
+    return Vec3(this->red, this->green, this->blue);
+}
+
 
 #pragma endregion
 #pragma warning( pop )
