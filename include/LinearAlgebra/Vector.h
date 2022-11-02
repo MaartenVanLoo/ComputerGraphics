@@ -25,7 +25,11 @@ namespace MRay {
             Vec2(double x = 0.0, double y = 0.0);
 
             double get(int index) const;
-
+            template<int index>
+            double get() const{
+                assert(index <= 1 & index >= 0);
+                return this->data[index];
+            };
             double dot(const Vec2 &rhs) const;
             static double dot(const Vec2 &lhs, const Vec2 &rhs);
 
@@ -66,26 +70,32 @@ namespace MRay {
 
     class Vec3 {
     public:
-        explicit Vec3(float x = 0.0, float y = 0.0, float z = 0.0);
+        explicit Vec3(double x = 0.0, double y = 0.0, double z = 0.0);
         Vec3(float x, Vec2 vec);
+        // Copy constructor
+        Vec3(const Vec3 &p1);
 
         //get index
         float get(int index) const;
         template<int index>
         float get() const noexcept {
-            assert(index <= 3 & index >= 0);
+            assert(index <= 2 & index >= 0);
+#if SET_DATA
+            return _mm_cvtss_f32(_mm_shuffle_ps(this->data, this->data, _MM_SHUFFLE(0, 0, 0, index)));
+#else
             return this->data[index];
+#endif
         }
 
         template<int index>
         void set(float value) {
             assert(index <= 2 & index >= 0);
-//#if SET_DATA
-//            __m128 b = _mm_set_ss(value);
-//            this->data = _mm_insert_ps(this->data, b, (index << 4)); //TODO: test!
-//#else
+#if SET_DATA
+            __m128 b = _mm_set_ss(value);
+            this->data = _mm_insert_ps(this->data, b, (index << 4)); //TODO: test!
+#else
             this->data[index] = value;
-//#endif
+#endif
         };
 
         float dot(const Vec3 &rhs) const;
@@ -108,21 +118,21 @@ namespace MRay {
 
         friend Vec3 operator+(Vec3 lhs, const Vec3 &rhs);   //elementwise addition
         friend Vec3 operator-(Vec3 lhs, const Vec3 &rhs);   //elementwise subtraction
-        friend Vec3 operator*(const float &lhs, Vec3 rhs);  //elementwise multiplication
-        friend Vec3 operator*(Vec3 lhs, const float &rhs);  //elementwise multiplication
+        friend Vec3 operator*(const double &lhs, Vec3 rhs);  //elementwise multiplication
+        friend Vec3 operator*(Vec3 lhs, const double &rhs);  //elementwise multiplication
         friend Vec3 operator*(Vec3 lhs, const Vec3 &rhs);   //elementwise multiplication
-        friend Vec3 operator/(const float &lhs, Vec3 rhs);  //elementwise division
-        friend Vec3 operator/(Vec3 lhs, const float &rhs);  //elementwise division
+        friend Vec3 operator/(const double &lhs, Vec3 rhs);  //elementwise division
+        friend Vec3 operator/(Vec3 lhs, const double &rhs);  //elementwise division
         friend Vec3 operator/(Vec3 lhs, const Vec3 &rhs);   //elementwise division
 
         friend std::ostream &operator<<(std::ostream &os, const Vec3 &vec3);
 
     private:
-//#if SET_DATA
-//        __m128 data;
-//#else
+#if SET_DATA
+        __m128 data;
+#else
         float data[3]{0.0, 0.0, 0.0};
-//#endif
+#endif
         friend Matrix4;
         friend Vec2;
         friend Vec4;
@@ -131,8 +141,8 @@ namespace MRay {
 
     class Vec4 {
     public:
-        explicit Vec4(float x = 0.0, float y = 0.0, float z = 0.0, float w = 0.0);
-        explicit Vec4(const Vec3 &vec3, float w = 0.0);
+        explicit Vec4(double x = 0.0, double y = 0.0, double z = 0.0, double w = 0.0);
+        explicit Vec4(const Vec3 &vec3, double w = 0.0);
 
         // Copy constructor
         Vec4(const Vec4 &p1);
@@ -150,10 +160,11 @@ namespace MRay {
         }
 
         template<int index>
-        void set(float value) {
+        void set(double value) {
+            assert(std::abs(value) < FLT_MAX);
             assert(index <= 3 & index >= 0);
 #if SET_DATA
-            __m128 b = _mm_set_ss(value);
+            __m128 b = _mm_set_ss((float)value);
             this->data = _mm_insert_ps(this->data, b, (index << 4)); //TODO: test!
 #else
             this->data[index] = value;
@@ -219,9 +230,9 @@ namespace MRay {
         Vec4 operator-() const;
         Vec4 &operator+=(const Vec4 &rhs);  // elementwise addition
         Vec4 &operator-=(const Vec4 &rhs);  // elementwise subtraction
-        Vec4 &operator*=(float rhs);        // elementwise multiplication
+        Vec4 &operator*=(double rhs);        // elementwise multiplication
         Vec4 &operator*=(const Vec4 &rhs);  // elementwise multiplication
-        Vec4 &operator/=(float rhs);        // elementwise division
+        Vec4 &operator/=(double rhs);        // elementwise division
         Vec4 &operator/=(const Vec4 &rhs);  // elementwise division
 
         friend Vec4 operator+(Vec4 lhs, const Vec4 &rhs);   //elementwise addition

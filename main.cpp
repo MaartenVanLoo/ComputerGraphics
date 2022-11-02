@@ -20,42 +20,42 @@ int main() {
 
     MRay::PerlinPlot plotter(1500,1000);
     MRay::Perlin2D perlin2D = MRay::Perlin2D();
-    perlin2D.setScale(MRay::Vec3(0.005,0.005,0.005));
+    perlin2D.setScale(MRay::Vec3(0.005f,0.005f,0.005f));
     perlin2D.setOctaves(2);
     plotter.plot(perlin2D, -255*4, 255*4, -255*4, 255*4);
 
 
-    MRay::Perlin3D perlin3D_1 = MRay::Perlin3D();
-    perlin3D_1.setRoughness(0.5);
-    perlin3D_1.setScale(MRay::Vec3(0.01,0.01,0.01));
-    perlin3D_1.setOctaves(0);
-    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
-    perlin3D_1.setOctaves(1);
-    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
-    perlin3D_1.setOctaves(2);
-    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
-    perlin3D_1.setOctaves(3);
-    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
-    perlin3D_1.setOctaves(4);
-    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
-    perlin3D_1.setOctaves(5);
-    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
-    perlin3D_1.setOctaves(6);
-    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
-    perlin3D_1.setOctaves(7);
-    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
-    perlin3D_1.setOctaves(8);
-    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
-    perlin3D_1.setOctaves(9);
-    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    //MRay::Perlin3D perlin3D_1 = MRay::Perlin3D();
+    //perlin3D_1.setRoughness(0.5);
+    //perlin3D_1.setScale(MRay::Vec3(0.01,0.01,0.01));
+    //perlin3D_1.setOctaves(0);
+    //plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    //perlin3D_1.setOctaves(1);
+    //plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    //perlin3D_1.setOctaves(2);
+    //plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    //perlin3D_1.setOctaves(3);
+    //plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    //perlin3D_1.setOctaves(4);
+    //plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    //perlin3D_1.setOctaves(5);
+    //plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    //perlin3D_1.setOctaves(6);
+    //plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    //perlin3D_1.setOctaves(7);
+    //plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    //perlin3D_1.setOctaves(8);
+    //plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    //perlin3D_1.setOctaves(9);
+    //plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
 
-    MRay::Perlin3D perlin3D_2 = MRay::Perlin3D();
-    perlin3D_2.setRoughness(.66);
-    perlin3D_2.setScale(MRay::Vec3(1,1,1));
+    //MRay::Perlin3D perlin3D_2 = MRay::Perlin3D();
+    //perlin3D_2.setRoughness(.66);
+    //perlin3D_2.setScale(MRay::Vec3(1,1,1));
     //plotter.plot(perlin3D_2, 0.01, 0.01, 0.01, 0);
 
     //plotter.plot(perlin3D_1,perlin3D_2,0.01,0.01,0.01,0);
-    return 0;
+    //return 0;
 
     Stopwatch stopwatch = Stopwatch();
     stopwatch.start();
@@ -65,8 +65,8 @@ int main() {
     //scene.load("../../SDL/spacecraft.json");
     //scene.load("../../SDL/sdl.json");
     //scene.load("../../SDL/sdl_all.json");
-    scene.load("../../SDL/materialTest.json");
-    //scene.load("../../SDL/RefractionTest.json");
+    //scene.load("../../SDL/materialTest.json");
+    scene.load("../../SDL/RefractionTest.json");
 
     MRay::Options options;
     options.enableGui = true;
@@ -85,11 +85,11 @@ int main() {
     camera.setFocalLength(200);
 
 
-    //MRay::RenderEngine engine(&scene, &camera, options);
-    //engine.render();
+    MRay::RenderEngine engine(&scene, &camera, options);
+    engine.render();
 
-    MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera, options);
-    liveScreen.show();
+    //MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera, options);
+    //liveScreen.show();
 
     /*sequence render:
     for(int i =0; i < 720; i+=5){

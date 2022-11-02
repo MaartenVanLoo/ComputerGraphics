@@ -62,7 +62,7 @@ Color3 MRay::PhongShader::shade(Ray &primaryRay, Intersection& intersection) {
         if (mDotS > 0.0){
             Color3 diffuse = mDotS * obj->getMaterial().getDiffuse<Phong>() * light->color;
             if (obj->getTexture() != nullptr){
-                diffuse *= first.obj->getTexture()->compute(first.point.get<0>(),first.point.get<1>(),first.point.get<2>(),10);
+                diffuse *= first.obj->getTexture()->compute(first.point.get<0>(),first.point.get<1>(),first.point.get<2>());
             }
             sample.add(diffuse);
         }

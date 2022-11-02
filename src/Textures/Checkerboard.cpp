@@ -5,12 +5,12 @@
 #include <Textures/Checkerboard.h>
 #include <iostream>
 using namespace MRay;
-Vec3 MRay::Checkboard::compute(float x, float y, float z,float scale) {
-    int u = std::abs((int(x/scale)) % 2);
-    int v = std::abs((int(y/scale)) % 2);
-    int c = u ^ v;
-    if ((x < 0) ^ (y < 0)) c ^= 1;
+Vec3 MRay::Checkboard::compute(float u, float v, float w) {
+    int ui = std::abs((int(u / this->su)) % 2);
+    int vi = std::abs((int(v / this->sv)) % 2);
+    int c = ui ^ vi;
+    if ((u < 0) ^ (v < 0)) c ^= 1;
     return Vec3(float(c),float(c),float(c));
 }
 
-Checkboard::Checkboard(float sx, float sy, float sz) : sx(sx), sy(sy), sz(sz) {}
+Checkboard::Checkboard(float su, float sv, float sw) : su(su), sv(sv), sw(sw) {}

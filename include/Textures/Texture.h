@@ -11,7 +11,8 @@
 namespace MRay {
     class Texture {
     public:
-        virtual Vec3 compute(float x, float y, float z, float scale) = 0;
+        virtual Vec3 compute(float u = 0.0, float v = 0.0, float w = 0.0) = 0;
+        virtual Vec2 normalMap(float u = 0.0, float v = 0.0, float w = 0.0);
     };
 }
 #endif //I_COMPUTERGRAPHICS_TEXTURE_H

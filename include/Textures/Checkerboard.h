@@ -9,12 +9,12 @@
 namespace MRay {
     class Checkboard : public Texture {
     public:
-        Checkboard(float sx, float sy, float sz);
+        Checkboard(float su = 1.0, float sv=1.0, float sw=1.0);
 
-        Vec3 compute(float x, float y, float z, float scale) override;
+        Vec3 compute(float u, float v, float w) override;
 
     private:
-        float sx=0.0f, sy=0.0f, sz=0.0f;
+        float su=1.0f, sv=1.0f, sw=1.0f;
     };
 }
 #endif //I_COMPUTERGRAPHICS_CHECKERBOARD_H

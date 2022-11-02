@@ -51,7 +51,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
     //sample.add(obj->getMaterial().emissive);
     Color3 ambient = ka * obj->getMaterial().getAmbient<CookTorrance>();
     if (obj->getTexture() != nullptr) {
-        ambient *= first.obj->getTexture()->compute(first.point.get<0>(), first.point.get<1>(), first.point.get<2>(),10);
+        ambient *= first.obj->getTexture()->compute(first.point.get<0>(), first.point.get<1>(), first.point.get<2>());
     }
     sample.add(ambient);
 
@@ -76,7 +76,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
             Vec4 tmp = mDotS * kd * fresnell(obj->getMaterial().fresnell);
             Color3 diffuse = (shadowFactor * mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>())) * light->color; //note: precompute fresnell values ??
             if (obj->getTexture() != nullptr) {
-                diffuse *= first.obj->getTexture()->compute(first.point.get<0>(), first.point.get<1>(), first.point.get<2>(),10);
+                diffuse *= first.obj->getTexture()->compute(first.point.get<0>(), first.point.get<1>(), first.point.get<2>());
             }
             assert(mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()).get<0>() >= 0); //underflow
             assert(mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>()).get<1>() >= 0); //underflow

@@ -4,6 +4,7 @@
 
 #include <Scene/SDLParser.h>
 #include <Textures/Checkerboard.h>
+#include "Textures/WaterTexture.h"
 
 template<class M>
 bool contains(M const&){return true;}
@@ -266,6 +267,8 @@ MRay::Material MRay::SDLParser::getMaterial(const std::string &material) {
 MRay::Texture *MRay::SDLParser::getTexture(const std::string &texture, Json::Value config) {
     if (texture == "checkboard"){
         return new Checkboard(5,5,5);
+    }else if (texture =="water"){
+        return new WaterTexture(0.1,0.1);
     }
     return nullptr;
 }

@@ -8,7 +8,7 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/highgui.hpp>
 #include <iostream>
-#include "LinearAlgebra/Vector.h"
+#include <LinearAlgebra/Vector.h>
 
 namespace MRay{
     //source:http://adrianb.io/2014/08/09/perlinnoise.html
@@ -67,24 +67,18 @@ namespace MRay{
     protected:
         int pearsonHash(int value) const;
         const static int permutation[];
-        int hash(int u) const ;
+
+        int hash(int u) const;
         int hash(int u, int v) const ;
         int hash(int u, int v, int w) const;
 
-        static double grad(int hash, const double u){return 0.0;};
-        static double grad(int hash, const double u, const double v);
-        static double grad(int hash, const double u, const double v, const double w);
+        static double grad(int hash, double u);
+        static double grad(int hash, double u, double v);
+        static double grad(int hash, double u, double v, double w);
 
-        static double fade(double t){
-            return t * t * t * (t * (t * 6 - 15) + 10);
-        }
-        static double dfade(double t){
-            //derivative of fade
-            return 30.0*t*t*(t*(t-2.0)+1.0);
-        }
-        static int inc(int v) {
-            return v+=1;
-        }
+        static double fade(double t);
+        static double dfade(double t);
+        static int inc(int v);
 
 
         int seed = 0;
@@ -124,7 +118,7 @@ namespace MRay{
         /// Compute fractal perlin noise with given settings at point [u,v]
         /// \param vec Vector with [u,v] value of point.
         /// \return noise value in range [-1,1]
-        double compute(Vec2 vec) const{return 0.0;}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
+        double compute(Vec2 vec) const{return compute(vec.get<0>(), vec.get<1>());}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
         /// Compute fractal perlin noise and its gradients with given settings at point [u,v]
         /// \param u 1st coordinate of noise.
         /// \param v 2nd coordinate of noise.
@@ -133,7 +127,7 @@ namespace MRay{
         /// Compute fractal perlin noise and its gradients with given settings at point [u,v]
         /// \param vec Vector with [u,v] value of point.
         /// \return Vector with 3 values, 1st is perlin noise in range [-1,1], 2nd = gradient with respect to u, 3th = gradient with respect to v.
-        Vec3 computeGradient(Vec2 vec){return Vec3();}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
+        Vec3 computeGradient(Vec2 vec){return computeGradient(vec.get<0>(), vec.get<1>());}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
 
         /// Compute perlin noise with given scale at point [u,v]
         /// \param u 1st coordinate of noise.
@@ -143,7 +137,7 @@ namespace MRay{
         /// Compute perlin noise with given scale at point [u,v]
         /// \param vec Vector with [u,v] value of point.
         /// \return noise value in range [-1,1]
-        double perlin(Vec2 vec) const{return 0.0;}; //todo, try to accelerate with vectors  //TODO: add intrinsics vec2 & vec3
+        double perlin(Vec2 vec) const{return perlin(vec.get<0>(),vec.get<1>());}; //todo, try to accelerate with vectors  //TODO: add intrinsics vec2 & vec3
         /// Compute perlin noise and its gradients with given scale at point [u,v]
         /// \param u 1st coordinate of noise.
         /// \param v 2nd coordinate of noise.
@@ -152,7 +146,7 @@ namespace MRay{
         /// Compute perlin noise and its gradients with given scale at point [u,v]
         /// \param vec Vector with [u,v] value of point.
         /// \return Vector with 3 values, 1st is perlin noise in range [-1,1], 2nd = gradient with respect to u, 3th = gradient with respect to v.
-        Vec3 perlinGradient(Vec2 vec){return Vec3();}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
+        Vec3 perlinGradient(Vec2 vec){return perlinGradient(vec.get<0>(),vec.get<1>());}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
     };
 
     class Perlin3D : public Perlin{
@@ -168,7 +162,7 @@ namespace MRay{
         /// Compute fractal perlin noise with given settings at point [u,v,w]
         /// \param vec Vector with [u,v,w] value of point.
         /// \return noise value in range [-1,1]
-        double compute(Vec3 vec) const{return 0.0; }; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
+        double compute(Vec3 vec) const{return compute(vec.get<0>(), vec.get<1>(), vec.get<2>());}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
         /// Compute fractal perlin noise and its gradients with given settings at point [u,v,w]
         /// \param u 1st coordinate of noise.
         /// \param v 2nd coordinate of noise.
@@ -178,7 +172,7 @@ namespace MRay{
         /// Compute fractal perlin noise and its gradients with given settings at point [u,v,w]
         /// \param vec Vector with [u,v,w] value of point.
         /// \return Vector with 4 values, 1st is perlin noise in range [-1,1], 2nd = gradient with respect to u, 3th = gradient with respect to v, 4th = gradient with respect to w.
-        Vec4 computeGradient(Vec3 vec) const {return Vec4();}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
+        Vec4 computeGradient(Vec3 vec) const {return computeGradient(vec.get<0>(), vec.get<1>(), vec.get<2>());}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
 
         /// Compute perlin noise with given scale at point [u,v,w]
         /// \param u 1st coordinate of noise.
@@ -189,7 +183,7 @@ namespace MRay{
         /// Compute perlin noise with given scale at point [u,v,w]
         /// \param vec Vector with [u,v,w] value of point.
         /// \return noise value in range [-1,1]
-        double perlin(Vec3 vec) const {return 0.0;}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
+        double perlin(Vec3 vec) const {return perlin(vec.get<0>(), vec.get<1>(), vec.get<2>());}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
         /// Compute perlin noise and its gradients with given scale at point [u,v]
         /// \param u 1st coordinate of noise.
         /// \param v 2nd coordinate of noise.
@@ -199,7 +193,7 @@ namespace MRay{
         /// Compute perlin noise and its gradients with given scale at point [u,v]
         /// \param vec Vector with [u,v,w] value of point.
         /// \return Vector with 4 values, 1st is perlin noise in range [-1,1], 2nd = gradient with respect to u, 3th = gradient with respect to v, 4th = gradient with respect to w.
-        Vec4 perlinGradient(Vec3 vec){return Vec4();}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
+        Vec4 perlinGradient(Vec3 vec){return perlinGradient(vec.get<0>(), vec.get<1>(), vec.get<2>());}; //todo, try to accelerate with vectors //TODO: add intrinsics vec2 & vec3
     };
 
 

@@ -5,8 +5,9 @@
 #include <Textures/Perlin.h>
 #include <iostream>
 #include <iomanip>
-#include "Utils/Stopwatch.h"
+#include <Utils/Stopwatch.h>
 
+#pragma region permutation
 const int MRay::Perlin::permutation[] = {
         151,160,137,91,90,15,                 // Hash lookup table as defined by Ken Perlin.  This is a randomly
         131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,    // arranged array of all numbers from 0-255 inclusive.
@@ -37,46 +38,7 @@ const int MRay::Perlin::permutation[] = {
         138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
 
 };
-
-
-
-
-
-double MRay::Perlin::grad(int hash, const double u, const double v){
-    switch (hash & 0x3){
-        case 0x0: return  u +  v;   // (1  ,1  )
-        case 0x1: return -u +  v;   // (-1 ,1  )
-        case 0x2: return  u + -v;   // (1  ,-1 )
-        case 0x3: return -u + -v;   // (-1 ,-1 )
-        default: return 0;
-    }
-}
-double MRay::Perlin::grad(int hash, const double u, const double v, const double w) {
-    switch (hash & 0xF){
-        case 0x0: return  u +  v;   // (1  ,1  ,0 )
-        case 0x1: return -u +  v;   // (-1 ,1  ,0 )
-        case 0x2: return  u + -v;   // (1  ,-1 ,0 )
-        case 0x3: return -u + -v;   // (-1 ,-1 ,0 )
-        case 0x4: return  u +  w;   // (1  ,0  ,1 )
-        case 0x5: return -u +  w;   // (-1 ,0  ,1 )
-        case 0x6: return  u + -w;   // (1  ,0  ,-1)
-        case 0x7: return -u + -w;   // (-1 ,0  ,-1)
-        case 0x8: return  v +  w;   // (0  ,1  ,1 )
-        case 0x9: return -v +  w;   // (0  ,-1 ,1 )
-        case 0xA: return  v + -w;   // (0  ,1  ,-1)
-        case 0xB: return -v + -w;   // (0  ,-1 ,-1)
-
-        case 0xC: return  v +  u;   // (1  ,1  ,0 )
-        case 0xD: return -v +  w;   // (0  ,-1 ,1 )
-        case 0xE: return  v + -u;   // (-1 ,1  ,0 )
-        case 0xF: return -v + -w;   // (0  ,-1 ,-1)
-        default: return 0;
-    }
-}
-
-
-
-
+#pragma endregion
 
 
 #pragma region Perlin
@@ -142,9 +104,58 @@ int MRay::Perlin::hash(int u, int v, int w) const{
 #pragma endregion
 
 
+double MRay::Perlin::grad(int hash, const double u) {
+    switch (hash & 0x1) {
+        case 0x0: return u;   // (1   )
+        case 0x1: return -u;   // (-1  )
+        default:  return 0;
+    }
+}
+double MRay::Perlin::grad(int hash, const double u, const double v){
+    switch (hash & 0x3){
+        case 0x0: return  u +  v;   // (1  ,1  )
+        case 0x1: return -u +  v;   // (-1 ,1  )
+        case 0x2: return  u + -v;   // (1  ,-1 )
+        case 0x3: return -u + -v;   // (-1 ,-1 )
+        default: return 0;
+    }
+}
+double MRay::Perlin::grad(int hash, const double u, const double v, const double w) {
+    switch (hash & 0xF){
+        case 0x0: return  u +  v;   // (1  ,1  ,0 )
+        case 0x1: return -u +  v;   // (-1 ,1  ,0 )
+        case 0x2: return  u + -v;   // (1  ,-1 ,0 )
+        case 0x3: return -u + -v;   // (-1 ,-1 ,0 )
+        case 0x4: return  u +  w;   // (1  ,0  ,1 )
+        case 0x5: return -u +  w;   // (-1 ,0  ,1 )
+        case 0x6: return  u + -w;   // (1  ,0  ,-1)
+        case 0x7: return -u + -w;   // (-1 ,0  ,-1)
+        case 0x8: return  v +  w;   // (0  ,1  ,1 )
+        case 0x9: return -v +  w;   // (0  ,-1 ,1 )
+        case 0xA: return  v + -w;   // (0  ,1  ,-1)
+        case 0xB: return -v + -w;   // (0  ,-1 ,-1)
+
+        case 0xC: return  v +  u;   // (1  ,1  ,0 )
+        case 0xD: return -v +  w;   // (0  ,-1 ,1 )
+        case 0xE: return  v + -u;   // (-1 ,1  ,0 )
+        case 0xF: return -v + -w;   // (0  ,-1 ,-1)
+        default: return 0;
+    }
+}
+
+double MRay::Perlin::fade(double t) {
+    return t * t * t * (t * (t * 6 - 15) + 10);
+}
+double MRay::Perlin::dfade(double t) {
+    //derivative of fade
+    return 30.0*t*t*(t*(t-2.0)+1.0);
+}
+int MRay::Perlin::inc(int v) {
+    return v+=1;
+}
+
+
 #pragma endregion
-
-
 
 #pragma region Perlin1D
 double MRay::Perlin1D::compute(double u) const{
@@ -532,7 +543,7 @@ MRay::Vec4 MRay::Perlin3D::perlinGradient(double u, double v, double w) const {
     double du = 0;
     double dv = 0;
     double dw = 0;
-    return Vec4((float)value, (float)du, (float)dv, (float)dw);
+    return Vec4(value, u, dv, dw);
 }
 #pragma endregion
 

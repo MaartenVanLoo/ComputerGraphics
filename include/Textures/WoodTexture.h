@@ -13,7 +13,7 @@ namespace MRay {
     public:
         WoodTexture();
 
-        Vec3 compute(float x, float y, float z, float scale) override;
+        Vec3 compute(float u, float v, float w) override;
 
         void preview(double x0 = 0, double x1 = 1, double y0 = 0, double y1 = 1);
     private:

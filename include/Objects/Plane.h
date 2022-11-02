@@ -29,8 +29,8 @@ namespace MRay {
         void computeBoundingBox();
 
     protected:
-        Vec4 pos;    // position describes to translation of the plane
-        Vec4 norm;   // normal vector fully describes the direction of a plane;
+        static const Vec4 pos; //default pos = (0,0,0,1)
+        static const Vec4 norm; //Default norm = (0,0,1,0)   // normal vector fully describes the direction of a plane;
     };
 }
 #endif //I_COMPUTERGRAPHICS_PLANE_H

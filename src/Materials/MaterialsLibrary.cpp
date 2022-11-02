@@ -5,6 +5,7 @@
 #include <Materials/MaterialsLibrary.h>
 using namespace MRay;
 
+//http://www.cs.cornell.edu/courses/cs5625/2013sp/lectures/Lec2ShadingModelsWeb.pdf
 Material MaterialsLibrary::emerald(){
     //phong
     PhongMaterial phongMaterial;
@@ -509,11 +510,11 @@ Material MaterialsLibrary::glass() {
     phongMaterial.transparency = .72;
 
     CookTorrenceMaterial cookTorrenceMaterial;
-    cookTorrenceMaterial.ambient = Vec4(1,1,1);
+    cookTorrenceMaterial.ambient = Vec4(1,2,1);
     cookTorrenceMaterial.diffuse = Vec4(0.1,0.1,0.1);
     cookTorrenceMaterial.shininess = .1;
     cookTorrenceMaterial.roughness = .01;
-    cookTorrenceMaterial.fresnell = Vec4(1.52,1.52,1.52,0);
+    cookTorrenceMaterial.fresnell = Vec4(1.52,1.52,1.52);
     cookTorrenceMaterial.transparency = .90;
 
     return Material(phongMaterial, cookTorrenceMaterial);
@@ -534,6 +535,22 @@ Material MaterialsLibrary::lightSourceGlass(){
 
     return Material(phongMaterial, cookTorrenceMaterial);
 }
+
+Material MaterialsLibrary::water() {
+    PhongMaterial phongMaterial;
+
+    CookTorrenceMaterial cookTorrenceMaterial;
+    cookTorrenceMaterial.ambient = Vec4(6,3,30);
+    cookTorrenceMaterial.diffuse = Vec4(0.1,0.1,0.2);
+    cookTorrenceMaterial.shininess = 0.2;
+    cookTorrenceMaterial.roughness = .3;
+    cookTorrenceMaterial.fresnell = Vec4(1.33,1.33,1.33);
+    cookTorrenceMaterial.transparency = 0.8;
+
+    return Material(phongMaterial, cookTorrenceMaterial);
+}
+
+
 const std::unordered_map<std::string,Material> MaterialsLibrary::materials = std::unordered_map<std::string, Material>({
     {"emerald",MaterialsLibrary::emerald()},
     {"jade",MaterialsLibrary::jade()},
@@ -564,5 +581,6 @@ const std::unordered_map<std::string,Material> MaterialsLibrary::materials = std
     {"perfect_mirror",MaterialsLibrary::perfect_mirror()},
     {"glass",MaterialsLibrary::glass()},
     {"lightSourceGlass",MaterialsLibrary::lightSourceGlass()},
+    {"water",MaterialsLibrary::water()},
     });
 

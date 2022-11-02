@@ -37,7 +37,7 @@ namespace MRay {
 
         double shininessThreshold = 0.0001;
         double transparencyThreshold = 0.0001;
-        int maxRayBounce = 10;
+        int maxRayBounce = 3;
         double eps = 0.001;
     };
 
