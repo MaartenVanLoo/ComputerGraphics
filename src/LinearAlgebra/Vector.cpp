@@ -135,8 +135,8 @@ MRay::Vec3::Vec3(float x, float y, float z) {
 }
 MRay::Vec3::Vec3(float x, Vec2 vec) {
     this->data[0] = x;
-    this->data[1] = vec.data[0];
-    this->data[2] = vec.data[1];
+    this->data[1] = float(vec.data[0]);
+    this->data[2] = float(vec.data[1]);
 }
 float MRay::Vec3::get(int index) const {
     assert(index <= 2 & index >= 0);

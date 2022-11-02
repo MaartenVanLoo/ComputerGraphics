@@ -366,7 +366,7 @@ MRay::Vec3 MRay::Perlin2D::perlinGradient(double u, double v) const{
     double du = duf*(vb - va ) + vf * duf * (va - vb - vc + vd);
     double dv = dvf*(vc - va ) + dvf * uf * (va - vb - vc + vd);
 
-    return Vec3(value, du, dv);
+    return Vec3(value,du, dv);
 }
 #pragma endregion
 

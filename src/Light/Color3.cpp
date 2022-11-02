@@ -150,12 +150,21 @@ void Color3::setRed(int red) {
     Color3::red = red;
 }
 
+void Color3::setRed(double red) {
+    Color3::red = (int)red;
+}
+
 void Color3::setGreen(int green) {
     Color3::green = green;
 }
-
+void Color3::setGreen(double red) {
+    Color3::green = (int)green;
+}
 void Color3::setBlue(int blue) {
     Color3::blue = blue;
+}
+void Color3::setBlue(double blue) {
+    Color3::blue = (int)blue;
 }
 
 Vec3 Color3::getVector() {

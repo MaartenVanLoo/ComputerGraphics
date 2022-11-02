@@ -8,7 +8,7 @@
 using namespace MRay;
 class TObject : public Object{
 public:
-    bool hitPoint(Ray &ray,Intersection &intersect) override {
+    bool hitPoint(Ray &ray,Intersection &intersect, const Options& options) override {
         return false;
     }
 

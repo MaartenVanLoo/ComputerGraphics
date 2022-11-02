@@ -34,21 +34,21 @@ namespace MRay {
             bool operator!=(const Vec2 &rhs) const;
 
             Vec2 operator-() const;
-            Vec2 &operator+=(const Vec2 &rhs); // elementwise addition
-            Vec2 &operator-=(const Vec2 &rhs); // elementwise subtraction
-            Vec2 &operator*=(double rhs); // elementwise multiplication
-            Vec2 &operator*=(const Vec2 &rhs); // elementwise multiplication
-            Vec2 &operator/=(double rhs); // elementwise division
-            Vec2 &operator/=(const Vec2 &rhs); // elementwise division
+            Vec2 &operator+=(const Vec2 &rhs);  // elementwise addition
+            Vec2 &operator-=(const Vec2 &rhs);  // elementwise subtraction
+            Vec2 &operator*=(double rhs);       // elementwise multiplication
+            Vec2 &operator*=(const Vec2 &rhs);  // elementwise multiplication
+            Vec2 &operator/=(double rhs);       // elementwise division
+            Vec2 &operator/=(const Vec2 &rhs);  // elementwise division
 
-            friend Vec2 operator+(Vec2 lhs, const Vec2 &rhs);   //elementwise addition
-            friend Vec2 operator-(Vec2 lhs, const Vec2 &rhs);   //elementwise subtraction
+            friend Vec2 operator+(Vec2 lhs, const Vec2 &rhs);    //elementwise addition
+            friend Vec2 operator-(Vec2 lhs, const Vec2 &rhs);    //elementwise subtraction
             friend Vec2 operator*(const double &lhs, Vec2 rhs);  //elementwise multiplication
             friend Vec2 operator*(Vec2 lhs, const double &rhs);  //elementwise multiplication
-            friend Vec2 operator*(Vec2 lhs, const Vec2 &rhs);   //elementwise multiplication
+            friend Vec2 operator*(Vec2 lhs, const Vec2 &rhs);    //elementwise multiplication
             friend Vec2 operator/(const double &lhs, Vec2 rhs);  //elementwise division
             friend Vec2 operator/(Vec2 lhs, const double &rhs);  //elementwise division
-            friend Vec2 operator/(Vec2 lhs, const Vec2 &rhs);   //elementwise division
+            friend Vec2 operator/(Vec2 lhs, const Vec2 &rhs);    //elementwise division
 
             friend std::ostream &operator<<(std::ostream &os, const Vec2 &vec2);
 
@@ -99,12 +99,12 @@ namespace MRay {
         bool operator!=(const Vec3 &rhs) const;
 
         Vec3 operator-() const;
-        Vec3 &operator+=(const Vec3 &rhs); // elementwise addition
-        Vec3 &operator-=(const Vec3 &rhs); // elementwise subtraction
-        Vec3 &operator*=(double rhs); // elementwise multiplication
-        Vec3 &operator*=(const Vec3 &rhs); // elementwise multiplication
-        Vec3 &operator/=(double rhs); // elementwise division
-        Vec3 &operator/=(const Vec3 &rhs); // elementwise division
+        Vec3 &operator+=(const Vec3 &rhs);  // elementwise addition
+        Vec3 &operator-=(const Vec3 &rhs);  // elementwise subtraction
+        Vec3 &operator*=(double rhs);       // elementwise multiplication
+        Vec3 &operator*=(const Vec3 &rhs);  // elementwise multiplication
+        Vec3 &operator/=(double rhs);       // elementwise division
+        Vec3 &operator/=(const Vec3 &rhs);  // elementwise division
 
         friend Vec3 operator+(Vec3 lhs, const Vec3 &rhs);   //elementwise addition
         friend Vec3 operator-(Vec3 lhs, const Vec3 &rhs);   //elementwise subtraction
@@ -217,24 +217,24 @@ namespace MRay {
         bool operator!=(const Vec4 &rhs) const;
 
         Vec4 operator-() const;
-        Vec4 &operator+=(const Vec4 &rhs); // elementwise addition
-        Vec4 &operator-=(const Vec4 &rhs); // elementwise subtraction
-        Vec4 &operator*=(float rhs); // elementwise multiplication
-        Vec4 &operator*=(const Vec4 &rhs); // elementwise multiplication
-        Vec4 &operator/=(float rhs); // elementwise division
-        Vec4 &operator/=(const Vec4 &rhs); // elementwise division
+        Vec4 &operator+=(const Vec4 &rhs);  // elementwise addition
+        Vec4 &operator-=(const Vec4 &rhs);  // elementwise subtraction
+        Vec4 &operator*=(float rhs);        // elementwise multiplication
+        Vec4 &operator*=(const Vec4 &rhs);  // elementwise multiplication
+        Vec4 &operator/=(float rhs);        // elementwise division
+        Vec4 &operator/=(const Vec4 &rhs);  // elementwise division
 
         friend Vec4 operator+(Vec4 lhs, const Vec4 &rhs);   //elementwise addition
-        friend Vec4 operator+(Vec4 lhs, const double &rhs);   //elementwise addition
-        friend Vec4 operator+(const double &lhs, Vec4 rhs);   //elementwise addition
+        friend Vec4 operator+(Vec4 lhs, const double &rhs); //elementwise addition
+        friend Vec4 operator+(const double &lhs, Vec4 rhs); //elementwise addition
         friend Vec4 operator-(Vec4 lhs, const Vec4 &rhs);   //elementwise subtraction
-        friend Vec4 operator-(Vec4 lhs, const double &rhs);   //elementwise addition
-        friend Vec4 operator-(const double &lhs, Vec4 rhs);   //elementwise addition
-        friend Vec4 operator*(const double &lhs, Vec4 rhs);  //elementwise multiplication
-        friend Vec4 operator*(Vec4 lhs, const double &rhs);  //elementwise multiplication
+        friend Vec4 operator-(Vec4 lhs, const double &rhs); //elementwise addition
+        friend Vec4 operator-(const double &lhs, Vec4 rhs); //elementwise addition
+        friend Vec4 operator*(const double &lhs, Vec4 rhs); //elementwise multiplication
+        friend Vec4 operator*(Vec4 lhs, const double &rhs); //elementwise multiplication
         friend Vec4 operator*(Vec4 lhs, const Vec4 &rhs);   //elementwise multiplication
-        friend Vec4 operator/(const double &lhs, Vec4 rhs);  //elementwise division
-        friend Vec4 operator/(Vec4 lhs, const double &rhs);  //elementwise division
+        friend Vec4 operator/(const double &lhs, Vec4 rhs); //elementwise division
+        friend Vec4 operator/(Vec4 lhs, const double &rhs); //elementwise division
         friend Vec4 operator/(Vec4 lhs, const Vec4 &rhs);   //elementwise division
 
 

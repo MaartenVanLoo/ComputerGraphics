@@ -14,7 +14,7 @@
 
 using namespace MRay;
 TEST_CASE("tBoolean"){
-
+    Options options;
     SECTION("BooleanUnion") {
         Object *obj1 = new Sphere(Vec4(0, -0.2, 0, 1), 1);
         obj1->setMaterial(MaterialsLibrary::red_plastic());
@@ -29,7 +29,7 @@ TEST_CASE("tBoolean"){
 
         Intersection intersection;
 
-        obj->hitPoint(ray, intersection);
+        obj->hitPoint(ray, intersection,options);
     }
     SECTION("BooleanIntersection") {
         Object *obj1 = new Sphere(Vec4(0, -0.2, 0, 1), 1);
@@ -45,7 +45,7 @@ TEST_CASE("tBoolean"){
 
         Intersection intersection;
 
-        obj->hitPoint(ray, intersection);
+        obj->hitPoint(ray, intersection,options);
     }
     SECTION("BooleanDifference") {
         //Boolean Difference
@@ -59,6 +59,6 @@ TEST_CASE("tBoolean"){
 
         Intersection intersection;
 
-        obj->hitPoint(ray, intersection);
+        obj->hitPoint(ray, intersection,options);
     }
 }

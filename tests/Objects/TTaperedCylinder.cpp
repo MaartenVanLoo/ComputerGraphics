@@ -9,6 +9,7 @@
 #define DEBUG_PRINT false
 using namespace MRay;
 TEST_CASE("tTaperedCylinder_HitPoints") {
+    Options options;
     TaperedCylinder cylinder = TaperedCylinder(1);
     cylinder.computeBoundingBox();
     Intersection intersect;
@@ -22,7 +23,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         Ray ray2 = Ray(Vec4(0,0,0.5,1),Vec4(0,0,-1,0)); //hit base (1)
         Ray ray3 = Ray(Vec4(0,0,0.5,1),Vec4(0,0,1,0)); //hit top (2)
 
-        CHECK(cylinder.hitPoint(ray1,intersect));
+        CHECK(cylinder.hitPoint(ray1,intersect, options));
         CHECK(intersect.hit.size() == 1);
         CHECK(intersect.hit[0].surface == 0);
         CHECK(intersect.hit[0].entering == false);
@@ -33,7 +34,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray2,intersect));
+        CHECK(cylinder.hitPoint(ray2,intersect, options));
         CHECK(intersect.hit.size() == 1);
         CHECK(intersect.hit[0].surface == 1);
         CHECK(intersect.hit[0].entering == false);
@@ -44,7 +45,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray3,intersect));
+        CHECK(cylinder.hitPoint(ray3,intersect, options));
         CHECK(intersect.hit.size() == 1);
         CHECK(intersect.hit[0].surface == 2);
         CHECK(intersect.hit[0].entering == false);
@@ -64,7 +65,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         Ray ray6 = Ray(Vec4(1.5,1.5,0),Vec4(-1,-1,1,0));    //hit wall than top
         Ray ray7 = Ray(Vec4(1.5,1.5,1,1), Vec4(-1,-1,-1,0)); // hit wall than base
 
-        CHECK(cylinder.hitPoint(ray1,intersect));
+        CHECK(cylinder.hitPoint(ray1,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 0);
         CHECK(intersect.hit[1].surface == 0);
@@ -89,7 +90,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
 
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray2,intersect));
+        CHECK(cylinder.hitPoint(ray2,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 2);
         CHECK(intersect.hit[1].surface == 1);
@@ -113,7 +114,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray3,intersect));
+        CHECK(cylinder.hitPoint(ray3,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 1);
         CHECK(intersect.hit[1].surface == 2);
@@ -137,7 +138,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray4,intersect));
+        CHECK(cylinder.hitPoint(ray4,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 2);
         CHECK(intersect.hit[1].surface == 0);
@@ -161,7 +162,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray5,intersect));
+        CHECK(cylinder.hitPoint(ray5,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 1);
         CHECK(intersect.hit[1].surface == 0);
@@ -185,7 +186,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray6,intersect));
+        CHECK(cylinder.hitPoint(ray6,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 0);
         CHECK(intersect.hit[1].surface == 2);
@@ -209,7 +210,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray7,intersect));
+        CHECK(cylinder.hitPoint(ray7,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 0);
         CHECK(intersect.hit[1].surface == 1);
@@ -247,7 +248,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         Ray ray7 = Ray(Vec4(1.5,1.5,1,1), Vec4(-1,-1,-1,0)); // hit wall than base
 
 
-        CHECK(cylinder.hitPoint(ray1,intersect));
+        CHECK(cylinder.hitPoint(ray1,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 0);
         CHECK(intersect.hit[1].surface == 0);
@@ -272,7 +273,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
 
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray2,intersect));
+        CHECK(cylinder.hitPoint(ray2,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 2);
         CHECK(intersect.hit[1].surface == 1);
@@ -296,7 +297,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray3,intersect));
+        CHECK(cylinder.hitPoint(ray3,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 1);
         CHECK(intersect.hit[1].surface == 2);
@@ -320,7 +321,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray4,intersect));
+        CHECK(cylinder.hitPoint(ray4,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 2);
         CHECK(intersect.hit[1].surface == 0);
@@ -344,7 +345,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray5,intersect));
+        CHECK(cylinder.hitPoint(ray5,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 1);
         CHECK(intersect.hit[1].surface == 0);
@@ -368,7 +369,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray6,intersect));
+        CHECK(cylinder.hitPoint(ray6,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 0);
         CHECK(intersect.hit[1].surface == 2);
@@ -392,7 +393,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray7,intersect));
+        CHECK(cylinder.hitPoint(ray7,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 0);
         CHECK(intersect.hit[1].surface == 1);
@@ -437,7 +438,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         ray6 = ray6.transform(AffineTransform::rotateX(1.57079632679));
         ray7 = ray7.transform(AffineTransform::rotateX(1.57079632679));
 
-        CHECK(cylinder.hitPoint(ray1,intersect));
+        CHECK(cylinder.hitPoint(ray1,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 0);
         CHECK(intersect.hit[1].surface == 0);
@@ -462,7 +463,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
 
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray2,intersect));
+        CHECK(cylinder.hitPoint(ray2,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 2);
         CHECK(intersect.hit[1].surface == 1);
@@ -486,7 +487,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray3,intersect));
+        CHECK(cylinder.hitPoint(ray3,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 1);
         CHECK(intersect.hit[1].surface == 2);
@@ -510,7 +511,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray4,intersect));
+        CHECK(cylinder.hitPoint(ray4,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 2);
         CHECK(intersect.hit[1].surface == 0);
@@ -534,7 +535,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray5,intersect));
+        CHECK(cylinder.hitPoint(ray5,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 1);
         CHECK(intersect.hit[1].surface == 0);
@@ -558,7 +559,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray6,intersect));
+        CHECK(cylinder.hitPoint(ray6,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 0);
         CHECK(intersect.hit[1].surface == 2);
@@ -582,7 +583,7 @@ TEST_CASE("tTaperedCylinder_HitPoints") {
         CHECK(std::abs(n2.get(3)) < 5e-6);
 
         intersect.clear();
-        CHECK(cylinder.hitPoint(ray7,intersect));
+        CHECK(cylinder.hitPoint(ray7,intersect, options));
         CHECK(intersect.hit.size() == 2);
         CHECK(intersect.hit[0].surface == 0);
         CHECK(intersect.hit[1].surface == 1);

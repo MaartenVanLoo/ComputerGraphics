@@ -48,10 +48,11 @@ namespace MRay {
         int getBlue() const;
 
         void setRed(int red);
-
+        void setRed(double red);
         void setGreen(int green);
-
+        void setGreen(double green);
         void setBlue(int blue);
+        void setBlue(double blue);
 
     private:
         int red = 0;

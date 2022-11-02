@@ -7,6 +7,7 @@
 #include <Objects/Box.h>
 using namespace MRay;
 TEST_CASE("tBox_HitPoints"){
+    Options options;
     Box box = Box();
     Intersection intersect;
     Vec4 target1, target2;
@@ -23,18 +24,18 @@ TEST_CASE("tBox_HitPoints"){
         Ray ray6 = Ray(Vec4(-2,-2,-2,1),Vec4(2,2,0,0));  //no intersect
 
 
-        CHECK_FALSE(box.hitPoint(ray1, intersect));
-        CHECK_FALSE(box.hitPoint(ray2, intersect));
-        CHECK_FALSE(box.hitPoint(ray3, intersect));
-        CHECK_FALSE(box.hitPoint(ray4, intersect));
-        CHECK_FALSE(box.hitPoint(ray5, intersect));
-        CHECK_FALSE(box.hitPoint(ray6, intersect));
+        CHECK_FALSE(box.hitPoint(ray1, intersect, options));
+        CHECK_FALSE(box.hitPoint(ray2, intersect, options));
+        CHECK_FALSE(box.hitPoint(ray3, intersect, options));
+        CHECK_FALSE(box.hitPoint(ray4, intersect, options));
+        CHECK_FALSE(box.hitPoint(ray5, intersect, options));
+        CHECK_FALSE(box.hitPoint(ray6, intersect, options));
 
         //2 intersections
         Ray ray7 = Ray(Vec4(-1.5,-2,0,1),Vec4(2,2,0,0));
         target1 = Vec4(-0.5,-1,0,1);
         target2 = Vec4(1,0.5,0,1);
-        CHECK(box.hitPoint(ray7, intersect));
+        CHECK(box.hitPoint(ray7, intersect, options));
         CHECK(intersect.hit[0].entering == true);
         CHECK(intersect.hit[1].entering == false);
         p1 = intersect.hit[0].point;

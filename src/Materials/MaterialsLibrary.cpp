@@ -510,7 +510,7 @@ Material MaterialsLibrary::glass() {
 
     CookTorrenceMaterial cookTorrenceMaterial;
     cookTorrenceMaterial.ambient = Vec4(1,1,1);
-    cookTorrenceMaterial.diffuse = Vec4(.1,.1,.1);
+    cookTorrenceMaterial.diffuse = Vec4(0.1,0.1,0.1);
     cookTorrenceMaterial.shininess = .1;
     cookTorrenceMaterial.roughness = .01;
     cookTorrenceMaterial.fresnell = Vec4(1.52,1.52,1.52,0);

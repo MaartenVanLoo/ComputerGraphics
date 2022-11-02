@@ -1,9 +1,9 @@
 #include <iostream>
 #include <Utils/Stopwatch.h>
 
-#include "include/RenderEngineCore.h"
+
 #include "Textures/Perlin.h"
-#include "Textures/WoodTexture.h"
+
 #include <cmath>
 #include <sstream>
 #include <Materials/Material.h>
