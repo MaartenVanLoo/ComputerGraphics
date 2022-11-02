@@ -16,22 +16,23 @@ double hsum_double_avx(__m256d v) {
     return  _mm_cvtsd_f64(_mm_add_sd(vlow, high64));  // reduce to scalar
 }
 
+
 #pragma region Vec2
-MRay::Vec2::Vec2(float x, float y) {
+MRay::Vec2::Vec2(double x, double y) {
     this->data[0] = x;
     this->data[1] = y;
 }
 
-float MRay::Vec2::get(int index) const {
+double MRay::Vec2::get(int index) const {
     assert(index <= 1 & index >= 0);
     return this->data[index];
 }
 
-float MRay::Vec2::dot(const Vec2 &rhs) const {
+double MRay::Vec2::dot(const Vec2 &rhs) const {
     return this->data[0] * rhs.data[0] + this->data[1] * rhs.data[1];
 }
 
-float MRay::Vec2::dot(const Vec2 &lhs, const Vec2 &rhs) {
+double MRay::Vec2::dot(const Vec2 &lhs, const Vec2 &rhs) {
     return lhs.dot(rhs);
 }
 
@@ -60,7 +61,7 @@ Vec2& MRay::Vec2::operator-=(const Vec2& rhs) {
     this->data[1]-=rhs.data[1];
     return *this;
 }
-Vec2 &MRay::Vec2::operator*=(const float rhs) {
+Vec2 &MRay::Vec2::operator*=(const double rhs) {
     this->data[0]*=rhs;
     this->data[1]*=rhs;
     return *this;
@@ -70,7 +71,7 @@ Vec2 &MRay::Vec2::operator*=(const Vec2& rhs) {
     this->data[1]*=rhs.data[1];
     return *this;
 }
-Vec2 &MRay::Vec2::operator/=(const float rhs) {
+Vec2 &MRay::Vec2::operator/=(const double rhs) {
     this->data[0]/=rhs;
     this->data[1]/=rhs;
     return *this;
@@ -89,11 +90,11 @@ Vec2 MRay::operator-(Vec2 lhs, const Vec2 &rhs) {
     lhs-=rhs;
     return lhs;
 }
-Vec2 MRay::operator*(const float &lhs, Vec2 rhs) {
+Vec2 MRay::operator*(const double &lhs, Vec2 rhs) {
     rhs*=lhs;
     return rhs;
 }
-Vec2 MRay::operator*(Vec2 lhs, const float &rhs) {
+Vec2 MRay::operator*(Vec2 lhs, const double &rhs) {
     lhs*=rhs;
     return lhs;
 }
@@ -101,11 +102,11 @@ Vec2 MRay::operator*(Vec2 lhs, const Vec2 &rhs) {
     lhs*=rhs;
     return lhs;
 }
-Vec2 MRay::operator/(Vec2 lhs, const float &rhs) {
+Vec2 MRay::operator/(Vec2 lhs, const double &rhs) {
     lhs/=rhs;
     return lhs;
 }
-Vec2 MRay::operator/(const float &lhs, Vec2 rhs ) {
+Vec2 MRay::operator/(const double &lhs, Vec2 rhs ) {
     rhs.data[0] = lhs/rhs.data[0];
     rhs.data[1] = lhs/rhs.data[1];
     return rhs;
@@ -124,12 +125,18 @@ std::ostream &MRay::operator<<(std::ostream &os, const Vec2 &vec2) {
 
 #pragma endregion
 
+
 #pragma region Vec3
 
 MRay::Vec3::Vec3(float x, float y, float z) {
     this->data[0] = x;
     this->data[1] = y;
     this->data[2] = z;
+}
+MRay::Vec3::Vec3(float x, Vec2 vec) {
+    this->data[0] = x;
+    this->data[1] = vec.data[0];
+    this->data[2] = vec.data[1];
 }
 float MRay::Vec3::get(int index) const {
     assert(index <= 2 & index >= 0);
@@ -246,7 +253,7 @@ Vec3 MRay::operator/(Vec3 lhs, const Vec3 &rhs) {
 #pragma endregion
 
 std::ostream &MRay::operator<<(std::ostream &os, const Vec3 &vec3) {
-    os <<"[" << vec3.data[0] << ", " << vec3.data[0] << ", " << vec3.data[0] << "]";
+    os <<"[" << vec3.data[0] << ", " << vec3.data[1] << ", " << vec3.data[2] << "]";
     return os;
 }
 

@@ -18,23 +18,43 @@ int main() {
     //MRay::WoodTexture wood = MRay::WoodTexture();
     //wood.preview(-1,1,-1,1);
 
-    MRay::PerlinPlot plotter;
-    MRay::Perlin3D perlin3D_1 = MRay::Perlin3D();
-    perlin3D_1.setRoughness(20);
-    //perlin3D_1.setDetails(100);
-    //perlin3D_1.setStretch(1);
-    perlin3D_1.setScale(MRay::Vec3(3,3,3));
-    plotter.plot(perlin3D_1, 0.01, 0.01, 0.1, 0);
+    MRay::PerlinPlot plotter(1500,1000);
+    MRay::Perlin2D perlin2D = MRay::Perlin2D();
+    perlin2D.setScale(MRay::Vec3(0.005,0.005,0.005));
+    perlin2D.setOctaves(2);
+    plotter.plot(perlin2D, -255*4, 255*4, -255*4, 255*4);
 
+
+    MRay::Perlin3D perlin3D_1 = MRay::Perlin3D();
+    perlin3D_1.setRoughness(0.5);
+    perlin3D_1.setScale(MRay::Vec3(0.01,0.01,0.01));
+    perlin3D_1.setOctaves(0);
+    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    perlin3D_1.setOctaves(1);
+    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    perlin3D_1.setOctaves(2);
+    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    perlin3D_1.setOctaves(3);
+    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    perlin3D_1.setOctaves(4);
+    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    perlin3D_1.setOctaves(5);
+    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    perlin3D_1.setOctaves(6);
+    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    perlin3D_1.setOctaves(7);
+    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    perlin3D_1.setOctaves(8);
+    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
+    perlin3D_1.setOctaves(9);
+    plotter.plot(perlin3D_1, -1000, 1000, -1000, 1000, 0);
 
     MRay::Perlin3D perlin3D_2 = MRay::Perlin3D();
-    perlin3D_2.setProfile(new MRay::Wave(22.87 * .6));
-    perlin3D_2.setRoughness(66);
-    perlin3D_2.setStretch(20);
+    perlin3D_2.setRoughness(.66);
     perlin3D_2.setScale(MRay::Vec3(1,1,1));
     //plotter.plot(perlin3D_2, 0.01, 0.01, 0.01, 0);
 
-    plotter.plot(perlin3D_1,perlin3D_2,0.01,0.01,0.01,0);
+    //plotter.plot(perlin3D_1,perlin3D_2,0.01,0.01,0.01,0);
     return 0;
 
     Stopwatch stopwatch = Stopwatch();
