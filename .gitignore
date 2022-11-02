@@ -18,3 +18,5 @@ _deps
 /out
 /.idea
 ~*
+
+/0_ComputerGraphics/*
