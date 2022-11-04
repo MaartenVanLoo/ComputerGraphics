@@ -1,0 +1,217 @@
+{
+  "objects":{
+    "g1_outerShell": {
+      "type": "TaperedCylinder",
+      "s":1.2,
+      "transformation": {
+        "scale": [0.5,0.5,2]
+      },
+      "material": "glass",
+      "priority": 1
+    },
+    "g1_innerShell": {
+      "type": "TaperedCylinder",
+      "s":1.2,
+      "transformation": {
+        "scale": [0.45,0.45,2],
+        "translate": [0, 0 ,0.05]
+      },
+      "material": "glass",
+      "priority": 1
+    },
+    "Glass_Type1":{
+      "type":"booleanDifference",
+      "left": "g1_outerShell",
+      "right": "g1_innerShell"
+    },
+
+    "chair_leg_1":{
+      "type":"box",
+      "transformation":{
+        "scale":[0.3,0.3,3],
+        "translate":[-2.75,-2.7,0],
+        "rotate":[0,0.09,0]
+      }
+    },
+    "chair_leg_2":{
+      "type":"box",
+      "transformation":{
+        "scale":[0.3,0.3,3],
+        "translate":[-2.75,2.7,0],
+        "rotate":[0,0.09,0]
+      }
+    },  
+    "chair_leg_3":{
+      "type":"box",
+      "transformation":{
+        "scale":[0.3,0.3,3],
+        "translate":[2.8,-2.7,0],
+        "rotate":[0,-0.13,0]
+      }
+    },  
+    "chair_leg_4":{
+      "type":"box",
+      "transformation":{
+        "scale":[0.3,0.3,3],
+        "translate":[2.8,2.7,0],
+        "rotate":[0,-0.13,0]
+      }
+    },
+    "chair_leg12":{
+      "type":"booleanUnion",
+      "right":"chair_leg_1",
+      "left":"chair_leg_2"
+    },
+    "chair_leg34":{
+      "type":"booleanUnion",
+      "right":"chair_leg_3",
+      "left":"chair_leg_4"
+    },
+    "chair_legs":{
+      "type":"booleanUnion",
+      "right":"chair_leg12",
+      "left":"chair_leg34"
+    },
+    "chair_seating":{
+      "type":"box",
+      "transformation":{
+        "scale":[3,3,0.4],
+        "translate":[0,0,3]
+      }
+    },
+    "chair_back_1":{
+      "type":"box",
+      "transformation":{
+        "scale":[0.3,0.3,4],
+        "translate":[-2.3,-2.5,7.4]
+      }
+    },
+    "chair_back_2":{
+      "type":"box",
+      "transformation":{
+        "scale":[0.3,0.3,4],
+        "translate":[-2.3,2.5,7.4]
+      }
+    },
+    "chair_back_3":{
+      "type":"box",
+      "transformation":{
+        "scale":[0.15,2.5,0.15],
+        "translate":[-2.4,0,5.9]
+      }
+    },
+    "chair_back_4":{
+      "type":"box",
+      "transformation":{
+        "scale":[0.1,2.5,0.3],
+        "translate":[-2.4,0,10.4]
+      }
+    },
+    "chair_back_12":{
+      "type":"booleanUnion",
+      "right":"chair_back_1",
+      "left":"chair_back_2"
+    },
+    "chair_back_34":{
+      "type":"booleanUnion",
+      "right":"chair_back_3",
+      "left":"chair_back_4"
+    },
+    "chair_back":{
+      "type":"booleanUnion",
+      "right":"chair_back_12",
+      "left":"chair_back_34",
+      "transformation":{
+        "rotate":[0,-0.11,0]
+      }
+    },
+    "chair_top":{
+      "type":"booleanUnion",
+      "right":"chair_back",
+      "left":"chair_seating"  
+    },
+    "Chair_Type1":{
+      "type":"booleanUnion",
+      "right":"chair_top",
+      "left":"chair_legs",
+      "material":"black_plastic"
+    },
+
+
+    "Cupboard_Body1":{
+      "type":"box",
+      "material":"black_plastic",
+      "transformation":{
+        "scale":[0.45,0.9,0.9]
+      },
+      "priority":1
+    },
+    "Cupboard_Body2":{
+      "type":"box",
+      "material":"black_plastic",
+      "transformation":{
+        "scale":[0.05,0.88,0.88],
+        "translate":[0.48,0,0]
+      }
+    },
+    "Cupboard_Body":{
+      "type":"booleanDifference",
+      "left":"Cupboard_Body1",
+      "right":"Cupboard_Body2"
+    },
+
+    "Cupboard_Front1":{
+      "type":"box",
+      "material":"white_plastic",
+      "transformation":{
+        "scale":[0.02,0.86,0.86],
+        "translate":[0.46,0,0]
+      }
+    },
+    "Cupboard_Front2":{
+      "type":"box",
+      "material":"yellow_plastic",
+      "transformation":{
+        "scale":[0.02,0.86,0.86],
+        "translate":[0.46,0,0]
+      }
+    },
+    "Cupboard_Front3_1":{
+      "type":"box",
+      "material":"white_plastic",
+      "transformation":{
+        "scale":[0.02,0.85,0.42],
+        "translate":[0.46,0,-0.43]
+      }
+    },
+    "Cupboard_Front3_2":{
+      "type":"box",
+      "material":"yellow_plastic",
+      "transformation":{
+        "scale":[0.02,0.85,0.42],
+        "translate":[0.46,0,0.43]
+      }
+    },
+    "Cupboard_Front3":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Front3_1",
+      "right":"Cupboard_Front3_2"
+    },
+    "Cupboard_Type1":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Body",
+      "right":"Cupboard_Front1"
+    },
+    "Cupboard_Type2":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Body",
+      "right":"Cupboard_Front2"
+    },
+    "Cupboard_Type3":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Body",
+      "right":"Cupboard_Front3"
+    }
+
+  }
+}
