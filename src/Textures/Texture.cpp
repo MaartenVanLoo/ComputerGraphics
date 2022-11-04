@@ -6,3 +6,10 @@
 MRay::Vec2 MRay::Texture::normalMap(float u, float v, float w) {
     return Vec2(0.0,0.0); //no deviation of normal
 }
+
+//note: all lower case!
+const std::string MRay::Texture::textureLibrary[] = {
+        "checkboard",
+        "water", //synonym for waterTexture
+        "watertexture"
+};

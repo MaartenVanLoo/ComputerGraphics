@@ -27,5 +27,16 @@ std::ostream &MRay::operator<<(std::ostream &os, const PointLight &light) {
     return os;
 }
 
+void PointLight::setPosition(double px, double py, double pz) {
+    Light::setPosition(px,py,pz);
+    PointLight::position = Vec4(px,py,pz,1);
+}
+
+void PointLight::setPosition(const Vec4 &pos) {
+    Light::setPosition(pos);
+    PointLight::position = pos;
+}
+
+
 
 

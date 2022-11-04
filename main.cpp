@@ -81,7 +81,7 @@ int main() {
     //camera.rotate(0.0f,float(CV_PI/4.0),0.0f);
     camera.translate(-10,5,1);
     camera.setSensor(MRay::Sensor(360,240));
-    camera.setResolution(MRay::Resolution(MRay::Screensize::_4K));
+    camera.setResolution(MRay::Resolution(MRay::Screensize::_1080p));
     camera.setFocalLength(200);
 
 

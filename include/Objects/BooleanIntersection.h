@@ -15,6 +15,8 @@ namespace MRay {
         void computeBoundingBox() override;
 
         Vec4 normal(Vec4 &point) const;
+
+        void setMaterial(Material mtrl) override;
     };
 }
 #endif //I_COMPUTERGRAPHICS_BOOLEANINTERSECTION_H

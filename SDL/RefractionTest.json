@@ -48,7 +48,7 @@
       },
       "material":"red_plastic"
     },
-    "l1":{
+    "l1_s":{
       "type":"sphere",
       "transformation":{
         "translate": [10,0,10],
@@ -57,7 +57,7 @@
       "material": "lightSourceGlass"
     },
 
-    "l2":{
+    "l2_s":{
       "type":"sphere",
       "transformation":{
         "translate": [10,15,10],
@@ -75,5 +75,16 @@
       "type":"pointlight",
       "position":[10,15,10]
     }
-  }
+  },
+  "scene": [
+    "water",
+    "ground",
+    "glassplane",
+    "straw",
+    "sphere",
+    "l1_s",
+    "l2_s",
+    "l1",
+    "l2"
+  ]
 }

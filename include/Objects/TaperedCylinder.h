@@ -17,7 +17,7 @@ namespace MRay {
         // F(x,y;z = x² + y² - (1+ (s-1)z)² for 0 < z < 1
 
     public:
-        explicit TaperedCylinder(float s = 1);
+        explicit TaperedCylinder(double s = 1.0);
 
         bool hitPoint(Ray &ray, Intersection &intersection, const Options &options) override;
 

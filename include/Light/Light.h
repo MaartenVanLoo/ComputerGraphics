@@ -21,6 +21,8 @@ namespace MRay {
 
         virtual ~Light();
 
+        virtual void setPosition(double px, double py, double pz);
+        virtual void setPosition(const Vec4& pos);
         //Color3 color = Color3(255, 255, 255); //white
         Color3 color = Color3(122, 122,122); //white
     };

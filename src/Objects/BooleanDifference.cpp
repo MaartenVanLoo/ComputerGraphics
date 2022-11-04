@@ -82,3 +82,9 @@ void BooleanDifference::computeBoundingBox() {
     this->bb = this->left->getBoundingBox(); //object never larger than the "positive" object
     this->bb.transform(this->transform);
 }
+
+void BooleanDifference::setMaterial(Material mtrl) {
+    Object::setMaterial(mtrl);
+    this->left->setMaterial(mtrl);
+    this->right->setMaterial(mtrl);
+}

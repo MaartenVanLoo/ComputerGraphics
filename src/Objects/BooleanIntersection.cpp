@@ -74,3 +74,9 @@ void BooleanIntersection::computeBoundingBox() {
     this->bb.intersect(this->right->getBoundingBox());
     this->bb.transform(this->transform);
 }
+
+void BooleanIntersection::setMaterial(Material mtrl) {
+    Object::setMaterial(mtrl);
+    this->left->setMaterial(mtrl);
+    this->right->setMaterial(mtrl);
+}

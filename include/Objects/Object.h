@@ -31,7 +31,8 @@ namespace MRay {
         virtual bool hitPoint(Ray &ray, Intersection &intersection, const Options& options) = 0;
 
         virtual void computeBoundingBox(){};
-        void setMaterial(Material mtrl);
+
+        virtual void setMaterial(Material mtrl);
         void setTexture(Texture *texture);
 
         /// Transform normal from LCS to GCS

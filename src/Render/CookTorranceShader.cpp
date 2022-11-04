@@ -88,7 +88,9 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
         h.normalize();
         float mDotH = h.dot(normal);
         if (mDotH > 0 && mDotS > 0){
-            double delta = std::acos(normal.dot(h));
+            //numerical precision error, limit detla!
+            double delta = std::max(std::min(normal.dot(h),1.0f),-1.0f);
+            delta = std::acos(delta);
             double beck = this->beckmannDistribution(delta , obj->getMaterial().getRoughness<CookTorrance>());
 
             float hDotS = h.dot(s);

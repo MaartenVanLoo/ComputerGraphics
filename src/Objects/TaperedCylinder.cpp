@@ -4,8 +4,9 @@
 
 #include <Objects/TaperedCylinder.h>
 
-MRay::TaperedCylinder::TaperedCylinder(float s) :s(s){
-
+MRay::TaperedCylinder::TaperedCylinder(double s) {
+    assert(std::abs(s) < FLT_MAX);
+    this->s = float(s);
 }
 
 bool MRay::TaperedCylinder::hitPoint(MRay::Ray &ray, MRay::Intersection &intersection, const Options &options) {

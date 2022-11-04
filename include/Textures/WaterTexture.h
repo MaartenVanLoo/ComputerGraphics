@@ -11,8 +11,8 @@
 namespace MRay {
     class WaterTexture : public Texture {
     public:
-        WaterTexture(double su,double sv);
-        WaterTexture(Vec3& scale);
+        explicit WaterTexture(double su=0.01, double sv=0.01);
+        explicit WaterTexture(Vec3& scale);
         Vec3 compute(float u, float v, float w) override {
             return Vec3();
         }

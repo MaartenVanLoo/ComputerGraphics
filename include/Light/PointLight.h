@@ -11,8 +11,11 @@ namespace MRay {
 
     class PointLight : public Light {
     public:
-        PointLight(float px, float py, float pz);
+        PointLight(float px=0.0, float py=0.0, float pz=0.0);
         PointLight(const Vec4 &position);
+
+        void setPosition(double px, double py, double pz);
+        void setPosition(const Vec4 &pos) override;
 
         friend std::ostream &operator<<(std::ostream &os, const PointLight &light);
 
@@ -23,7 +26,7 @@ namespace MRay {
 
         Vec4 getVec(const Vec4 &point) const override;
 
-        Vec4 position = Vec4(-3, -10, 10, 1);
+        Vec4 position = Vec4(0, 0, 0, 1);
     };
 }
 

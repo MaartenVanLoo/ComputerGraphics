@@ -187,7 +187,7 @@ float MRay::Vec3::get(int index) const {
 float MRay::Vec3::dot(const Vec3 &rhs) const {
 #if SSE_AVX_EXTENSIONS
 #if SET_DATA
-    __m128 temp = _mm_dp_ps(this->data,rhs.data,0x71); //store result in lowest bits, use only the first 3 values (lowest 96 bits);
+    __m128 temp = _mm_dp_ps(this->data,rhs.data,0x71); //store result in the lowest bits, use only the first 3 values (lowest 96 bits);
     return _mm_cvtss_f32(temp);
 #else
     __m128 lhs_ps = _mm_set_ps(this->data[3], this->data[2], this->data[1], this->data[0]); //float

@@ -83,3 +83,9 @@ void BooleanUnion::computeBoundingBox() {
     this->bb.add(this->right->getBoundingBox());
     this->bb.transform(this->transform);
 }
+
+void BooleanUnion::setMaterial(Material mtrl) {
+    Object::setMaterial(mtrl);
+    this->left->setMaterial(mtrl);
+    this->right->setMaterial(mtrl);
+}
