@@ -14,7 +14,7 @@ namespace MRay {
         virtual Vec3 compute(float u = 0.0, float v = 0.0, float w = 0.0) = 0;
         virtual Vec2 normalMap(float u = 0.0, float v = 0.0, float w = 0.0);
 
-        const static std::string textureLibrary[3];
+        const static std::vector<std::string> textureLibrary;
     };
 }
 #endif //I_COMPUTERGRAPHICS_TEXTURE_H

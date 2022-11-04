@@ -22,10 +22,12 @@ namespace MRay {
             int loadedMaterials = 0;
             int loadedObjects = 0;
             int loadedLights = 0;
+            int loadedTextures = 0;
 
             int validMaterials = 0;
             int validObjects = 0;
             int validLights = 0;
+            int validTextures = 0;
 
             int sceneObjects = 0;
             int sceneLights = 0;
@@ -41,18 +43,19 @@ namespace MRay {
         void parse(const std::string& sdlFile, bool topLevel);
         void importFiles(const Json::Value& import);
 
+        std::unordered_map<std::string, SDLParser> importedFiles;
         std::unordered_map<std::string, Json::Value> loadedMaterials;
         std::unordered_map<std::string, Json::Value> loadedObjects;
         std::unordered_map<std::string, Json::Value> loadedLights;
-        std::unordered_map<std::string, SDLParser> importedFiles;
+        std::unordered_map<std::string, Json::Value> loadedTextures;
 
-        std::vector<Material> sceneMaterials;
         std::vector<Object*> sceneObjects;
         std::vector<Light*> sceneLights;
         bool hasScene = false;
 
 
         void loadMaterials(Json::Value& materials);
+        void loadTextures(Json::Value& materials);
         void loadObjects(Json::Value& objects);
         void loadLights(Json::Value& lights);
 
@@ -62,25 +65,28 @@ namespace MRay {
         bool validateObject(const Json::Value& material) noexcept;
         void validateLights();
         bool validateLight(const Json::Value& material) noexcept;
+        void validateTextures();
+        bool validateTexture(const Json::Value& material) noexcept;
 
         void sceneConstructor(const Json::Value& sceneDescription);
         void construct(const std::string& identifier);
         Object* constructObject(const std::string& identifier);
         Light* constructLight(const std::string& identifier);
         Material constructMaterial(const std::string& material);
+        Texture* constructTexture(const std::string& texture);
+
         Object* buildObject(const Json::Value& config);
         Light* buildLight(const Json::Value& config);
         Material buildMaterial(const Json::Value& config);
-
-        Texture* constructTexture(const std::string& texture);
         Texture* buildTexture(const Json::Value& texture);
-        Texture* buildTexture(const std::string& texture);
+        Texture* buildDefaultTexture(const std::string& texture);
 
         //functions to check if it contains a certain key in this file or its imports
         bool containsImport(const std::string &key) const;
         bool containsObject(const std::string &key) const;
         bool containsLight(const std::string &key) const;
         bool containsMaterial(const std::string & key) const;
+        bool containsTexture(const std::string & key) const;
 
         Statistics statistics;
         void printStatistics();

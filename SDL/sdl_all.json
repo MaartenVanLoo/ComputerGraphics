@@ -136,7 +136,26 @@
 			"type":"pointlight",
 			"position":[-5,15,20]
 		}
-	}
-		
+	},
+	"scene": [
+		"problem",
+		"plane1",
+		"TaperedCylinder1",
+		"sphere1",
+		"sphere2",
+		"box1",
+		"box2",
+		"booleanI1",
+		"booleanI2",
+		"booleanIntersection",
+		"booleanU1",
+		"booleanU2",
+		"booleanUnion",
+		"booleanD1",
+		"booleanD2",
+		"booleanDifference",
+		"l1",
+		"l2"
+	]
 	
 }

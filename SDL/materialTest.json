@@ -13,183 +13,182 @@
 			},
 			"material":"black_plastic"
 		},
-		"01.box":{
+		"01_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-36,0]
 			},
 			"material":"emerald"
 		},
-		"02.box":{
+		"02_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-33,0]
 			},
 			"material":"jade"
 		},
-		"03.box":{
+		"03_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-30,0]
 			},
 			"material":"obsidian"
 		},
-		"04.box":{
+		"04_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-27,0]
 			},
 			"material":"pearl"
 		},
-		"05.box":{
+		"05_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-24,0]
 			},
 			"material":"ruby"
 		},
-		"06.box":{
+		"06_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-21,0]
 			},
 			"material":"turquoise"
 		},
-		"07.box":{
+		"07_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-18,0]
 			},
 			"material":"brass"
 		},
-		"08.box":{
+		"08_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-15,0]
 			},
 			"material":"bronze"
 		},
-		"09box":{
+		"09_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-12,0]
 			},
 			"material":"chrome"
 		},
-		"10.box":{
+		"10_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-9,0]
 			},
 			"material":"copper"
 		},
-		"11.box":{
+		"11_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-6,0]
 			},
 			"material":"gold"
 		},
-		"12.box":{
+		"12_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,-3,0]
 			},
 			"material":"silver"
 		},
-		"13.box":{
+		"13_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,0,0]
 			},
 			"material":"black_plastic"
 		},
-		"14.box":{
+		"14_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,3,0]
 			},
 			"material":"cyan_plastic"
 		},
-		"15.box":{
+		"15_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,6,0]
 			},
 			"material":"green_plastic"
 		},
-		"16.box":{
+		"16_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,9,0]
 			},
 			"material":"red_plastic"
 		},
-		"17.box":{
+		"17_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,12,0]
 			},
 			"material":"white_plastic"
 		},
-		"18.box":{
+		"18_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,15,0]
 			},
 			"material":"yellow_plastic"
 		},
-		"19.box":{
+		"19_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,18,0]
 			},
 			"material":"black_rubber"
 		},
-		"20.box":{
+		"20_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,21,0]
 			},
 			"material":"cyan_rubber"
 		},
-		"21.box":{
+		"21_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,24,0]
 			},
 			"material":"green_rubber"
 		},
-		"22.box":{
+		"22_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,27,0]
 			},
 			"material":"red_rubber"
 		},
-		"23.box":{
+		"23_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,30,0]
 			},
 			"material":"white_rubber"
 		},
-		"24.box":{
+		"24_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,33,0]
 			},
 			"material":"yellow_rubber"
 		},
-		"25.box":{
+		"25_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,36,0]
 			},
 			"material":"gray_rubber"
-		}
-		,
-		"26.box":{
+		},
+		"26_box":{
 			"type":"box",
 			"transformation":{
 				"translate":[0,39,0]
@@ -197,183 +196,182 @@
 			"material":"gray_plastic"
 		},
 
-		"01.sphere":{
+		"01_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-36,0]
 			},
 			"material":"emerald"
 		},
-		"02.sphere":{
+		"02_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-33,0]
 			},
 			"material":"jade"
 		},
-		"03.sphere":{
+		"03_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-30,0]
 			},
 			"material":"obsidian"
 		},
-		"04.sphere":{
+		"04_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-27,0]
 			},
 			"material":"pearl"
 		},
-		"05.sphere":{
+		"05_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-24,0]
 			},
 			"material":"ruby"
 		},
-		"06.sphere":{
+		"06_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-21,0]
 			},
 			"material":"turquoise"
 		},
-		"07.sphere":{
+		"07_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-18,0]
 			},
 			"material":"brass"
 		},
-		"08.sphere":{
+		"08_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-15,0]
 			},
 			"material":"bronze"
 		},
-		"09.sphere":{
+		"09_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-12,0]
 			},
 			"material":"chrome"
 		},
-		"10.sphere":{
+		"10_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-9,0]
 			},
 			"material":"copper"
 		},
-		"11.sphere":{
+		"11_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-6,0]
 			},
 			"material":"gold"
 		},
-		"12.sphere":{
+		"12_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,-3,0]
 			},
 			"material":"silver"
 		},
-		"13.sphere":{
+		"13_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,0,0]
 			},
 			"material":"black_plastic"
 		},
-		"14.sphere":{
+		"14_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,3,0]
 			},
 			"material":"cyan_plastic"
 		},
-		"15.sphere":{
+		"15_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,6,0]
 			},
 			"material":"green_plastic"
 		},
-		"16.sphere":{
+		"16_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,9,0]
 			},
 			"material":"red_plastic"
 		},
-		"17.sphere":{
+		"17_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,12,0]
 			},
 			"material":"white_plastic"
 		},
-		"18.sphere":{
+		"18_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,15,0]
 			},
 			"material":"yellow_plastic"
 		},
-		"19.sphere":{
+		"19_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,18,0]
 			},
 			"material":"black_rubber"
 		},
-		"20.sphere":{
+		"20_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,21,0]
 			},
 			"material":"cyan_rubber"
 		},
-		"21.sphere":{
+		"21_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,24,0]
 			},
 			"material":"green_rubber"
 		},
-		"22.sphere":{
+		"22_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,27,0]
 			},
 			"material":"red_rubber"
 		},
-		"23.sphere":{
+		"23_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,30,0]
 			},
 			"material":"white_rubber"
 		},
-		"24.sphere":{
+		"24_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,33,0]
 			},
 			"material":"yellow_rubber"
 		},
-		"25.sphere":{
+		"25_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,36,0]
 			},
 			"material":"gray_rubber"
-		}
-		,
-		"26.sphere":{
+		},
+		"26_sphere":{
 			"type":"sphere",
 			"transformation":{
 				"translate":[-5,39,0]
@@ -599,5 +597,91 @@
 			"type":"pointlight",
 			"position":[-5,15,20]
 		}
-	}
+	},
+	"scene": [
+		"mirrorBox",
+		"01_box",
+		"02_box",
+		"03_box",
+		"04_box",
+		"05_box",
+		"06_box",
+		"07_box",
+		"08_box",
+		"09_box",
+		"10_box",
+		"11_box",
+		"12_box",
+		"13_box",
+		"14_box",
+		"15_box",
+		"16_box",
+		"17_box",
+		"18_box",
+		"19_box",
+		"20_box",
+		"21_box",
+		"22_box",
+		"23_box",
+		"24_box",
+		"25_box",
+		"26_box",
+
+		"01_sphere",
+		"02_sphere",
+		"03_sphere",
+		"04_sphere",
+		"05_sphere",
+		"06_sphere",
+		"07_sphere",
+		"08_sphere",
+		"09_sphere",
+		"10_sphere",
+		"11_sphere",
+		"12_sphere",
+		"13_sphere",
+		"14_sphere",
+		"15_sphere",
+		"16_sphere",
+		"17_sphere",
+		"18_sphere",
+		"19_sphere",
+		"20_sphere",
+		"21_sphere",
+		"22_sphere",
+		"23_sphere",
+		"24_sphere",
+		"25_sphere",
+		"26_sphere",
+		
+		"01_TaperedCylinder",
+		"02_TaperedCylinder",
+		"03_TaperedCylinder",
+		"04_TaperedCylinder",
+		"05_TaperedCylinder",
+		"06_TaperedCylinder",
+		"07_TaperedCylinder",
+		"08_TaperedCylinder",
+		"09_TaperedCylinder",
+		"10_TaperedCylinder",
+		"11_TaperedCylinder",
+		"12_TaperedCylinder",
+		"13_TaperedCylinder",
+		"14_TaperedCylinder",
+		"15_TaperedCylinder",
+		"16_TaperedCylinder",
+		"17_TaperedCylinder",
+		"18_TaperedCylinder",
+		"19_TaperedCylinder",
+		"20_TaperedCylinder",
+		"21_TaperedCylinder",
+		"22_TaperedCylinder",
+		"23_TaperedCylinder",
+		"24_TaperedCylinder",
+		"25_TaperedCylinder",
+		"26_TaperedCylinder",
+
+		"l1",
+		"l2"
+	]
 }

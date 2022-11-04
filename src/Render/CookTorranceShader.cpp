@@ -142,6 +142,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
             sample.add(obj->getMaterial().getTransparancy<CookTorrance>() * shade(transmitted));
         }
         else {
+            assert(snell2 >= 0);
             double snell = sqrt(snell2);
             Ray transmitted;
             transmitted.setPos(first.point - this->options.eps * normal);

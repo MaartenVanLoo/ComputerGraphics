@@ -31,7 +31,12 @@
 			"type":"pointlight",
 			"position":[10,0,20]
 		}
-	}
-		
+	},
+	"scene": [
+		"box",
+		"sphere1",
+		"l1",
+		"l2"
+	]
 	
 }

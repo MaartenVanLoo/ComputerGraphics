@@ -8,7 +8,7 @@ MRay::Vec2 MRay::Texture::normalMap(float u, float v, float w) {
 }
 
 //note: all lower case!
-const std::string MRay::Texture::textureLibrary[] = {
+const std::vector<std::string> MRay::Texture::textureLibrary ={
         "checkboard",
         "water", //synonym for waterTexture
         "watertexture"

@@ -42,6 +42,10 @@ bool contains(M const&m, K const&k, Ks const&...ks){
     if (it==m.end()) return false;
     return contains(it->second, ks...);
 }
+template<>
+bool contains<std::vector<std::string>,std::string>(std::vector<std::string> const&m, std::string const&k){
+    return std::find(m.begin(),m.end(),k) != m.end();
+}
 
 bool SDLParser::containsImport(const std::string &file) const{
     if (file.empty()) return false;
@@ -94,6 +98,19 @@ bool SDLParser::containsMaterial(const std::string &id) const{
     }
     return false;
 }
+bool SDLParser::containsTexture(const std::string &id) const{
+    std::string file;
+    std::string key;
+    splitIdentifier(id, file,key);
+    if (file.empty()){
+        return contains(this->loadedTextures,key);
+    }else{
+        for (auto& pair:this->importedFiles){
+            auto& imported = pair.second;
+            if (imported.containsTexture(key)) return true;
+        }
+    }
+}
 #pragma endregion
 
 
@@ -137,6 +154,9 @@ void MRay::SDLParser::parse(const std::string& sdlFile, bool topLevel) {
     if (!root["materials"].isNull()){
         loadMaterials(root["materials"]);
     }
+    if (!root["textures"].isNull()){
+        loadTextures(root["textures"]);
+    }
     if (!root["objects"].isNull()){
         loadObjects(root["objects"]);
     }
@@ -144,6 +164,7 @@ void MRay::SDLParser::parse(const std::string& sdlFile, bool topLevel) {
         loadLights(root["lights"]);
     }
     this->validateMaterials();
+    this->validateTextures();
     this->validateObjects();
     this->validateLights();
 
@@ -186,6 +207,23 @@ void SDLParser::loadMaterials(Json::Value& materials) {
     }
     if (total> 0) std::cout << "\rLoading materials...Done" << std::endl;
     this->statistics.loadedMaterials = count;
+}
+void SDLParser::loadTextures(Json::Value& textures) {
+    auto objIds = textures.getMemberNames();
+    int count = 0;
+    size_t total = objIds.size();
+    for (auto objId = objIds.begin(); objId != objIds.end(); objId++){
+        count++;
+        std::cout << "\rLoading textures..." << count <<"/"<<total;
+        Json::Value obj = textures[*objId];
+        if (contains(this->loadedTextures, *objId)){
+            Logger::warning("Overriding existing texture " + *objId);
+        }
+        this->loadedTextures[*objId] = obj;
+
+    }
+    if (total> 0) std::cout << "\rLoading textures...Done" << std::endl;
+    this->statistics.loadedTextures = count;
 }
 void SDLParser::loadObjects(Json::Value &objects) {
     auto objIds = objects.getMemberNames();
@@ -244,21 +282,6 @@ bool validateTransformation(const Json::Value& transform) noexcept{
         return true;
     }catch(...){}
     return false;
-}
-bool validateTextures(const std::string& texture){
-    //todo: check if imported files contain custom textures??
-    for (const auto& t: Texture::textureLibrary){
-        if (t == texture) return true;
-    }
-    return false;
-}
-bool validateTextures(const Json::Value& texture) noexcept{
-    if (texture.isNull()) return true;
-    if (texture.isString()) return validateTextures(texture.asString());
-
-    //todo: texture options???
-    return false;
-
 }
 
 
@@ -324,8 +347,11 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             const Json::Value& transformation = object["transformation"];
             if (!validateTransformation(transformation)) return false;
 
-            const Json::Value& texture = object["texture"];
-            if (!validateTextures(texture)) return false;
+            const std::string texture = object.get("texture","").asString();
+            if (!texture.empty()){
+                //check if texture is loaded
+                if (!this->containsTexture(texture) && !contains(Texture::textureLibrary,texture)) return false;
+            }
             //all oké
             return true;
 
@@ -334,15 +360,18 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             // required fields
 
             // optional fields
-            std::string material = object.get("material", "").asString();
+            const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
                 if (!this->containsMaterial(material) && !contains(MaterialsLibrary::materials,material)) return false;
             }
             const Json::Value& transformation = object["transformation"];
             if (!validateTransformation(transformation)) return false;
-            const Json::Value& texture = object["texture"];
-            if (!validateTextures(texture)) return false;
+            const std::string texture = object.get("texture","").asString();
+            if (!texture.empty()){
+                //check if texture is loaded
+                if (!this->containsTexture(texture) && !contains(Texture::textureLibrary,texture)) return false;
+            }
 
             //all oké
             return true;
@@ -352,15 +381,18 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             // required fields
 
             //optional fields
-            std::string material = object.get("material", "").asString();
+            const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
                 if (!this->containsMaterial(material) && !contains(MaterialsLibrary::materials,material)) return false;
             }
             const Json::Value& transformation = object["transformation"];
             if (!validateTransformation(transformation)) return false;
-            const Json::Value& texture = object["texture"];
-            if (!validateTextures(texture)) return false;
+            const std::string texture = object.get("texture","").asString();
+            if (!texture.empty()){
+                //check if texture is loaded
+                if (!this->containsTexture(texture) && !contains(Texture::textureLibrary,texture)) return false;
+            }
 
             //all oké
             return true;
@@ -371,15 +403,18 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
 
             //optional fields
             double s = object.get("s",1.0).asDouble();
-            std::string material = object.get("material", "").asString();
+            const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
                 if (!this->containsMaterial(material) && !contains(MaterialsLibrary::materials,material)) return false;
             }
             const Json::Value& transformation = object["transformation"];
             if (!validateTransformation(transformation)) return false;
-            const Json::Value& texture = object["texture"];
-            if (!validateTextures(texture)) return false;
+            const std::string texture = object.get("texture","").asString();
+            if (!texture.empty()){
+                //check if texture is loaded
+                if (!this->containsTexture(texture) && !contains(Texture::textureLibrary,texture)) return false;
+            }
 
             //all oké
             return true;
@@ -395,13 +430,16 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             if (!this->containsObject(right)) return false;
 
             //optional fields
-            std::string material = object.get("material", "").asString();
+            const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
                 if (!this->containsMaterial(material) && !contains(MaterialsLibrary::materials,material)) return false;
             }
-            const Json::Value& transformation = object["transformation"];
-            if (!validateTransformation(transformation)) return false;
+            const std::string texture = object.get("texture","").asString();
+            if (!texture.empty()){
+                //check if texture is loaded
+                if (!this->containsTexture(texture) && !contains(Texture::textureLibrary,texture)) return false;
+            }
 
             //all oké
             return true;
@@ -417,14 +455,16 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             if (!this->containsObject(right)) return false;
 
             //optional fields
-            std::string material = object.get("material", "").asString();
+            const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
                 if (!this->containsMaterial(material) && !contains(MaterialsLibrary::materials,material)) return false;
             }
-            const Json::Value& transformation = object["transformation"];
-            if (!validateTransformation(transformation)) return false;
-
+            const std::string texture = object.get("texture","").asString();
+            if (!texture.empty()){
+                //check if texture is loaded
+                if (!this->containsTexture(texture) && !contains(Texture::textureLibrary,texture)) return false;
+            }
             //all oké
             return true;
 
@@ -439,7 +479,7 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             if (!this->containsObject(right)) return false;
 
             //optional fields
-            std::string material = object.get("material", "").asString();
+            const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
                 if (!this->containsMaterial(material) && !contains(MaterialsLibrary::materials,material)) return false;
@@ -491,6 +531,36 @@ bool SDLParser::validateLight(const Json::Value &light) noexcept{
     return false;
 }
 
+void SDLParser::validateTextures(){
+    int count = 0;
+    size_t total = this->loadedTextures.size();
+    for (auto it = this->loadedTextures.cbegin(), next_it = it; it != this->loadedTextures.cend(); it = next_it){
+        count++;
+        std::cout << "\rValidating textures..." << count << "/" << total;
+        ++next_it;
+        std::string_view key = (*it).first;
+        const Json::Value& material = (*it).second;
+        if (!SDLParser::validateTexture(material)){
+            std::cout << "\n";
+            Logger::warning("Textures " + std::string(key) + " is not valid");
+            this->loadedTextures.erase(it);
+        }
+
+    }
+    if (total > 0) std::cout << "\rValidating textures...Done\t\t\t\t\t\t" << std::endl;
+    this->statistics.validTextures = count;
+}
+bool SDLParser::validateTexture(const Json::Value &texture) noexcept{
+    //TODO: implement custom materials
+    if (texture.isString()){
+        std::string sTexture = texture.asString();
+        for (const auto& t: Texture::textureLibrary){
+            if (t == sTexture) return true;
+        }
+    }
+    Logger::warning("Custom materials are not implemented");
+    return false;
+}
 #pragma endregion
 
 
@@ -634,9 +704,25 @@ Material SDLParser::constructMaterial(const std::string& material){
         return MaterialsLibrary::materials.at(material);
     }
     //dammit, getting here means this material wasn't loaded but this should be caught in validation????
-    throw std::invalid_argument(material + " is not found in loaded lights");
+    throw std::invalid_argument(material + " is not found in loaded materials");
 }
-
+Texture* SDLParser::constructTexture(const std::string& texture){
+    //first look in loaded objects, they might override default library
+    if (texture.empty()) return nullptr; //default value!
+    if (contains(this->loadedTextures,texture)){
+        return buildTexture(this->loadedMaterials[texture]);
+    }
+    for (auto& pair:this->importedFiles){
+        auto& imported = pair.second;
+        if (imported.containsMaterial(texture)) return imported.constructTexture(texture);
+    }
+    //look in default library:
+    if (contains(Texture::textureLibrary,texture)){
+        return buildDefaultTexture(texture);
+    }
+    //dammit, getting here means this texture wasn't loaded but this should be caught in validation????
+    throw std::invalid_argument(texture + " is not found in loaded textures");
+}
 
 Object* SDLParser::buildObject(const Json::Value& config){
     //std::cout << "building object\n";
@@ -753,31 +839,18 @@ Light* SDLParser::buildLight(const Json::Value& config){
     return nullptr;
 }
 
-
 Material SDLParser::buildMaterial(const Json::Value& config){
     //todo: implement custom material
+    Logger::error("Custom material not implemented");
     return Material();
 }
 
-
-Texture* SDLParser::constructTexture(const std::string& texture){
-    //note=> texture must already be loaded!
-
-    //for now no custom textures allowed
-    return buildTexture(texture);
-
-    //todo:check if imported files contain custom textures???
-
-
-
-}
 Texture* SDLParser::buildTexture(const Json::Value& texture){
     //todo: custom texture?
+    Logger::error("Custom texture not implemented");
     return nullptr;
 }
-Texture* SDLParser::buildTexture(const Json::String& texture){
-    //todo: custom texture?
-
+Texture* SDLParser::buildDefaultTexture(const Json::String& texture){
     if (texture == "checkboard"){
         return new Checkboard(5,5,5);
     }else if (texture =="water" || texture =="waterTexture"){
@@ -786,6 +859,63 @@ Texture* SDLParser::buildTexture(const Json::String& texture){
     return nullptr;
 }
 
+#pragma endregion
+
+#pragma region statistics
+void SDLParser::Statistics::reset() {
+    this->loadedMaterials = 0;
+    this->loadedObjects = 0;
+    this->loadedLights = 0;
+    this->loadedTextures = 0;
+
+    this->validMaterials = 0;
+    this->validObjects = 0;
+    this->validLights = 0;
+    this->validTextures = 0;
+
+    this->sceneObjects = 0;
+    this->sceneLights = 0;
+    this->importedFiles = 0;
+}
+void SDLParser::Statistics::add(Statistics& stats) {
+    this->loadedMaterials +=stats.loadedMaterials;
+    this->loadedObjects +=stats.loadedObjects;
+    this->loadedLights +=stats.loadedLights;
+    this->loadedTextures +=stats.loadedTextures;
+
+    this->validMaterials +=stats.validMaterials;
+    this->validObjects +=stats.validObjects;
+    this->validLights +=stats.validLights;
+    this->validTextures +=stats.validTextures;
+
+    this->sceneObjects +=stats.sceneObjects;
+    this->sceneLights +=stats.sceneLights;
+
+    this->importedFiles +=stats.importedFiles;
+}
+void SDLParser::printStatistics() {
+    Statistics combinedStats = Statistics();
+    for (auto& pair:this->importedFiles){
+        auto& imported = pair.second;
+         combinedStats.add(imported.statistics);
+    }
+    combinedStats.add(this->statistics);
+
+    std::cout << "Load statistics:\n";
+    std::cout << "Loaded elements:\n";
+    std::cout << "\tMaterials:\t" << combinedStats.validMaterials << "\n";
+    std::cout << "\tObjects  :\t" << combinedStats.validObjects << "\n";
+    std::cout << "\tLights   :\t" << combinedStats.validLights << "\n";
+    std::cout << "Rejected elements:\n";
+    std::cout << "\tMaterials:\t" << (combinedStats.loadedMaterials - combinedStats.validMaterials) << "\n";
+    std::cout << "\tObjects  :\t" << (combinedStats.loadedObjects - combinedStats.validObjects) << "\n";
+    std::cout << "\tLights   :\t" << (combinedStats.loadedLights - combinedStats.validLights) << "\n";
+
+    std::cout << "Total unique scene elements:\n";
+    std::cout << "\tObjects  :\t" << this->sceneObjects.size() << "\n";
+    std::cout << "\tLights   :\t" << this->sceneLights.size() << "\n";
+    std::cout.flush();
+}
 #pragma endregion
 
 
@@ -1031,54 +1161,3 @@ MRay::Object *MRay::SDLParser::transformObject(Object* object, Json::Value trans
     return object;
 }
 */
-void SDLParser::Statistics::reset() {
-    this->loadedMaterials = 0;
-    this->loadedObjects = 0;
-    this->loadedLights = 0;
-
-    this->validMaterials = 0;
-    this->validObjects = 0;
-    this->validLights = 0;
-
-    this->sceneObjects = 0;
-    this->sceneLights = 0;
-    this->importedFiles = 0;
-}
-
-void SDLParser::Statistics::add(Statistics& stats) {
-    this->loadedMaterials +=stats.loadedMaterials;
-    this->loadedObjects +=stats.loadedObjects;
-    this->loadedLights +=stats.loadedLights;
-    this->validMaterials +=stats.validMaterials;
-    this->validObjects +=stats.validObjects;
-    this->validLights +=stats.validLights;
-    this->sceneObjects +=stats.sceneObjects;
-    this->sceneLights +=stats.sceneLights;
-    this->importedFiles +=stats.importedFiles;
-}
-
-void SDLParser::printStatistics() {
-    Statistics combinedStats = Statistics();
-    for (auto& pair:this->importedFiles){
-        auto& imported = pair.second;
-         combinedStats.add(imported.statistics);
-    }
-    combinedStats.add(this->statistics);
-
-    std::cout << "Load statistics:\n";
-    std::cout << "Loaded elements:\n";
-    std::cout << "\tMaterials:\t" << combinedStats.validMaterials << "\n";
-    std::cout << "\tObjects  :\t" << combinedStats.validObjects << "\n";
-    std::cout << "\tLights   :\t" << combinedStats.validLights << "\n";
-    std::cout << "Rejected elements:\n";
-    std::cout << "\tMaterials:\t" << (combinedStats.loadedMaterials - combinedStats.validMaterials) << "\n";
-    std::cout << "\tObjects  :\t" << (combinedStats.loadedObjects - combinedStats.validObjects) << "\n";
-    std::cout << "\tLights   :\t" << (combinedStats.loadedLights - combinedStats.validLights) << "\n";
-
-    std::cout << "Total unique scene elements:\n";
-    std::cout << "\tObjects  :\t" << this->sceneObjects.size() << "\n";
-    std::cout << "\tLights   :\t" << this->sceneLights.size() << "\n";
-    std::cout.flush();
-}
-
-
