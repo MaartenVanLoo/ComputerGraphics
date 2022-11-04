@@ -165,7 +165,7 @@
       "material":"white_plastic",
       "transformation":{
         "scale":[0.02,0.86,0.86],
-        "translate":[0.46,0,0]
+        "translate":[0.45,0,0]
       }
     },
     "Cupboard_Front2":{
@@ -173,7 +173,7 @@
       "material":"yellow_plastic",
       "transformation":{
         "scale":[0.02,0.86,0.86],
-        "translate":[0.46,0,0]
+        "translate":[0.45,0,0]
       }
     },
     "Cupboard_Front3_1":{
@@ -181,7 +181,7 @@
       "material":"white_plastic",
       "transformation":{
         "scale":[0.02,0.85,0.42],
-        "translate":[0.46,0,-0.43]
+        "translate":[0.45,0,-0.43]
       }
     },
     "Cupboard_Front3_2":{
@@ -189,7 +189,7 @@
       "material":"yellow_plastic",
       "transformation":{
         "scale":[0.02,0.85,0.42],
-        "translate":[0.46,0,0.43]
+        "translate":[0.45,0,0.43]
       }
     },
     "Cupboard_Front3":{
@@ -197,6 +197,89 @@
       "left":"Cupboard_Front3_1",
       "right":"Cupboard_Front3_2"
     },
+    "Cupboard_Front4_1":{
+      "type":"box",
+      "material":"white_plastic",
+      "transformation":{
+        "scale":[0.02,0.85,0.28],
+        "translate":[0.45,0,-0.585]
+      }
+    },
+    "Cupboard_Front4_2":{
+      "type":"box",
+      "material":"yellow_plastic",
+      "transformation":{
+        "scale":[0.02,0.85,0.28],
+        "translate":[0.45,0,0.0]
+      }
+    },    
+    "Cupboard_Front4_3":{
+      "type":"box",
+      "material":"cyan_plastic",
+      "transformation":{
+        "scale":[0.02,0.85,0.28],
+        "translate":[0.45,0,0.585]
+      }
+    },
+    "Cupboard_Front4_4":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Front4_1",
+      "right":"Cupboard_Front4_2"
+    },
+    "Cupboard_Front4":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Front4_3",
+      "right":"Cupboard_Front4_4"
+    },
+    "Cupboard_Front5_1":{
+      "type":"box",
+      "material":"white_plastic",
+      "transformation":{
+        "scale":[0.02,0.85,0.21],
+        "translate":[0.45,0,-0.65]
+      }
+    },
+    "Cupboard_Front5_2":{
+      "type":"box",
+      "material":"yellow_plastic",
+      "transformation":{
+        "scale":[0.02,0.85,0.21],
+        "translate":[0.45,0,-0.215]
+      }
+    },    
+    "Cupboard_Front5_3":{
+      "type":"box",
+      "material":"cyan_plastic",
+      "transformation":{
+        "scale":[0.02,0.85,0.21],
+        "translate":[0.45,0,0.215]
+      }
+    },    
+    "Cupboard_Front5_4":{
+      "type":"box",
+      "material":"green_plastic",
+      "transformation":{
+        "scale":[0.02,0.85,0.21],
+        "translate":[0.45,0,0.65]
+      }
+    },
+    "Cupboard_Front5_5":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Front5_1",
+      "right":"Cupboard_Front5_2"
+    },
+    "Cupboard_Front5_6":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Front5_3",
+      "right":"Cupboard_Front5_4"
+    },
+    "Cupboard_Front5":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Front5_5",
+      "right":"Cupboard_Front5_6"
+    },
+
+
     "Cupboard_Type1":{
       "type":"booleanUnion",
       "left":"Cupboard_Body",
@@ -211,6 +294,16 @@
       "type":"booleanUnion",
       "left":"Cupboard_Body",
       "right":"Cupboard_Front3"
+    },
+    "Cupboard_Type4":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Body",
+      "right":"Cupboard_Front4"
+    },
+    "Cupboard_Type5":{
+      "type":"booleanUnion",
+      "left":"Cupboard_Body",
+      "right":"Cupboard_Front5"
     }
 
   }

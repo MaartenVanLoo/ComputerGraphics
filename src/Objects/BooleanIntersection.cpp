@@ -32,11 +32,12 @@ bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection, const O
     bool inside =  insideLeft && insideRight; //inside union object = OR operation
     auto l = intersection.leftHit->hit.begin();
     auto r = intersection.rightHit->hit.begin();
-    while (l != intersection.leftHit->hit.end() && r != intersection.rightHit->hit.end()){
+    while (l != intersection.leftHit->hit.end() || r != intersection.rightHit->hit.end()){
         bool isLeft = false;
-        if ( *l < *r || r == intersection.rightHit->hit.end()){
-            isLeft = true;
-        }
+        if (r==intersection.rightHit->hit.end()) isLeft = true;
+        else if (l==intersection.leftHit->hit.end()) isLeft = false;
+        else if ( *l < *r) isLeft = true;
+
         Hit* current;
         if (isLeft){
             insideLeft = l->entering;

@@ -19,19 +19,19 @@ namespace MRay {
         struct Statistics{
             void reset();
             void add(Statistics& stats);
-            int loadedMaterials = 0;
-            int loadedObjects = 0;
-            int loadedLights = 0;
-            int loadedTextures = 0;
+            size_t loadedMaterials = 0;
+            size_t loadedObjects = 0;
+            size_t loadedLights = 0;
+            size_t loadedTextures = 0;
 
-            int validMaterials = 0;
-            int validObjects = 0;
-            int validLights = 0;
-            int validTextures = 0;
+            size_t validMaterials = 0;
+            size_t validObjects = 0;
+            size_t validLights = 0;
+            size_t validTextures = 0;
 
-            int sceneObjects = 0;
-            int sceneLights = 0;
-            int importedFiles = 0;
+            size_t sceneObjects = 0;
+            size_t sceneLights = 0;
+            size_t importedFiles = 0;
         };
     public:
         SDLParser(){};

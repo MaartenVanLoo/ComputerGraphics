@@ -80,14 +80,14 @@ int main() {
     MRay::Camera camera = MRay::Camera();
     //camera.setPosition(MRay::Vec4(-9,0,2,1));
     camera.rotate(0.0f,float(CV_PI/4.0),float(CV_PI));
-    camera.translate(10,5,10);
+    camera.translate(1,-.6,1.2);
     camera.setSensor(MRay::Sensor(360,240));
     camera.setResolution(MRay::Resolution(MRay::Screensize::_1080p));
     camera.setFocalLength(200);
 
 
-    MRay::RenderEngine engine(&scene, &camera, options);
-    engine.render();
+    //MRay::RenderEngine engine(&scene, &camera, options);
+    //engine.render();
 
     MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera, options);
     liveScreen.show();

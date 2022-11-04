@@ -238,7 +238,8 @@ Material MaterialsLibrary::black_plastic(){
     cookTorrenceMaterial.ambient = Vec4(0.02*255, 0.02*255, 0.02*255);
     cookTorrenceMaterial.diffuse = Vec4(0.01, 0.01, 0.01);
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
-    cookTorrenceMaterial.shininess = 0.25;
+    cookTorrenceMaterial.shininess = 0.05;
+    cookTorrenceMaterial.roughness = 0.8;
     return Material(phongMaterial, cookTorrenceMaterial);
 }
 /// Based on PVP, polyvinylpyrrolidone
@@ -256,7 +257,8 @@ Material MaterialsLibrary::cyan_plastic(){
     cookTorrenceMaterial.ambient = Vec4(0.0*255, 0.1*255, 0.1*255);
     cookTorrenceMaterial.diffuse = Vec4(0.0, 0.50980392, 0.50980392);
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
-    cookTorrenceMaterial.shininess = 0.25;
+    cookTorrenceMaterial.shininess = 0.05;
+    cookTorrenceMaterial.roughness = .45;
     return Material(phongMaterial, cookTorrenceMaterial);
 }
 /// Based on PVP, polyvinylpyrrolidone
@@ -274,7 +276,8 @@ Material MaterialsLibrary::green_plastic(){
     cookTorrenceMaterial.ambient = Vec4(0.0*255, 0.1*255, 0.01*255);
     cookTorrenceMaterial.diffuse = Vec4(0.1, 0.35, 0.1);
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
-    cookTorrenceMaterial.shininess = 0.25;
+    cookTorrenceMaterial.shininess = 0.05;
+    cookTorrenceMaterial.roughness = .45;
     return Material(phongMaterial, cookTorrenceMaterial);
 }
 /// Based on PVP, polyvinylpyrrolidone
@@ -292,8 +295,8 @@ Material MaterialsLibrary::red_plastic(){
     cookTorrenceMaterial.ambient = Vec4(.2*255, 0.0*255, 0.0*255);
     cookTorrenceMaterial.diffuse = Vec4(0.5, 0.0, 0.0);
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
-    cookTorrenceMaterial.shininess = 0.25;
-    cookTorrenceMaterial.roughness = .3;
+    cookTorrenceMaterial.shininess = 0.05;
+    cookTorrenceMaterial.roughness = .45;
     return Material(phongMaterial, cookTorrenceMaterial);
 }
 /// Based on PVP, polyvinylpyrrolidone
@@ -311,7 +314,8 @@ Material MaterialsLibrary::white_plastic(){
     cookTorrenceMaterial.ambient = Vec4(0.2*255, 0.2*255, 0.2*255);
     cookTorrenceMaterial.diffuse = Vec4(0.55, 0.55, 0.55);
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
-    cookTorrenceMaterial.shininess = 0.25;
+    cookTorrenceMaterial.shininess = 0.05;
+    cookTorrenceMaterial.roughness = .45;
     return Material(phongMaterial, cookTorrenceMaterial);
 }
 /// Based on PVP, polyvinylpyrrolidone
@@ -329,7 +333,8 @@ Material MaterialsLibrary::yellow_plastic(){
     cookTorrenceMaterial.ambient = Vec4(0.15*255, 0.15*255, 0.05*255);
     cookTorrenceMaterial.diffuse = Vec4(0.5, 0.5, 0.0);
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
-    cookTorrenceMaterial.shininess = 0.25;
+    cookTorrenceMaterial.shininess = 0.05;
+    cookTorrenceMaterial.roughness = .45;
     return Material(phongMaterial, cookTorrenceMaterial);
 }
 /// Based on PVP, polyvinylpyrrolidone
@@ -347,7 +352,8 @@ Material MaterialsLibrary::gray_plastic() {
     cookTorrenceMaterial.ambient = Vec4(0.1*255, 0.1*255, 0.1*255);
     cookTorrenceMaterial.diffuse = Vec4(0.3, 0.3, 0.3);
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
-    cookTorrenceMaterial.shininess = 0.25;
+    cookTorrenceMaterial.shininess = 0.05;
+    cookTorrenceMaterial.roughness = .45;
     return Material(phongMaterial, cookTorrenceMaterial);
 }
 

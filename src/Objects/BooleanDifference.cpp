@@ -35,14 +35,15 @@ bool BooleanDifference::hitPoint(Ray &ray, Intersection &intersection, const Opt
     intersection.rightHit->sort();
     bool insideLeft = !intersection.leftHit->hit[0].entering; //start condition for left object
     bool insideRight = !intersection.rightHit->hit[0].entering; //start condition for right object
-    bool inside =  insideLeft && insideRight; //inside union object = OR operation
+    bool inside =  insideLeft && !insideRight; //inside union object = OR operation
     auto l = intersection.leftHit->hit.begin();
     auto r = intersection.rightHit->hit.begin();
-    while (l != intersection.leftHit->hit.end() && r != intersection.rightHit->hit.end()){
+    while (l != intersection.leftHit->hit.end() || r != intersection.rightHit->hit.end()){
         bool isLeft = false;
-        if ( *l < *r || r == intersection.rightHit->hit.end()){
-            isLeft = true;
-        }
+        if (r==intersection.rightHit->hit.end()) isLeft = true;
+        else if (l==intersection.leftHit->hit.end()) isLeft = false;
+        else if ( *l < *r) isLeft = true;
+
         Hit* current;
         if (isLeft){
             insideLeft = l->entering;
