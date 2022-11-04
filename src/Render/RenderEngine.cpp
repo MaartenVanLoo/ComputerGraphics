@@ -116,13 +116,10 @@ void RenderEngine::render() {
         for (int y = 0; y < this->camera->getResolution().height; y++) {
             for (int x = 0; x < this->camera->getResolution().width; x++) {
                 if (x == 1705 && y == 442 ){
-                    std::cout << "Break point" << std::endl;
+                    //std::cout << "Break point" << std::endl;
                 }
                 Color3 rgb = this->shader->shade(x,y);
                 this->image->setPixel(x, y, rgb);
-                if (x >= 1694 && x <= 1694+26 && y >= 423 && y <= 423+21){
-                    std::cout << "{" << x << "," << "y" << y << "}" << rgb << "\n";
-                }
             }
             if (progress < y*100/this->camera->getResolution().height){
                 progress = y*100/this->camera->getResolution().height;

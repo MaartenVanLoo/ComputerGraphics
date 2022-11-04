@@ -26,25 +26,24 @@
       "type":"box",
       "transformation":{
         "translate":[0,10,4],
-        "scale":[0.1,5,2],
+        "scale":[2,20,2],
         "rotate":[0,0,0]
       },
-      "material":"water",
-      "texture":"water"
+      "material":"glass"
     },
     "straw":{
       "type":"taperedCylinder",
       "s": 1,
       "transformation":{
-        "translate":[10,10,0],
-        "scale": [0.1,0.1,20]
+        "translate":[20,10,0],
+        "scale": [0.2,0.2,20]
       },
       "material":"red_plastic"
     },
     "sphere": {
       "type": "sphere",
       "transformation": {
-        "translate": [-3,-1,2]
+        "translate": [0,0,2]
       },
       "material":"red_plastic"
     },
@@ -60,7 +59,7 @@
     "l2_s":{
       "type":"sphere",
       "transformation":{
-        "translate": [10,15,10],
+        "translate": [-10,0,10],
         "scale": [0.10,0.10,0.10]
       },
       "material": "lightSourceGlass"
@@ -73,11 +72,10 @@
     },
     "l2":{
       "type":"pointlight",
-      "position":[10,15,10]
+      "position":[-10,0,10]
     }
   },
   "scene": [
-    "water",
     "ground",
     "glassplane",
     "straw",

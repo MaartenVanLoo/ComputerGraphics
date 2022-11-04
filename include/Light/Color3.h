@@ -54,10 +54,11 @@ namespace MRay {
         void setBlue(int blue);
         void setBlue(double blue);
 
+        void clipColor(Color3* c);
     private:
-        int red = 0;
-        int green = 0;
-        int blue = 0;
+        double red = 0;
+        double green = 0;
+        double blue = 0;
 
         //transaction variables
         bool transactionOpen = false;

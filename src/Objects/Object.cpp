@@ -35,5 +35,13 @@ Vec4 Object::transformNormal(Vec4 normal) const{
     return normal;
 }
 
+long long Object::getPriority() const {
+    return priority;
+}
+
+void Object::setPriority(long long int priority) {
+    Object::priority = priority;
+}
+
 
 

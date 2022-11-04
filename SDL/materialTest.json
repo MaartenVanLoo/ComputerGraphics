@@ -595,11 +595,11 @@
 		},
 		"l2":{
 			"type":"pointlight",
-			"position":[-5,15,20]
+			"position":"this doesn't work"
 		}
 	},
 	"scene": [
-		"mirrorBox",
+
 		"01_box",
 		"02_box",
 		"03_box",

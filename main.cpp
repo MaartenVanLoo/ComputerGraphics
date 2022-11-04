@@ -18,11 +18,11 @@ int main() {
     //MRay::WoodTexture wood = MRay::WoodTexture();
     //wood.preview(-1,1,-1,1);
 
-    MRay::PerlinPlot plotter(1500,1000);
-    MRay::Perlin2D perlin2D = MRay::Perlin2D();
-    perlin2D.setScale(MRay::Vec3(0.005f,0.005f,0.005f));
-    perlin2D.setOctaves(2);
-    plotter.plot(perlin2D, -255*4, 255*4, -255*4, 255*4);
+    //MRay::PerlinPlot plotter(1500,1000);
+    //MRay::Perlin2D perlin2D = MRay::Perlin2D();
+    //perlin2D.setScale(MRay::Vec3(0.005f,0.005f,0.005f));
+    //perlin2D.setOctaves(2);
+    //plotter.plot(perlin2D, -255*4, 255*4, -255*4, 255*4);
 
 
     //MRay::Perlin3D perlin3D_1 = MRay::Perlin3D();
@@ -66,11 +66,12 @@ int main() {
     //scene.load("../../SDL/sdl.json");
     //scene.load("../../SDL/sdl_all.json");
     //scene.load("../../SDL/materialTest.json");
-    scene.load("../../SDL/RefractionTest.json");
+    //scene.load("../../SDL/RefractionTest.json");
+    scene.load("../../SDL/bathroom.json");
 
     MRay::Options options;
     options.enableGui = true;
-    options.multicore = true;
+    options.multicore = false;
     options.quitOnFinish = false;
     //options.shaderType = MRay::ShaderTypes::Phong;
     options.shaderType = MRay::ShaderTypes::CookTorrance;
@@ -78,8 +79,8 @@ int main() {
 
     MRay::Camera camera = MRay::Camera();
     //camera.setPosition(MRay::Vec4(-9,0,2,1));
-    //camera.rotate(0.0f,float(CV_PI/4.0),0.0f);
-    camera.translate(-10,5,1);
+    camera.rotate(0.0f,float(CV_PI/4.0),float(CV_PI));
+    camera.translate(10,5,10);
     camera.setSensor(MRay::Sensor(360,240));
     camera.setResolution(MRay::Resolution(MRay::Screensize::_1080p));
     camera.setFocalLength(200);
@@ -88,8 +89,8 @@ int main() {
     MRay::RenderEngine engine(&scene, &camera, options);
     engine.render();
 
-    //MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera, options);
-    //liveScreen.show();
+    MRay::LiveScreen liveScreen = MRay::LiveScreen(&scene, &camera, options);
+    liveScreen.show();
 
     /*sequence render:
     for(int i =0; i < 720; i+=5){

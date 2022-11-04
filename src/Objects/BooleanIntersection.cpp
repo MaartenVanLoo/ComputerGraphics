@@ -25,6 +25,47 @@ bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection, const O
     //if (intersection.leftHit->empty() || intersection.rightHit->empty())return false; //no hitpoints found when either one of the objects is empty
 
     //sort out the intersection of the union of the points
+    intersection.leftHit->sort();
+    intersection.rightHit->sort();
+    bool insideLeft = !intersection.leftHit->hit[0].entering; //start condition for left object
+    bool insideRight = !intersection.rightHit->hit[0].entering; //start condition for right object
+    bool inside =  insideLeft && insideRight; //inside union object = OR operation
+    auto l = intersection.leftHit->hit.begin();
+    auto r = intersection.rightHit->hit.begin();
+    while (l != intersection.leftHit->hit.end() && r != intersection.rightHit->hit.end()){
+        bool isLeft = false;
+        if ( *l < *r || r == intersection.rightHit->hit.end()){
+            isLeft = true;
+        }
+        Hit* current;
+        if (isLeft){
+            insideLeft = l->entering;
+            current = &*l;
+            l++;
+        }else{
+            //hit.obj == this->right
+            insideRight = r->entering;
+            current = &*r;
+            r++;
+        }
+        if (inside == (insideLeft && insideRight)){
+            //this hit doesn't change the state of the solid
+        }else{
+            intersection.hit.push_back(*current);
+            inside = (insideLeft && insideRight);
+        }
+    }
+    //Todo: do i need to transpose normals & hitpoints?
+    for (auto& h: intersection.hit){
+        h.normal = this->getTransform() * h.normal;
+        h.point = this->getTransform() * h.point;
+    }
+    return !intersection.hit.empty();
+
+
+    //old version:
+    /*
+    //sort out the intersection of the union of the points
     // merge all hits, sort them by time
     for (auto& hit : intersection.leftHit->hit) intersection.hit.push_back(hit);
     for (auto& hit : intersection.rightHit->hit) intersection.hit.push_back(hit);
@@ -58,6 +99,7 @@ bool BooleanIntersection::hitPoint(Ray &ray, Intersection &intersection, const O
         h.point = this->getTransform() * h.point;
     }
     return !intersection.hit.empty();
+     */
 }
 
 

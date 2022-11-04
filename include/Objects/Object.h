@@ -33,6 +33,10 @@ namespace MRay {
         virtual void computeBoundingBox(){};
 
         virtual void setMaterial(Material mtrl);
+
+        long long getPriority() const;
+        void setPriority(long long int priority);
+
         void setTexture(Texture *texture);
 
         /// Transform normal from LCS to GCS
@@ -46,6 +50,7 @@ namespace MRay {
         Material mtrl;
         Texture* texture=nullptr;
         BoundingBox bb;
+        long long priority = 0;
     };
 
 }

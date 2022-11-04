@@ -42,6 +42,43 @@ bool BooleanUnion::hitPoint(Ray &ray, Intersection &intersection, const Options 
 
     // find out which intersections have to be kept and which are "inside" the object
     // a hit must be kept when the state insideLeft || insideRight doesn't change
+    intersection.leftHit->sort();
+    intersection.rightHit->sort();
+    bool insideLeft = !intersection.leftHit->hit[0].entering; //start condition for left object
+    bool insideRight = !intersection.rightHit->hit[0].entering; //start condition for right object
+    bool inside =  insideLeft && insideRight; //inside union object = OR operation
+    auto l = intersection.leftHit->hit.begin();
+    auto r = intersection.rightHit->hit.begin();
+    while (l != intersection.leftHit->hit.end() && r != intersection.rightHit->hit.end()){
+        bool isLeft = false;
+        if ( *l < *r || r == intersection.rightHit->hit.end()){
+            isLeft = true;
+        }
+        Hit* current;
+        if (isLeft){
+            insideLeft = l->entering;
+            current = &*l;
+            l++;
+        }else{
+            //hit.obj == this->right
+            insideRight = r->entering;
+            current = &*r;
+            r++;
+        }
+        if (inside == (insideLeft || insideRight)){
+            //this hit doesn't change the state of the solid
+        }else{
+            intersection.hit.push_back(*current);
+            inside = (insideLeft && insideRight);
+        }
+    }
+    //Todo: do i need to transpose normals & hitpoints?
+    for (auto& h: intersection.hit){
+        h.normal = this->getTransform() * h.normal;
+        h.point = this->getTransform() * h.point;
+    }
+    return !intersection.hit.empty();
+    /*
     //start conditions:
     bool insideLeft = !intersection.leftHit->hit[0].entering; //start condition for left object
     bool insideRight = !intersection.rightHit->hit[0].entering; //start condition for right object
@@ -68,6 +105,8 @@ bool BooleanUnion::hitPoint(Ray &ray, Intersection &intersection, const Options 
         h.point = this->getTransform() * h.point;
     }
     return !intersection.hit.empty();
+
+     */
 }
 
 Vec4 BooleanUnion::normal(Vec4 &point) const {

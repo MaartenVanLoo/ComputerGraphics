@@ -9,10 +9,10 @@ using namespace MRay;
 #pragma region Color3
 MRay::Color3::Color3() {}
 
-void clipColor(Color3 *c){
-    c->setRed(std::min(c->getRed(),255));
-    c->setGreen(std::min(c->getGreen(),255));
-    c->setBlue(std::min(c->getBlue(),255));
+void Color3::clipColor(Color3 *c){
+    c->red=std::min(c->red,255.0);
+    c->green=std::min(c->green,255.0);
+    c->blue=std::min(c->blue,255.0);
 }
 MRay::Color3::Color3(int red, int green, int blue) {
     this->red = red;
@@ -66,9 +66,9 @@ void MRay::Color3::add(const Color3 &color) {
             std::cout << "Green" << int(color.green) + this->green << "\n";
         if (int(color.blue) + this->blue < 0)
             std::cout << "Blue" << int(color.blue) + this->blue << "\n";
-        this->red   = int(color.red   )+ this->red  ;
-        this->green = int(color.green )+ this->green;
-        this->blue  = int(color.blue  )+ this->blue ;
+        this->red   = color.red   + this->red  ;
+        this->green = color.green + this->green;
+        this->blue  = color.blue  + this->blue ;
         clipColor(this);
     }
 }
@@ -135,15 +135,15 @@ Color3 MRay::operator*(double lhs, Color3 rhs) {
 }
 
 int Color3::getRed() const {
-    return red;
+    return (int)red;
 }
 
 int Color3::getGreen() const {
-    return green;
+    return (int)green;
 }
 
 int Color3::getBlue() const {
-    return blue;
+    return (int)blue;
 }
 
 void Color3::setRed(int red) {
@@ -158,17 +158,17 @@ void Color3::setGreen(int green) {
     Color3::green = green;
 }
 void Color3::setGreen(double red) {
-    Color3::green = (int)green;
+    Color3::green = green;
 }
 void Color3::setBlue(int blue) {
     Color3::blue = blue;
 }
 void Color3::setBlue(double blue) {
-    Color3::blue = (int)blue;
+    Color3::blue = blue;
 }
 
 Vec3 Color3::getVector() {
-    return Vec3(this->red, this->green, this->blue);
+    return Vec3((int)this->red, (int)this->green,(int) this->blue);
 }
 
 

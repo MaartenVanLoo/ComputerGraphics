@@ -167,6 +167,7 @@ Material MaterialsLibrary::chrome(){
     cookTorrenceMaterial.diffuse = Vec4(0.4, 0.4, 0.4);
     cookTorrenceMaterial.fresnell = Vec4(1.1071,1.1812,1.3230);
     cookTorrenceMaterial.shininess = 0.6;
+    cookTorrenceMaterial.roughness = 0.2;
     return Material(phongMaterial, cookTorrenceMaterial);
 }
 
@@ -292,6 +293,7 @@ Material MaterialsLibrary::red_plastic(){
     cookTorrenceMaterial.diffuse = Vec4(0.5, 0.0, 0.0);
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
     cookTorrenceMaterial.shininess = 0.25;
+    cookTorrenceMaterial.roughness = .3;
     return Material(phongMaterial, cookTorrenceMaterial);
 }
 /// Based on PVP, polyvinylpyrrolidone
@@ -383,8 +385,6 @@ Material MaterialsLibrary::cyan_rubber(){
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
     cookTorrenceMaterial.shininess = 0.015625;
     return Material(phongMaterial, cookTorrenceMaterial);
-        return Material(0.0*255, 0.05*255, 0.05*255, 0.4, 0.5, 0.5, 0.04, 0.7, 0.7, .078125*128,
-                        1.5245,1.5299,1.5413);
 }
 
 ///rubber is similar to plastic for refractive indeces
@@ -403,8 +403,6 @@ Material MaterialsLibrary::green_rubber(){
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
     cookTorrenceMaterial.shininess = 0.015625;
     return Material(phongMaterial, cookTorrenceMaterial);
-        return Material(0.0*255, 0.05*255, 0.0*255, 0.4, 0.5, 0.4, 0.04, 0.7, 0.04, .078125*128,
-                        1.5245,1.5299,1.5413);
 }
 
 ///rubber is similar to plastic for refractive indeces
@@ -423,8 +421,6 @@ Material MaterialsLibrary::red_rubber(){
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
     cookTorrenceMaterial.shininess = 0.015625;
     return Material(phongMaterial, cookTorrenceMaterial);
-        return Material(0.05*255, 0.0*255, 0.0*255, 0.5, 0.4, 0.4, 0.7, 0.04, 0.04, .078125*128,
-                        1.5245,1.5299,1.5413);
 }
 
 ///rubber is similar to plastic for refractive indeces
@@ -443,8 +439,6 @@ Material MaterialsLibrary::white_rubber(){
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
     cookTorrenceMaterial.shininess = 0.015625;
     return Material(phongMaterial, cookTorrenceMaterial);
-        return Material(0.05*255, 0.05*255, 0.05*255, 0.5, 0.5, 0.5, 0.7, 0.7, 0.7, .078125*128,
-                        1.5245,1.5299,1.5413);
 }
 
 ///rubber is similar to plastic for refractive indeces
@@ -463,8 +457,6 @@ Material MaterialsLibrary::yellow_rubber(){
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
     cookTorrenceMaterial.shininess = 0.015625;
     return Material(phongMaterial, cookTorrenceMaterial);
-        return Material(0.05*255, 0.05*255, 0.0*255, 0.5, 0.5, 0.4, 0.7, 0.7, 0.04, .078125*128,
-                        1.5245,1.5299,1.5413);
 }
 
 ///rubber is similar to plastic for refractive indeces
@@ -483,8 +475,6 @@ Material MaterialsLibrary::gray_rubber() {
     cookTorrenceMaterial.fresnell = Vec4(1.5245,1.5299,1.5413);
     cookTorrenceMaterial.shininess = 0.015625;
     return Material(phongMaterial, cookTorrenceMaterial);
-        return Material(0.12*255, 0.12*255, 0.12*255, 0.3, 0.3, 0.3, 0.4, 0.4, 0.4, .078125*128,
-                        1.5245,1.5299,1.5413);
 }
 Material MaterialsLibrary::perfect_mirror(){
     PhongMaterial phongMaterial;

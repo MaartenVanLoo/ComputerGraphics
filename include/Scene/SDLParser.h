@@ -13,7 +13,7 @@
 
 #include "Scene.h"
 #include <json/json.h>
-
+#include <filesystem>
 namespace MRay {
     class SDLParser {
         struct Statistics{
@@ -40,6 +40,7 @@ namespace MRay {
         std::vector<Object*> getObjects();
         std::vector<Light*> getLights();
     protected:
+        std::filesystem::path dir; // working directory of this parser;
         void parse(const std::string& sdlFile, bool topLevel);
         void importFiles(const Json::Value& import);
 

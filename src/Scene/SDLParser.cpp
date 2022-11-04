@@ -7,6 +7,7 @@
 #include "Textures/WaterTexture.h"
 #include "Utils/Logger.h"
 
+
 using namespace MRay;
 
 #pragma region helpers
@@ -61,12 +62,14 @@ bool SDLParser::containsObject(const std::string &id) const {
     std::string key;
     splitIdentifier(id, file, key);
     if (file.empty()){
-        return contains(this->loadedObjects,key);
-    }else{
+        if (contains(this->loadedObjects,key)) return true;
         for (auto& pair:this->importedFiles){
             auto& imported = pair.second;
             if (imported.containsObject(key)) return true;
         }
+    }else{
+        //todo:how to take namespaces into account to avoid naming collisions
+        Logger::error("Object namespaces not implemented");
     }
     return false;
 }
@@ -75,12 +78,14 @@ bool SDLParser::containsLight(const std::string &id) const {
     std::string key;
     splitIdentifier(id, file, key);
     if (file.empty()){
-        return contains(this->loadedLights,key);
-    }else{
+        if (contains(this->loadedLights,key)) return true;
         for (auto& pair:this->importedFiles){
             auto& imported = pair.second;
             if (imported.containsLight(key)) return true;
         }
+    }else{
+        //todo:how to take namespaces into account to avoid naming collisions
+        Logger::error("Object namespaces not implemented");
     }
     return false;
 }
@@ -89,12 +94,14 @@ bool SDLParser::containsMaterial(const std::string &id) const{
     std::string key;
     splitIdentifier(id, file, key);
     if (file.empty()){
-        return contains(this->loadedMaterials,key);
-    }else{
+        if (contains(this->loadedMaterials,key)) return true;
         for (auto& pair:this->importedFiles){
             auto& imported = pair.second;
             if (imported.containsMaterial(key)) return true;
         }
+    }else{
+        //todo:how to take namespaces into account to avoid naming collisions
+        Logger::error("Object namespaces not implemented");
     }
     return false;
 }
@@ -103,13 +110,16 @@ bool SDLParser::containsTexture(const std::string &id) const{
     std::string key;
     splitIdentifier(id, file,key);
     if (file.empty()){
-        return contains(this->loadedTextures,key);
-    }else{
+        if (contains(this->loadedTextures,key)) return true;
         for (auto& pair:this->importedFiles){
             auto& imported = pair.second;
             if (imported.containsTexture(key)) return true;
         }
+    }else{
+        //todo:how to take namespaces into account to avoid naming collisions
+        Logger::error("Object namespaces not implemented");
     }
+    return false;
 }
 #pragma endregion
 
@@ -126,14 +136,17 @@ void MRay::SDLParser::parse(const std::string& sdlFile){
     this->parse(sdlFile,true);
 }
 void MRay::SDLParser::parse(const std::string& sdlFile, bool topLevel) {
+    std::filesystem::path path(sdlFile);
+    this->dir = path.parent_path();
+
     Json::Value root;
     std::ifstream file;
     try{
         file.open(sdlFile);
-        file >> root;
         if (file.fail()){
             throw std::ios::failure("Something went wrong when reading the SDL file: " + sdlFile);
         }
+        file >> root;
         file.close();
     }
     catch(std::exception& e){
@@ -141,13 +154,11 @@ void MRay::SDLParser::parse(const std::string& sdlFile, bool topLevel) {
         throw e; //continue throwing
     }
 
-    if (topLevel){
-        std::cout << "Loading file " << sdlFile << std::endl;
-    }
+    if (topLevel) std::cout << "Loading file " << sdlFile << std::endl;
+
     this->statistics.reset();
 
     if (!root["import"].isNull()){
-        std::cout << "Importing files";
         importFiles(root["import"]);
         //TODO: import other files
     }
@@ -173,7 +184,7 @@ void MRay::SDLParser::parse(const std::string& sdlFile, bool topLevel) {
         this->sceneConstructor(root["scene"]);
     }
 
-    printStatistics();
+    if (topLevel) printStatistics();
 }
 
 
@@ -182,12 +193,15 @@ void SDLParser::importFiles(const Json::Value& import) {
     if (!import.isArray()) return;
     for (Json::Value::ArrayIndex i = 0; i != import.size(); i++){
         std::string file = import.get(i,"").asString();
+        std::cout << "Importing file " << file << "\n";
+        file = (this->dir /= file).string();
+
         if (file.empty()) continue;
         if (containsImport(file)) continue; //file already loaded;
 
         //import file
         this->importedFiles[file] = SDLParser(); //first add file to imported files to avoid self importing of file! (would be infinite loop!)
-        this->importedFiles[file].parse(file);
+        this->importedFiles[file].parse(file,false);
     }
 }
 
@@ -302,7 +316,7 @@ void SDLParser::validateMaterials() {
 
     }
     if (total > 0) std::cout << "\rValidating materials...Done\t\t\t\t\t\t" << std::endl;
-    this->statistics.validMaterials = count;
+    this->statistics.validMaterials = this->loadedMaterials.size();
 }
 bool SDLParser::validateMaterial(const Json::Value &material) noexcept{
     //TODO: implement custom materials
@@ -327,7 +341,7 @@ void SDLParser::validateObjects() {
 
     }
     if (total > 0) std::cout << "\rValidating objects...Done\t\t\t\t\t\t" << std::endl;
-    this->statistics.validObjects = count;
+    this->statistics.validObjects = this->loadedObjects.size();
 }
 bool SDLParser::validateObject(const Json::Value &object) noexcept {
     //note: by getting the "optional fields" I ensure no exceptions will be thrown later in the code
@@ -335,10 +349,35 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
         std::string type = getType(object);
         if (type.empty()) return false; //no valid type
 
-        if (type == "sphere") {
+        if (type == "object"){
+            //existing description but with aditional parameters
+            //required fields
+            const std::string name = object.get("name","").asString();
+            if (name.empty()) return false;
+            if (!this->containsObject(name)) return false;
+
+            //optional fields
+            long long priority = object.get("priority",1).asInt64();
+            std::string material = object.get("material", "").asString();
+            if (!material.empty()){
+                //check if material is loaded or default library
+                if (!this->containsMaterial(material) && !contains(MaterialsLibrary::materials,material)) return false;
+            }
+            const Json::Value& transformation = object["transformation"];
+            if (!validateTransformation(transformation)) return false;
+
+            const std::string texture = object.get("texture","").asString();
+            if (!texture.empty()){
+                //check if texture is loaded
+                if (!this->containsTexture(texture) && !contains(Texture::textureLibrary,texture)) return false;
+            }
+            return true;
+        }
+        else if (type == "sphere") {
             // required fields
 
             //optional fields
+            long long priority = object.get("priority",1).asInt64();
             std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded or default library
@@ -360,6 +399,7 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             // required fields
 
             // optional fields
+            long long priority = object.get("priority",1).asInt64();
             const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
@@ -381,6 +421,7 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             // required fields
 
             //optional fields
+            long long priority = object.get("priority",1).asInt64();
             const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
@@ -402,6 +443,7 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             // required fields
 
             //optional fields
+            long long priority = object.get("priority",1).asInt64();
             double s = object.get("s",1.0).asDouble();
             const std::string material = object.get("material", "").asString();
             if (!material.empty()){
@@ -430,6 +472,7 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             if (!this->containsObject(right)) return false;
 
             //optional fields
+            long long priority = object.get("priority",1).asInt64();
             const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
@@ -455,6 +498,7 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             if (!this->containsObject(right)) return false;
 
             //optional fields
+            long long priority = object.get("priority",1).asInt64();
             const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
@@ -479,6 +523,7 @@ bool SDLParser::validateObject(const Json::Value &object) noexcept {
             if (!this->containsObject(right)) return false;
 
             //optional fields
+            long long priority = object.get("priority",1).asInt64();
             const std::string material = object.get("material", "").asString();
             if (!material.empty()){
                 //check if material is loaded
@@ -511,7 +556,7 @@ void SDLParser::validateLights() {
         }
     }
     if (total > 0) std::cout << "\rValidating lights...Done\t\t\t\t\t\t" << std::endl;
-    this->statistics.validLights = count;
+    this->statistics.validLights = this->loadedLights.size();
 }
 bool SDLParser::validateLight(const Json::Value &light) noexcept{
     try{
@@ -548,7 +593,7 @@ void SDLParser::validateTextures(){
 
     }
     if (total > 0) std::cout << "\rValidating textures...Done\t\t\t\t\t\t" << std::endl;
-    this->statistics.validTextures = count;
+    this->statistics.validTextures = this->loadedTextures.size();
 }
 bool SDLParser::validateTexture(const Json::Value &texture) noexcept{
     //TODO: implement custom materials
@@ -660,14 +705,18 @@ Object* SDLParser::constructObject(const std::string& identifier){
     std::string key;
     splitIdentifier(identifier, file, key);
     if (file.empty()){
-        //this sdl file contains the object description => build it!
-        if (!contains(loadedObjects, key)) throw std::invalid_argument(key + " is not found in loaded objects");
-        return this->buildObject(loadedObjects[key]); //finally, after all the validation and checking we can create the actual object!
-    }else{
-        for (auto& pair:this->importedFiles){
-            auto& imported = pair.second;
-            if (imported.containsObject(identifier)) return imported.constructObject(identifier);
+        if (!contains(loadedObjects, key)){
+            for (auto& pair:this->importedFiles){
+                auto& imported = pair.second;
+                if (imported.containsObject(identifier)) return imported.constructObject(identifier);
+            }
+            throw std::invalid_argument(key + " is not found in loaded objects");
         }
+        return this->buildObject(loadedObjects[key]); //finally, after all the validation and checking we can create the actual object!
+
+    }else{
+        //todo:how to take namespaces into account to avoid naming collisions
+        Logger::error("Object namespaces not implemented");
     }
     //dammit, getting here means this identifier wasn't loaded but this should be caught in validation????
     throw std::invalid_argument(key + " is not found in loaded lights");
@@ -678,13 +727,17 @@ Light* SDLParser::constructLight(const std::string& identifier){
     splitIdentifier(identifier, file, key);
     if (file.empty()){
         //this sdl file contains the object description => build it!
-        if (!contains(loadedLights, key)) throw std::invalid_argument(key + " is not found in loaded lights");
+        if (!contains(loadedLights, key)){
+            for (auto& pair:this->importedFiles){
+                auto& imported = pair.second;
+                if (imported.containsObject(identifier)) return imported.buildLight(identifier);
+            }
+            throw std::invalid_argument(key + " is not found in loaded lights");
+        }
         return this->buildLight(loadedLights[key]); //finally, after all the validation and checking we can create the actual light!
     }else{
-        for (auto& pair:this->importedFiles){
-            auto& imported = pair.second;
-            if (imported.containsObject(identifier)) return imported.buildLight(identifier);
-        }
+        //todo:how to take namespaces into account to avoid naming collisions
+        Logger::error("Object namespaces not implemented");
     }
     //dammit, getting here means this identifier wasn't loaded but this should be caught in validation????
     throw std::invalid_argument(key + " is not found in loaded lights");
@@ -730,11 +783,33 @@ Object* SDLParser::buildObject(const Json::Value& config){
 
     std::string type = getType(config);
     if (type.empty()) throw std::invalid_argument(type + " is an unknown object specifier"); // no valid type, should never happen due to all the previous checks
-    if (type == "sphere"){
-        Object* object = new Sphere();
+    if (type == "object"){
+        const std::string name = config.get("name","").asString();
+        Object* object = constructObject(name);
+
+        //optional fields
+        const long long priority = config.get("priority",0).asInt64();
+        object->setPriority(priority);
 
         const std::string material = config.get("material","").asString();
-        object->setMaterial(constructMaterial(material));
+        if (!material.empty()) object->setMaterial(constructMaterial(material));
+
+        const Json::Value& transform = config["transformation"];
+        applyTransformation(object, transform);
+
+        const std::string texture = config.get("texture","").asString();
+        object->setTexture(constructTexture(texture));
+
+        return object;
+    }
+    else if (type == "sphere"){
+        Object* object = new Sphere();
+
+        const long long priority = config.get("priority",0).asInt64();
+        object->setPriority(priority);
+
+        const std::string material = config.get("material","").asString();
+        if (!material.empty()) object->setMaterial(constructMaterial(material));
 
         const Json::Value& transform = config["transformation"];
         applyTransformation(object, transform);
@@ -746,8 +821,11 @@ Object* SDLParser::buildObject(const Json::Value& config){
     else if (type == "box" || type == "cube"){
         Object* object = new Box();
 
+        const long long priority = config.get("priority",0).asInt64();
+        object->setPriority(priority);
+
         const std::string material = config.get("material","").asString();
-        object->setMaterial(constructMaterial(material));
+        if (!material.empty()) object->setMaterial(constructMaterial(material));
 
         const Json::Value& transform = config["transformation"];
         applyTransformation(object, transform);
@@ -759,8 +837,11 @@ Object* SDLParser::buildObject(const Json::Value& config){
     else if (type == "plane"){
         Object* object = new Plane();
 
+        const long long priority = config.get("priority",0).asInt64();
+        object->setPriority(priority);
+
         const std::string material = config.get("material","").asString();
-        object->setMaterial(constructMaterial(material));
+        if (!material.empty()) object->setMaterial(constructMaterial(material));
 
         const Json::Value& transform = config["transformation"];
         applyTransformation(object, transform);
@@ -773,8 +854,11 @@ Object* SDLParser::buildObject(const Json::Value& config){
         double s = config.get("s",1.0).asDouble();
         Object* object = new TaperedCylinder(s);
 
+        const long long priority = config.get("priority",0).asInt64();
+        object->setPriority(priority);
+
         const std::string material = config.get("material","").asString();
-        object->setMaterial(constructMaterial(material));
+        if (!material.empty()) object->setMaterial(constructMaterial(material));
 
         const Json::Value& transform = config["transformation"];
         applyTransformation(object, transform);
@@ -788,9 +872,12 @@ Object* SDLParser::buildObject(const Json::Value& config){
         Object* right = this->constructObject(config.get("right","").asString());
         Object* object = new BooleanDifference(left, right);
 
+        const long long priority = config.get("priority",0).asInt64();
+        if (!config["priority"].isNull() && config["priority"].isNumeric()) object->setPriority(priority);
+
         //can override material
         const std::string material = config.get("material","").asString();
-        object->setMaterial(constructMaterial(material));
+        if (!material.empty()) object->setMaterial(constructMaterial(material));
 
         //can apply additional transform
         const Json::Value& transform = config["transformation"];
@@ -803,11 +890,17 @@ Object* SDLParser::buildObject(const Json::Value& config){
         Object* right = this->constructObject(config.get("right","").asString());
         Object* object = new BooleanIntersection(left, right);
 
+        const long long priority = config.get("priority",0).asInt64();
+        if (!config["priority"].isNull() && config["priority"].isNumeric()) object->setPriority(priority);
+
         //can override material
         const std::string material = config.get("material","").asString();
-        object->setMaterial(constructMaterial(material));
+        if (!material.empty()) object->setMaterial(constructMaterial(material));
 
         //can apply additional transform
+        const Json::Value& transform = config["transformation"];
+        applyTransformation(object, transform);
+
         return object;
     }
     else if (type == "booleanunion"){
@@ -815,11 +908,17 @@ Object* SDLParser::buildObject(const Json::Value& config){
         Object* right = this->constructObject(config.get("right","").asString());
         Object* object = new BooleanUnion(left, right);
 
+        const long long priority = config.get("priority",0).asInt64();
+        if (!config["priority"].isNull() && config["priority"].isNumeric()) object->setPriority(priority);
+
         //can override material
         const std::string material = config.get("material","").asString();
-        object->setMaterial(constructMaterial(material));
+        if (!material.empty()) object->setMaterial(constructMaterial(material));
 
         //can apply additional transform
+        const Json::Value& transform = config["transformation"];
+        applyTransformation(object, transform);
+
         return object;
     }
     return nullptr;
@@ -850,7 +949,7 @@ Texture* SDLParser::buildTexture(const Json::Value& texture){
     Logger::error("Custom texture not implemented");
     return nullptr;
 }
-Texture* SDLParser::buildDefaultTexture(const Json::String& texture){
+Texture* SDLParser::buildDefaultTexture(const std::string& texture){
     if (texture == "checkboard"){
         return new Checkboard(5,5,5);
     }else if (texture =="water" || texture =="waterTexture"){

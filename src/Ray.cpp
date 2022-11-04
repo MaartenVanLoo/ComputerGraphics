@@ -85,11 +85,35 @@ std::ostream &MRay::operator<<(std::ostream &os, const Ray &ray) {
 }
 
 Object *Ray::getObject() const{
-    return this->obj;
+    //return the object with the highest priority, if they are equal, the first one will be returned
+    Object* current = nullptr;
+    for(Object * obj: this->inside){
+        if (current == nullptr) current = obj;
+        if (current->getPriority() > obj->getPriority()){
+            current = obj;
+        }
+    }
+    return current;
 }
 
-void Ray::setObject(Object *obj) {
-    this->obj = obj;
+void Ray::pushObject(Object *obj) {
+    this->inside.push_back(obj);
+}
+void Ray::eraseObject(Object *obj){
+    auto loc = std::find(this->inside.begin(), this->inside.end(), obj);
+    if (loc == this->inside.end()) return; //object not found
+    this->inside.erase(loc);
+}
+
+Ray::Ray(const Ray &ray) {
+    this->inside = ray.inside;
+    this->direction = ray.direction;
+    this->position = ray.position;
+    this->depth = ray.depth;
+}
+
+size_t Ray::getInsideSize() {
+    return this->inside.size();
 }
 
 

@@ -62,7 +62,7 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
     //when exiting && current ray object = nullptr => camera ray must be inside an object
     if (!first.entering) {
         normal = -normal;
-        if (primaryRay.getObject() == nullptr) primaryRay.setObject(first.obj);
+        if (primaryRay.getObject() == nullptr) primaryRay.pushObject(first.obj);
     }
     // diff & spec
     for (const Light* light: scene->getLights()){
@@ -73,7 +73,6 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
         s.normalize();
         float mDotS = s.dot(normal); // lambert term;
         if (mDotS > 0.0){
-            Vec4 tmp = mDotS * kd * fresnell(obj->getMaterial().fresnell);
             Color3 diffuse = (shadowFactor * mDotS * kd * fresnell(obj->getMaterial().getFresnell<CookTorrance>())) * light->color; //note: precompute fresnell values ??
             if (obj->getTexture() != nullptr) {
                 diffuse *= first.obj->getTexture()->compute(first.point.get<0>(), first.point.get<1>(), first.point.get<2>());
@@ -122,8 +121,31 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
         double cosa2 = cosa*cosa;
         double sina2 = 1-cosa2;
 
-        double n1 = primaryRay.getObject() == nullptr?1:primaryRay.getObject()->getMaterial().getRelativeSpeed<CookTorrance>();
-        double n2 = first.entering?obj->getMaterial().getRelativeSpeed<CookTorrance>():1;
+        double n1, n2;
+
+        Ray transmitted(primaryRay);
+        if (first.entering){
+            transmitted.pushObject(first.obj);
+        }
+        else{
+            transmitted.eraseObject(first.obj);
+        }
+        Object* primaryObject = primaryRay.getObject();
+        Object* refractedObject = transmitted.getObject();
+
+        if (primaryObject == nullptr){
+            n1 = 1;
+            n2 = refractedObject->getMaterial().getRelativeSpeed<CookTorrance>();
+        }else if (refractedObject == nullptr) {
+            n1 = primaryObject->getMaterial().getRelativeSpeed<CookTorrance>();
+            n2 = 1;
+        }else{
+            n1 = primaryObject->getMaterial().getRelativeSpeed<CookTorrance>();
+            n2 = refractedObject->getMaterial().getRelativeSpeed<CookTorrance>();
+        }
+
+
+
         double cr = n1/n2;
         double snell2 = 1-cr*cr*sina2; //snell2 = cos(theta2)^2
 
@@ -132,10 +154,9 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
 
         double critAngle = std::acos(n2/n1);
         double angle = std::acos(cosa);
-        if (angle > critAngle && n2/n1 < 1){
+        if (angle > critAngle && n2/n1 < 1 || snell2 < 0){
             internalReflection = true;
         }else if(first.thinMaterial) {
-            Ray transmitted;
             transmitted.setPos(first.point - this->options.eps * normal);
             transmitted.setDir(primaryRay.dir());
             transmitted.setDepth(primaryRay.getDepth() + 1);
@@ -144,11 +165,9 @@ Color3 CookTorranceShader::shade(Ray &primaryRay, Intersection &intersection) {
         else {
             assert(snell2 >= 0);
             double snell = sqrt(snell2);
-            Ray transmitted;
             transmitted.setPos(first.point - this->options.eps * normal);
             transmitted.setDir(float(cr) * primaryRay.dir() + float(cr * cosa - snell) * normal);
             transmitted.setDepth(primaryRay.getDepth() + 1);
-            transmitted.setObject(first.obj);
             sample.add(obj->getMaterial().getTransparancy<CookTorrance>() * shade(transmitted));
         }
 

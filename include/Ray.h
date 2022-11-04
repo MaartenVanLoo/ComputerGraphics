@@ -8,14 +8,14 @@
 #include <iostream>
 #include "LinearAlgebra/Vector.h"
 #include "LinearAlgebra/Matrix.h"
-
+#include <vector>
 
 namespace MRay {
     class Object;
     class Ray {
     public:
         Ray() {};
-
+        Ray(const Ray& ray);
         Ray(const Vec4 &position, const Vec4 &direction);
 
         const Vec4 &pos() const;
@@ -42,12 +42,14 @@ namespace MRay {
         int getDepth() const;
 
         Object* getObject() const;
-        void setObject(Object* obj);
+        void pushObject(Object* obj);
+        void eraseObject(Object* obj);
+        size_t getInsideSize();
     private:
         Vec4 position = Vec4(0, 0, 0, 1);
         Vec4 direction = Vec4(0, 0, 0, 0);;
         int depth = 0;
-        Object* obj = nullptr;
+        std::vector<Object*> inside;
     };
 
     class PrimaryRay : public Ray {

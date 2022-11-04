@@ -1,0 +1,8 @@
+{
+  "import": [
+    "house.json"
+  ],
+  "scene": [
+    "Cupboard_Type3"
+  ]
+}
